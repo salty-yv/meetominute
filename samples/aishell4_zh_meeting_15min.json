@@ -1,0 +1,25 @@
+{
+  "dataset": "AISHELL-4",
+  "source_session": "20200706_L_R001S01C01",
+  "source_url": "https://huggingface.co/datasets/AISHELL/AISHELL-4/blob/main/train_L/wav/20200706_L_R001S01C01.flac",
+  "official_dataset_url": "https://www.openslr.org/111/",
+  "license": "CC BY-SA 4.0",
+  "clip_start_seconds": 120,
+  "clip_end_seconds": 1020,
+  "clip_duration_seconds": 900,
+  "format": "WAV PCM signed 16-bit little-endian",
+  "sample_rate_hz": 16000,
+  "channels": 1,
+  "file_size_bytes": 28800078,
+  "annotated_speakers": [
+    "001-M",
+    "002-M",
+    "003-M",
+    "004-M",
+    "005-F",
+    "006-F",
+    "007-M"
+  ],
+  "rttm_segments_intersecting_clip": 242,
+  "annotation_time_offset_seconds": 120
+}

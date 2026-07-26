@@ -1,0 +1,91 @@
+{
+  "metrics": {
+    "backend": "ollama",
+    "model": "meetominute-qwen35-9b",
+    "transcript": "E:\\meetominute\\benchmark-results\\app-smoke-data\\20260726-131107\\meetings\\2026-07-26_FunASR 应用级冒烟测试_aebf22ff\\transcript_raw.json",
+    "segment_count": 25,
+    "speaker_count": 7,
+    "transcript_character_count": 252,
+    "processing_seconds": 46.264,
+    "llm_call_count": 2,
+    "llm_calls": [
+      {
+        "elapsed_seconds": 19.205,
+        "prompt_tokens": 807,
+        "completion_tokens": 257,
+        "total_tokens": 1064
+      },
+      {
+        "elapsed_seconds": 27.058,
+        "prompt_tokens": 427,
+        "completion_tokens": 444,
+        "total_tokens": 871
+      }
+    ],
+    "completion_tokens": 701,
+    "effective_completion_tokens_per_second": 15.15,
+    "summary_character_count": 69,
+    "section_counts": {
+      "member_progress": 0,
+      "experimental_results": 0,
+      "suggestions": 2,
+      "decisions": 0,
+      "action_items": 2,
+      "open_questions": 1,
+      "next_followups": 0
+    },
+    "evidence_field_count": 5,
+    "valid_timestamp_evidence_count": 5,
+    "all_required_outputs_present": true,
+    "ollama_runtime": {
+      "size_bytes": 6152991536,
+      "size_vram_bytes": 4150536437,
+      "context_length": 8192
+    }
+  },
+  "minutes": {
+    "meeting": {
+      "title": "AISHELL-4 中文会议测试",
+      "date": "2026-07-26",
+      "expected_speakers": 7
+    },
+    "summary": "会议讨论了由大学策划的开场节目安排，包括老师和学生组织的跳舞及大合唱。参会人员确认了邀请参与节目的老师范围，涉及班导、专业教师及校领导等。",
+    "member_progress": [],
+    "experimental_results": [],
+    "suggestions": [
+      {
+        "content": "需要给老师们准备好服装并说好时间",
+        "evidence_time": "[00:00:27][00:00:30]"
+      },
+      {
+        "content": "需要确定邀请哪些老师参与合唱与伴舞",
+        "evidence_time": "[00:00:40][00:00:48]"
+      }
+    ],
+    "decisions": [],
+    "action_items": [
+      {
+        "owner": "未明确",
+        "task": "给老师们准备好服装并说好时间",
+        "due": "待确认",
+        "evidence_time": "[00:00:27][00:00:30]",
+        "status": "待处理"
+      },
+      {
+        "owner": "未明确",
+        "task": "确定邀请哪些老师参与合唱与伴舞",
+        "due": "待确认",
+        "evidence_time": "[00:00:40][00:00:48]",
+        "status": "待处理"
+      }
+    ],
+    "open_questions": [
+      {
+        "content": "具体需要邀请哪些老师参与节目",
+        "evidence_time": "[00:00:40][00:00:48]"
+      }
+    ],
+    "next_followups": [],
+    "generator": "ollama"
+  }
+}

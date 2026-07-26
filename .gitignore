@@ -1,0 +1,15 @@
+.venv/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.install-logs/
+.benchmark-logs/
+.env
+data/
+meetings/
+*.log
+samples/*.wav
+benchmark-results/app-smoke-data/

@@ -1,0 +1,62 @@
+{
+  "metrics": {
+    "backend": "ollama",
+    "model": "meetominute-qwen35-9b",
+    "transcript": "E:\\meetominute\\benchmark-results\\app-smoke-data\\20260726-131107\\meetings\\2026-07-26_FunASR 应用级冒烟测试_aebf22ff\\transcript_raw.json",
+    "segment_count": 25,
+    "speaker_count": 7,
+    "transcript_character_count": 252,
+    "processing_seconds": 23.997,
+    "llm_call_count": 2,
+    "llm_calls": [
+      {
+        "elapsed_seconds": 15.909,
+        "prompt_tokens": 766,
+        "completion_tokens": 60,
+        "total_tokens": 826
+      },
+      {
+        "elapsed_seconds": 8.086,
+        "prompt_tokens": 248,
+        "completion_tokens": 109,
+        "total_tokens": 357
+      }
+    ],
+    "completion_tokens": 169,
+    "effective_completion_tokens_per_second": 7.04,
+    "summary_character_count": 3,
+    "section_counts": {
+      "member_progress": 0,
+      "experimental_results": 0,
+      "suggestions": 0,
+      "decisions": 0,
+      "action_items": 0,
+      "open_questions": 0,
+      "next_followups": 0
+    },
+    "evidence_field_count": 0,
+    "valid_timestamp_evidence_count": 0,
+    "all_required_outputs_present": true,
+    "ollama_runtime": {
+      "size_bytes": 6152991536,
+      "size_vram_bytes": 4150536437,
+      "context_length": 8192
+    }
+  },
+  "minutes": {
+    "meeting": {
+      "title": "AISHELL-4 中文会议测试",
+      "date": "2026-07-26",
+      "expected_speakers": 7
+    },
+    "summary": "未明确",
+    "member_progress": [],
+    "experimental_results": [],
+    "suggestions": [],
+    "decisions": [],
+    "action_items": [],
+    "open_questions": [],
+    "next_followups": [],
+    "generator": "ollama"
+  }
+}

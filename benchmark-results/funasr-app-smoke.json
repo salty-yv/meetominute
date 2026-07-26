@@ -1,0 +1,63 @@
+{
+  "status": "completed",
+  "processing_seconds": 54.919,
+  "meeting_id": "b962a1d7791c4708bc5d92351f3d9746",
+  "meeting_directory": "E:\\meetominute\\benchmark-results\\app-smoke-data\\20260726-114430\\meetings\\2026-07-26_FunASR 应用级冒烟测试_b962a1d7",
+  "transcriber_backend": "funasr",
+  "minutes_backend": "mock",
+  "duration_seconds": 60.0,
+  "segment_count": 25,
+  "speaker_count": 2,
+  "sample_segments": [
+    {
+      "id": "seg_0001",
+      "start": 1.01,
+      "end": 2.45,
+      "speaker": "SPEAKER_01",
+      "text": "由大学策策划，",
+      "timestamp": "00:00:01"
+    },
+    {
+      "id": "seg_0002",
+      "start": 2.45,
+      "end": 5.53,
+      "speaker": "SPEAKER_01",
+      "text": "前一段时间策划也也让大家说了，",
+      "timestamp": "00:00:02"
+    },
+    {
+      "id": "seg_0003",
+      "start": 5.53,
+      "end": 11.81,
+      "speaker": "SPEAKER_01",
+      "text": "反正开场的节目是肯定是由老师和学生组织的跳舞，",
+      "timestamp": "00:00:05"
+    },
+    {
+      "id": "seg_0004",
+      "start": 11.81,
+      "end": 13.65,
+      "speaker": "SPEAKER_01",
+      "text": "唱歌一个大节目。",
+      "timestamp": "00:00:11"
+    },
+    {
+      "id": "seg_0005",
+      "start": 13.65,
+      "end": 16.889,
+      "speaker": "SPEAKER_01",
+      "text": "然后就是请下边同学说一说自己的策划，",
+      "timestamp": "00:00:13"
+    }
+  ],
+  "outputs": {
+    "normalized.wav": true,
+    "transcript_raw.json": true,
+    "transcript_edited.json": true,
+    "transcript.md": true,
+    "minutes.json": true,
+    "minutes.md": true,
+    "minutes.txt": true,
+    "minutes.docx": true
+  }
+}

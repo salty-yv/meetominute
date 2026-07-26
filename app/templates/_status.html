@@ -1,0 +1,66 @@
+<section
+  class="status-card status-card-{{ meeting.status }}"
+  id="task-status"
+  {% if meeting.status in active_statuses %}
+  data-poll-url="{{ url_for('meeting_status', meeting_id=meeting.id) }}"
+  {% endif %}
+  aria-label="任务处理状态"
+>
+  <div class="status-card-top">
+    <div class="status-copy">
+      <span class="status status-{{ meeting.status }}"><i></i>{{ status_labels[meeting.status] }}</span>
+      <div>
+        <h2>{{ meeting.current_step }}</h2>
+        <p>
+          {% if meeting.status in active_statuses %}
+            后台正在处理，关闭浏览器不会中断任务。
+          {% elif meeting.status == "completed" %}
+            逐字稿与纪要均已生成，可以开始审核和导出。
+          {% elif meeting.status == "transcribed" %}
+            逐字稿已就绪，确认内容后可重新生成纪要。
+          {% elif meeting.status == "failed" %}
+            请查看错误信息和处理日志后重新尝试。
+          {% else %}
+            当前任务状态已保存到本机。
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <div class="progress-orbit" style="--progress: {{ meeting.progress }}">
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="orbit-bg" cx="22" cy="22" r="18"></circle>
+        <circle class="orbit-value" cx="22" cy="22" r="18"></circle>
+      </svg>
+      <strong>{{ meeting.progress }}<small>%</small></strong>
+    </div>
+  </div>
+
+  <div class="process-steps">
+    <div class="process-step {% if meeting.progress >= 5 %}done{% elif meeting.status != 'failed' %}active{% endif %}">
+      <span>{% if meeting.progress >= 5 %}✓{% else %}1{% endif %}</span>
+      <div><strong>录音接收</strong><small>格式检查</small></div>
+    </div>
+    <i class="{% if meeting.progress >= 30 %}done{% endif %}"></i>
+    <div class="process-step {% if meeting.progress >= 75 %}done{% elif meeting.progress >= 5 and meeting.status != 'failed' %}active{% endif %}">
+      <span>{% if meeting.progress >= 75 %}✓{% else %}2{% endif %}</span>
+      <div><strong>语音转写</strong><small>说话人区分</small></div>
+    </div>
+    <i class="{% if meeting.progress >= 85 %}done{% endif %}"></i>
+    <div class="process-step {% if meeting.progress >= 100 %}done{% elif meeting.progress >= 75 and meeting.status != 'failed' %}active{% endif %}">
+      <span>{% if meeting.progress >= 100 %}✓{% else %}3{% endif %}</span>
+      <div><strong>纪要生成</strong><small>事实与行动项</small></div>
+    </div>
+    <i class="{% if meeting.progress >= 100 %}done{% endif %}"></i>
+    <div class="process-step {% if meeting.progress >= 100 %}done{% endif %}">
+      <span>{% if meeting.progress >= 100 %}✓{% else %}4{% endif %}</span>
+      <div><strong>审核导出</strong><small>人工确认</small></div>
+    </div>
+  </div>
+
+  {% if meeting.error %}
+    <div class="error-message">
+      <span class="error-icon" aria-hidden="true">!</span>
+      <div><strong>处理失败</strong><p>{{ meeting.error }}</p></div>
+    </div>
+  {% endif %}
+</section>

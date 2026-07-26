@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+{% block title %}{{ meeting.title }} · MeetOminute{% endblock %}
+{% block content %}
+<header class="meeting-hero">
+  <div class="meeting-hero-main">
+    <a class="back-link" href="{{ url_for('index') }}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M10 7l-5 5 5 5"/></svg>
+      返回工作台
+    </a>
+    <div class="meeting-overline">
+      <span>{{ meeting.meeting_date }}</span>
+      <i></i>
+      <span>
+        {% if meeting.processing_mode == "local" %}全本地处理{% elif meeting.processing_mode == "mixed" %}混合处理{% else %}云端处理{% endif %}
+      </span>
+    </div>
+    <h1>{{ meeting.title }}</h1>
+    <div class="meeting-facts">
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        {{ meeting.source_filename }}
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 19c.5-4 2.5-6 6-6s5.5 2 6 6"/><circle cx="17" cy="9" r="2"/><path d="M16 14c2.8 0 4.5 1.5 5 4"/></svg>
+        预计 {{ meeting.expected_speakers }} 人
+      </span>
+      {% if meeting.duration_seconds %}
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        {{ meeting.duration_seconds|timestamp }}
+      </span>
+      {% endif %}
+      {% if meeting.transcriber_backend %}
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V8M9 21V4M13 17V9M17 20V5M21 16v-6"/></svg>
+        {{ meeting.transcriber_backend|upper }}
+      </span>
+      {% endif %}
+    </div>
+  </div>
+  <div class="meeting-hero-actions">
+    <span class="status status-{{ meeting.status }}"><i></i>{{ status_labels[meeting.status] }}</span>
+    {% if meeting.status == "failed" %}
+    <form action="{{ url_for('retry_meeting', meeting_id=meeting.id) }}" method="post">
+      <button class="button secondary" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>
+        重新处理
+      </button>
+    </form>
+    {% endif %}
+  </div>
+</header>
+
+{% include "_status.html" %}
+
+<div class="workspace-layout">
+  <aside class="workspace-sidebar">
+    <div class="sidebar-sticky">
+      <p class="sidebar-label">会议工作区</p>
+      <nav class="workspace-nav" aria-label="会议内容导航">
+        <a href="#recording" data-section-link="recording" class="active">
+          <span>01</span><div><strong>原始录音</strong><small>试听与定位</small></div><i></i>
+        </a>
+        <a href="#transcript" data-section-link="transcript">
+          <span>02</span><div><strong>逐字稿</strong><small>姓名与文本校对</small></div><i></i>
+        </a>
+        <a href="#minutes" data-section-link="minutes">
+          <span>03</span><div><strong>会议纪要</strong><small>审核与导出</small></div><i></i>
+        </a>
+        <a href="#logs" data-section-link="logs">
+          <span>04</span><div><strong>处理日志</strong><small>运行诊断</small></div><i></i>
+        </a>
+      </nav>
+      <div class="local-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10M6 10h12v10H6z"/></svg>
+        <div><strong>本地私密空间</strong><small>修改会立即保存到本机会议目录。</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="workspace-content">
+    <section class="panel detail-section" id="recording" data-workspace-section>
+      <div class="section-heading">
+        <div class="heading-with-icon">
+          <span class="section-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>
+          </span>
+          <div><p class="eyebrow">SOURCE AUDIO</p><h2>原始录音</h2></div>
+        </div>
+        <span class="section-state ready"><i></i>已保存在本机</span>
+      </div>
+
+      <div class="audio-stage">
+        <div class="audio-visual" aria-hidden="true">
+          {% for height in [18,35,56,30,70,42,78,50,88,42,68,29,74,52,90,58,35,76,46,84,39,62,28,70,48,80,34,58,24,42] %}
+          <i style="--bar-height: {{ height }}%"></i>
+          {% endfor %}
+        </div>
+        <div class="audio-meta">
+          <div>
+            <span class="audio-file-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM14 3v5h4"/><path d="M10 16v-4l4-1v4"/><circle cx="9" cy="16" r="1.5"/><circle cx="13" cy="15" r="1.5"/></svg>
+            </span>
+            <div><strong>{{ meeting.source_filename }}</strong><small>点击逐字稿时间戳可从对应位置播放</small></div>
+          </div>
+          {% if meeting.duration_seconds %}<span>{{ meeting.duration_seconds|timestamp }}</span>{% endif %}
+        </div>
+        <audio id="meeting-audio" controls preload="metadata" src="{{ url_for('meeting_media', meeting_id=meeting.id) }}"></audio>
+      </div>
+    </section>
+
+    <section class="panel detail-section" id="transcript" data-workspace-section>
+      <div class="section-heading">
+        <div class="heading-with-icon">
+          <span class="section-icon blue">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H8l-4 3z"/><path d="M8 9h8M8 13h5"/></svg>
+          </span>
+          <div><p class="eyebrow">TRANSCRIPT</p><h2>说话人与逐字稿</h2></div>
+        </div>
+        {% if segments %}<span class="section-state ready"><i></i>{{ segments|length }} 个片段</span>{% else %}<span class="section-state waiting"><i></i>等待生成</span>{% endif %}
+      </div>
+
+      {% if segments %}
+        <form class="speaker-map" action="{{ url_for('update_speakers', meeting_id=meeting.id) }}" method="post" data-dirty-form>
+          <div class="subheading">
+            <div>
+              <span class="subheading-index">A</span>
+              <div><h3>说话人姓名映射</h3><p>把匿名标签改成真实姓名，全文会统一更新，原始标签仍会保留。</p></div>
+            </div>
+            <button class="button compact secondary" type="submit">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
+              保存姓名
+            </button>
+          </div>
+          <div class="speaker-grid">
+          {% for speaker, name in speakers.items() %}
+            <label class="{{ loop.cycle('speaker-tone-1','speaker-tone-2','speaker-tone-3','speaker-tone-4','speaker-tone-5','speaker-tone-6') }}">
+              <span><i></i>{{ speaker }}</span>
+              <input name="name_{{ speaker }}" value="{{ name }}" placeholder="填写真实姓名">
+            </label>
+          {% endfor %}
+          </div>
+        </form>
+
+        <form action="{{ url_for('update_transcript', meeting_id=meeting.id) }}" method="post" data-dirty-form>
+          <div class="transcript-toolbar">
+            <div class="toolbar-title">
+              <span class="subheading-index">B</span>
+              <div><h3>逐段校正</h3><p>搜索内容、筛选说话人，点击时间可回听原音。</p></div>
+            </div>
+            <div class="transcript-actions">
+              <label class="search-field transcript-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+                <input type="search" placeholder="搜索逐字稿" aria-label="搜索逐字稿" data-transcript-search>
+              </label>
+              <label class="filter-field speaker-filter">
+                <span class="sr-only">筛选说话人</span>
+                <select data-speaker-filter>
+                  <option value="">全部说话人</option>
+                  {% for speaker, name in speakers.items() %}
+                  <option value="{{ speaker }}">{{ name or speaker }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <button class="button compact primary" type="submit">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
+                保存逐字稿
+              </button>
+            </div>
+          </div>
+
+          <div class="transcript-result-line">
+            <span>显示 <strong data-visible-segments>{{ segments|length }}</strong> / {{ segments|length }} 个片段</span>
+            <span class="unsaved-indicator" data-unsaved-indicator hidden><i></i>有未保存修改</span>
+          </div>
+
+          <div class="segment-list">
+          {% for segment in segments %}
+            <article
+              class="segment-card {{ loop.cycle('speaker-tone-1','speaker-tone-2','speaker-tone-3','speaker-tone-4','speaker-tone-5','speaker-tone-6') }}"
+              data-transcript-segment
+              data-speaker="{{ segment.speaker }}"
+              data-start="{{ segment.start }}"
+              data-end="{{ segment.end }}"
+            >
+              <div class="segment-rail"><span>{{ "%02d"|format(loop.index) }}</span><i></i></div>
+              <div class="segment-body">
+                <div class="segment-meta">
+                  <div class="segment-person">
+                    <span class="speaker-avatar" aria-hidden="true">{{ (speakers.get(segment.speaker) or segment.speaker)[0] }}</span>
+                    <select name="speaker_{{ segment.id }}" aria-label="{{ segment.timestamp }} 的说话人" data-segment-speaker>
+                      {% for speaker, name in speakers.items() %}
+                      <option value="{{ speaker }}" {% if speaker == segment.speaker %}selected{% endif %}>{{ name or speaker }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <button type="button" class="timestamp-button" data-seek="{{ segment.start }}" title="从这里播放">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5z"/></svg>
+                    {{ segment.timestamp }}
+                  </button>
+                </div>
+                <textarea name="text_{{ segment.id }}" rows="2" aria-label="{{ segment.timestamp }} 的转写文本" data-transcript-text>{{ segment.text }}</textarea>
+              </div>
+            </article>
+          {% endfor %}
+          </div>
+
+          <div class="no-transcript-results" data-transcript-empty hidden>
+            <strong>没有匹配的片段</strong><span>清除搜索词或切换说话人后再试。</span>
+          </div>
+        </form>
+      {% else %}
+        <div class="empty-state compact-empty">
+          <span class="empty-illustration small" aria-hidden="true">
+            <svg viewBox="0 0 72 72"><path d="M14 19h44v34H26L14 61z"/><path d="M24 30h24M24 39h17"/></svg>
+          </span>
+          <h3>逐字稿正在路上</h3>
+          <p>音频处理和说话人识别完成后，这里会出现可编辑片段。</p>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="panel detail-section" id="minutes" data-workspace-section>
+      <div class="section-heading">
+        <div class="heading-with-icon">
+          <span class="section-icon amber">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM14 3v5h4"/><path d="M9 12h6M9 16h6"/></svg>
+          </span>
+          <div><p class="eyebrow">MINUTES</p><h2>结构化会议纪要</h2></div>
+        </div>
+        {% if minutes %}<span class="section-state review"><i></i>待人工审核</span>{% else %}<span class="section-state waiting"><i></i>等待生成</span>{% endif %}
+      </div>
+
+      {% if segments and meeting.status not in active_statuses %}
+      <form class="inline-action" action="{{ url_for('generate_minutes', meeting_id=meeting.id) }}" method="post">
+        <span class="inline-action-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V7z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>
+        </span>
+        <div><strong>基于已校正的逐字稿生成</strong><p>重新生成不会覆盖原始转写；请在正式导出前人工确认事实。</p></div>
+        <button class="button secondary" type="submit">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>
+          重新生成
+        </button>
+      </form>
+      {% endif %}
+
+      {% if minutes %}
+        <article class="minutes-document">
+          <div class="minutes-cover">
+            <div class="minutes-cover-top">
+              <span class="document-label">MEETING SUMMARY</span>
+              <button class="icon-button" type="button" data-copy-summary data-copy-text="{{ minutes.summary }}" title="复制摘要" aria-label="复制会议摘要">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="1"/><path d="M16 8V4H5v12h3"/></svg>
+              </button>
+            </div>
+            <h3>会议摘要</h3>
+            <p class="summary">{{ minutes.summary }}</p>
+            <div class="minutes-stats">
+              <span><b>{{ minutes.action_items|length }}</b> 项待办</span>
+              <span><b>{{ minutes.decisions|length }}</b> 项决定</span>
+              <span><b>{{ minutes.open_questions|length }}</b> 个未决问题</span>
+              <span><b>{{ minutes.next_followups|length }}</b> 项后续跟进</span>
+            </div>
+          </div>
+
+          <div class="minutes-grid">
+            <section class="minutes-section tone-green">
+              <div class="minutes-section-head"><span>01</span><h3>各成员工作进展</h3><b>{{ minutes.member_progress|length }}</b></div>
+              {% if minutes.member_progress %}
+              <ul>{% for item in minutes.member_progress %}
+                <li><span>{{ item.progress or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+
+            <section class="minutes-section tone-blue">
+              <div class="minutes-section-head"><span>02</span><h3>实验结果与数据结论</h3><b>{{ minutes.experimental_results|length }}</b></div>
+              {% if minutes.experimental_results %}
+              <ul>{% for item in minutes.experimental_results %}
+                <li><span>{{ item.result or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+
+            <section class="minutes-section tone-amber">
+              <div class="minutes-section-head"><span>03</span><h3>建议</h3><b>{{ minutes.suggestions|length }}</b></div>
+              {% if minutes.suggestions %}
+              <ul>{% for item in minutes.suggestions %}
+                <li><span>{{ item.suggestion or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+
+            <section class="minutes-section tone-purple">
+              <div class="minutes-section-head"><span>04</span><h3>已形成的决定</h3><b>{{ minutes.decisions|length }}</b></div>
+              {% if minutes.decisions %}
+              <ul>{% for item in minutes.decisions %}
+                <li><span>{{ item.content or item.decision or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+
+            <section class="minutes-section tone-red">
+              <div class="minutes-section-head"><span>05</span><h3>未解决问题与风险</h3><b>{{ minutes.open_questions|length }}</b></div>
+              {% if minutes.open_questions %}
+              <ul>{% for item in minutes.open_questions %}
+                <li><span>{{ item.question or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+
+            <section class="minutes-section tone-slate">
+              <div class="minutes-section-head"><span>06</span><h3>下次会议跟进</h3><b>{{ minutes.next_followups|length }}</b></div>
+              {% if minutes.next_followups %}
+              <ul>{% for item in minutes.next_followups %}
+                <li><span>{{ item.followup or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
+            </section>
+          </div>
+
+          <section class="action-section">
+            <div class="action-section-title">
+              <div><p class="eyebrow">ACTION ITEMS</p><h3>待办事项</h3></div>
+              <span>{{ minutes.action_items|length }} 项</span>
+            </div>
+            {% if minutes.action_items %}
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>负责人</th><th>具体任务</th><th>截止日期</th><th>原文时间</th><th>状态</th></tr></thead>
+                <tbody>
+                {% for item in minutes.action_items %}
+                <tr>
+                  <td><span class="owner-chip">{{ item.owner }}</span></td>
+                  <td>{{ item.task }}</td>
+                  <td>{{ item.due }}</td>
+                  <td><button class="table-time" type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button></td>
+                  <td><span class="task-status">{{ item.status }}</span></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="no-actions"><span>✓</span><p>逐字稿中没有明确的待办事项</p></div>
+            {% endif %}
+          </section>
+        </article>
+
+        <div class="export-bar">
+          <div>
+            <span class="export-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>
+            </span>
+            <div><strong>导出会议纪要</strong><small>选择适合后续协作的文件格式</small></div>
+          </div>
+          <div class="export-links">
+            <a href="{{ url_for('download_minutes', meeting_id=meeting.id, kind='docx') }}"><b>W</b><span>Word<small>可编辑文档</small></span></a>
+            <a href="{{ url_for('download_minutes', meeting_id=meeting.id, kind='md') }}"><b>M↓</b><span>Markdown<small>知识库</small></span></a>
+            <a href="{{ url_for('download_minutes', meeting_id=meeting.id, kind='txt') }}"><b>T</b><span>TXT<small>纯文本</small></span></a>
+            <a href="{{ url_for('download_minutes', meeting_id=meeting.id, kind='json') }}"><b>{ }</b><span>JSON<small>结构化数据</small></span></a>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty-state compact-empty">
+          <span class="empty-illustration small" aria-hidden="true">
+            <svg viewBox="0 0 72 72"><path d="M18 10h28l9 9v43H18z"/><path d="M45 10v12h10M27 34h19M27 43h19M27 52h12"/></svg>
+          </span>
+          <h3>等待生成会议纪要</h3>
+          <p>纪要会从校正后的逐字稿提取事实、决定、行动项和原文时间。</p>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="panel detail-section logs-section" id="logs" data-workspace-section>
+      <details>
+        <summary>
+          <span class="log-heading">
+            <span class="section-icon dark">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 8-3 4 3 4M17 8l3 4-3 4M14 5l-4 14"/></svg>
+            </span>
+            <span><strong>处理日志</strong><small>用于诊断模型加载或任务失败</small></span>
+          </span>
+          <span class="details-toggle">
+            展开日志
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+          </span>
+        </summary>
+        <pre class="log-view">{{ log_text or "暂无日志" }}</pre>
+      </details>
+    </section>
+  </div>
+</div>
+{% endblock %}

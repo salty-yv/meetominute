@@ -1,0 +1,2456 @@
+{
+  "metrics": {
+    "backend": "funasr",
+    "model": "paraformer-zh",
+    "vad_model": "fsmn-vad",
+    "punc_model": "ct-punc",
+    "speaker_model": "cam++",
+    "requested_device": "auto",
+    "torch_version": "2.6.0+cu124",
+    "cuda_available": true,
+    "cuda_version": "12.4",
+    "gpu_name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "audio": "E:\\meetominute\\samples\\aishell4_zh_meeting_15min.wav",
+    "audio_duration_seconds": 900.0,
+    "processing_seconds": 308.255,
+    "real_time_factor": 0.3425,
+    "speed_x_realtime": 2.92,
+    "segment_count": 302,
+    "predicted_speaker_count": 8,
+    "predicted_speakers": [
+      "SPEAKER_01",
+      "SPEAKER_02",
+      "SPEAKER_03",
+      "SPEAKER_04",
+      "SPEAKER_05",
+      "SPEAKER_06",
+      "SPEAKER_07",
+      "SPEAKER_08"
+    ],
+    "recognized_character_count": 2976,
+    "peak_gpu_memory_mb": 2534.6,
+    "reference_segment_count": 242,
+    "reference_speaker_count": 7,
+    "reference_character_count": 3910,
+    "character_edit_distance": 1479,
+    "character_error_rate": 0.3783
+  },
+  "segments": [
+    {
+      "id": "seg_0001",
+      "start": 1.01,
+      "end": 2.45,
+      "speaker": "SPEAKER_01",
+      "text": "由大学策策划，",
+      "timestamp": "00:00:01"
+    },
+    {
+      "id": "seg_0002",
+      "start": 2.45,
+      "end": 5.53,
+      "speaker": "SPEAKER_01",
+      "text": "前一段时间策划也也让大家说了，",
+      "timestamp": "00:00:02"
+    },
+    {
+      "id": "seg_0003",
+      "start": 5.53,
+      "end": 11.81,
+      "speaker": "SPEAKER_01",
+      "text": "反正开场的节目是肯定是由老师和学生组织的跳舞，",
+      "timestamp": "00:00:05"
+    },
+    {
+      "id": "seg_0004",
+      "start": 11.81,
+      "end": 13.65,
+      "speaker": "SPEAKER_01",
+      "text": "唱歌一个大节目。",
+      "timestamp": "00:00:11"
+    },
+    {
+      "id": "seg_0005",
+      "start": 13.65,
+      "end": 16.889,
+      "speaker": "SPEAKER_01",
+      "text": "然后就是请下边同学说一说自己的策划，",
+      "timestamp": "00:00:13"
+    },
+    {
+      "id": "seg_0006",
+      "start": 16.889,
+      "end": 18.03,
+      "speaker": "SPEAKER_01",
+      "text": "是准备好活动，",
+      "timestamp": "00:00:16"
+    },
+    {
+      "id": "seg_0007",
+      "start": 18.11,
+      "end": 18.79,
+      "speaker": "SPEAKER_01",
+      "text": "可以说一下。",
+      "timestamp": "00:00:18"
+    },
+    {
+      "id": "seg_0008",
+      "start": 19.89,
+      "end": 20.13,
+      "speaker": "SPEAKER_03",
+      "text": "呃，",
+      "timestamp": "00:00:19"
+    },
+    {
+      "id": "seg_0009",
+      "start": 20.15,
+      "end": 21.75,
+      "speaker": "SPEAKER_03",
+      "text": "因为这边活动的话，",
+      "timestamp": "00:00:20"
+    },
+    {
+      "id": "seg_0010",
+      "start": 22.23,
+      "end": 25.73,
+      "speaker": "SPEAKER_03",
+      "text": "开场是一个老师和同学们的大合唱，",
+      "timestamp": "00:00:22"
+    },
+    {
+      "id": "seg_0011",
+      "start": 25.85,
+      "end": 26.45,
+      "speaker": "SPEAKER_03",
+      "text": "有跳舞。",
+      "timestamp": "00:00:25"
+    },
+    {
+      "id": "seg_0012",
+      "start": 27.05,
+      "end": 27.29,
+      "speaker": "SPEAKER_03",
+      "text": "呃，",
+      "timestamp": "00:00:27"
+    },
+    {
+      "id": "seg_0013",
+      "start": 27.31,
+      "end": 30.69,
+      "speaker": "SPEAKER_03",
+      "text": "这个一定要给老师们呃准备好服装，",
+      "timestamp": "00:00:27"
+    },
+    {
+      "id": "seg_0014",
+      "start": 30.81,
+      "end": 32.01,
+      "speaker": "SPEAKER_03",
+      "text": "给老师们说好时间，",
+      "timestamp": "00:00:30"
+    },
+    {
+      "id": "seg_0015",
+      "start": 32.65,
+      "end": 36.15,
+      "speaker": "SPEAKER_03",
+      "text": "然后也给老师对老师，",
+      "timestamp": "00:00:32"
+    },
+    {
+      "id": "seg_0016",
+      "start": 36.17,
+      "end": 36.91,
+      "speaker": "SPEAKER_04",
+      "text": "跟学生一起，",
+      "timestamp": "00:00:36"
+    },
+    {
+      "id": "seg_0017",
+      "start": 36.91,
+      "end": 39.43,
+      "speaker": "SPEAKER_03",
+      "text": "对老师合唱学生伴舞舞。",
+      "timestamp": "00:00:36"
+    },
+    {
+      "id": "seg_0018",
+      "start": 40.35,
+      "end": 42.63,
+      "speaker": "SPEAKER_04",
+      "text": "这一看始准备请哪些老师呃，",
+      "timestamp": "00:00:40"
+    },
+    {
+      "id": "seg_0019",
+      "start": 42.63,
+      "end": 45.57,
+      "speaker": "SPEAKER_03",
+      "text": "这一块主要请咱们一个是咱们班班导，",
+      "timestamp": "00:00:42"
+    },
+    {
+      "id": "seg_0020",
+      "start": 45.65,
+      "end": 48.67,
+      "speaker": "SPEAKER_03",
+      "text": "还有就是请咱们请咱们这个专业的老师，",
+      "timestamp": "00:00:45"
+    },
+    {
+      "id": "seg_0021",
+      "start": 48.73,
+      "end": 49.51,
+      "speaker": "SPEAKER_03",
+      "text": "还有校长、",
+      "timestamp": "00:00:48"
+    },
+    {
+      "id": "seg_0022",
+      "start": 49.65,
+      "end": 54.43,
+      "speaker": "SPEAKER_03",
+      "text": "副校长之类的这一块如。",
+      "timestamp": "00:00:49"
+    },
+    {
+      "id": "seg_0023",
+      "start": 54.49,
+      "end": 58.23,
+      "speaker": "SPEAKER_04",
+      "text": "果需要我帮助啊好的，",
+      "timestamp": "00:00:54"
+    },
+    {
+      "id": "seg_0024",
+      "start": 58.27,
+      "end": 58.59,
+      "speaker": "SPEAKER_03",
+      "text": "到时，",
+      "timestamp": "00:00:58"
+    },
+    {
+      "id": "seg_0025",
+      "start": 58.59,
+      "end": 60.075,
+      "speaker": "SPEAKER_03",
+      "text": "候需要您的帮助然后接。",
+      "timestamp": "00:00:58"
+    },
+    {
+      "id": "seg_0026",
+      "start": 61.66,
+      "end": 64.88,
+      "speaker": "SPEAKER_03",
+      "text": "下来就是一些节目节目的话嗯需要需后，",
+      "timestamp": "00:01:01"
+    },
+    {
+      "id": "seg_0027",
+      "start": 65.16,
+      "end": 65.555,
+      "speaker": "SPEAKER_03",
+      "text": "下，",
+      "timestamp": "00:01:05"
+    },
+    {
+      "id": "seg_0028",
+      "start": 65.99,
+      "end": 68.87,
+      "speaker": "SPEAKER_03",
+      "text": "边再具体安排哪个节目在，",
+      "timestamp": "00:01:05"
+    },
+    {
+      "id": "seg_0029",
+      "start": 68.87,
+      "end": 70.535,
+      "speaker": "SPEAKER_03",
+      "text": "前哪个节目在后嗯然后安排完。",
+      "timestamp": "00:01:08"
+    },
+    {
+      "id": "seg_0030",
+      "start": 71.0,
+      "end": 71.24,
+      "speaker": "SPEAKER_03",
+      "text": "了，",
+      "timestamp": "00:01:11"
+    },
+    {
+      "id": "seg_0031",
+      "start": 71.28,
+      "end": 72.68,
+      "speaker": "SPEAKER_03",
+      "text": "之后会跟那个每一个，",
+      "timestamp": "00:01:11"
+    },
+    {
+      "id": "seg_0032",
+      "start": 72.68,
+      "end": 77.17,
+      "speaker": "SPEAKER_03",
+      "text": "节目的负责人去联系啊然后看他们需要什，",
+      "timestamp": "00:01:12"
+    },
+    {
+      "id": "seg_0033",
+      "start": 77.17,
+      "end": 79.19,
+      "speaker": "SPEAKER_03",
+      "text": "么道具需要什么提前布置嗯叫，",
+      "timestamp": "00:01:17"
+    },
+    {
+      "id": "seg_0034",
+      "start": 79.21,
+      "end": 80.485,
+      "speaker": "SPEAKER_03",
+      "text": "场地或者干嘛的呃让，",
+      "timestamp": "00:01:19"
+    },
+    {
+      "id": "seg_0035",
+      "start": 81.03,
+      "end": 81.395,
+      "speaker": "SPEAKER_02",
+      "text": "他，",
+      "timestamp": "00:01:21"
+    },
+    {
+      "id": "seg_0036",
+      "start": 82.22,
+      "end": 83.675,
+      "speaker": "SPEAKER_03",
+      "text": "们及时的报备我们，",
+      "timestamp": "00:01:22"
+    },
+    {
+      "id": "seg_0037",
+      "start": 84.4,
+      "end": 84.64,
+      "speaker": "SPEAKER_03",
+      "text": "也，",
+      "timestamp": "00:01:24"
+    },
+    {
+      "id": "seg_0038",
+      "start": 84.68,
+      "end": 85.84,
+      "speaker": "SPEAKER_03",
+      "text": "会提前他们准备然后，",
+      "timestamp": "00:01:24"
+    },
+    {
+      "id": "seg_0039",
+      "start": 85.9,
+      "end": 87.295,
+      "speaker": "SPEAKER_03",
+      "text": "再一个就是拉赞助这块。",
+      "timestamp": "00:01:25"
+    },
+    {
+      "id": "seg_0040",
+      "start": 88.02,
+      "end": 89.88,
+      "speaker": "SPEAKER_03",
+      "text": "拉赞助这块我们呃因为是元家晚，",
+      "timestamp": "00:01:28"
+    },
+    {
+      "id": "seg_0041",
+      "start": 89.88,
+      "end": 90.62,
+      "speaker": "SPEAKER_03",
+      "text": "会嘛我们肯，",
+      "timestamp": "00:01:29"
+    },
+    {
+      "id": "seg_0042",
+      "start": 90.62,
+      "end": 93.85,
+      "speaker": "SPEAKER_03",
+      "text": "定要需要去找一些呃吃的或，",
+      "timestamp": "00:01:30"
+    },
+    {
+      "id": "seg_0043",
+      "start": 93.85,
+      "end": 97.735,
+      "speaker": "SPEAKER_03",
+      "text": "者喝的比如像那个医保啊还有什么呃这个康师傅啊就这。",
+      "timestamp": "00:01:33"
+    },
+    {
+      "id": "seg_0044",
+      "start": 98.15,
+      "end": 99.895,
+      "speaker": "SPEAKER_03",
+      "text": "一系列的吃的或者喝，",
+      "timestamp": "00:01:38"
+    },
+    {
+      "id": "seg_0045",
+      "start": 100.4,
+      "end": 104.25,
+      "speaker": "SPEAKER_03",
+      "text": "的一些品牌让他们给咱们，",
+      "timestamp": "00:01:40"
+    },
+    {
+      "id": "seg_0046",
+      "start": 104.25,
+      "end": 108.0,
+      "speaker": "SPEAKER_03",
+      "text": "拉赞助啊我们去拉赞助让他们支持我们，",
+      "timestamp": "00:01:44"
+    },
+    {
+      "id": "seg_0047",
+      "start": 108.0,
+      "end": 110.02,
+      "speaker": "SPEAKER_03",
+      "text": "的一些设备啊呃还有器材，",
+      "timestamp": "00:01:48"
+    },
+    {
+      "id": "seg_0048",
+      "start": 110.02,
+      "end": 110.82,
+      "speaker": "SPEAKER_03",
+      "text": "什么的我们先能，",
+      "timestamp": "00:01:50"
+    },
+    {
+      "id": "seg_0049",
+      "start": 110.9,
+      "end": 113.115,
+      "speaker": "SPEAKER_03",
+      "text": "在拉赞助力这个呃拉赞助这方面主，",
+      "timestamp": "00:01:50"
+    },
+    {
+      "id": "seg_0050",
+      "start": 113.89,
+      "end": 115.155,
+      "speaker": "SPEAKER_03",
+      "text": "要现在拉的是医保。",
+      "timestamp": "00:01:53"
+    },
+    {
+      "id": "seg_0051",
+      "start": 116.38,
+      "end": 123.39,
+      "speaker": "SPEAKER_04",
+      "text": "医保去确定是给我们十万的赞助啊然后我们买一些设备什么的，",
+      "timestamp": "00:01:56"
+    },
+    {
+      "id": "seg_0052",
+      "start": 123.39,
+      "end": 126.73,
+      "speaker": "SPEAKER_03",
+      "text": "可能后期还需要再去拉一些别的赞。",
+      "timestamp": "00:02:03"
+    },
+    {
+      "id": "seg_0053",
+      "start": 126.81,
+      "end": 129.19,
+      "speaker": "SPEAKER_03",
+      "text": "助然后 a 这边目前没有咱们的，",
+      "timestamp": "00:02:06"
+    },
+    {
+      "id": "seg_0054",
+      "start": 129.19,
+      "end": 132.535,
+      "speaker": "SPEAKER_03",
+      "text": "设备是自己购买呢还是租用别的公司。",
+      "timestamp": "00:02:09"
+    },
+    {
+      "id": "seg_0055",
+      "start": 137.34,
+      "end": 139.8,
+      "speaker": "SPEAKER_03",
+      "text": "啊租用别的公司的因为咱们这儿，",
+      "timestamp": "00:02:17"
+    },
+    {
+      "id": "seg_0056",
+      "start": 139.8,
+      "end": 141.12,
+      "speaker": "SPEAKER_05",
+      "text": "是开的话是一，",
+      "timestamp": "00:02:19"
+    },
+    {
+      "id": "seg_0057",
+      "start": 141.12,
+      "end": 142.84,
+      "speaker": "SPEAKER_05",
+      "text": "学年一次不可能说这，",
+      "timestamp": "00:02:21"
+    },
+    {
+      "id": "seg_0058",
+      "start": 142.86,
+      "end": 143.86,
+      "speaker": "SPEAKER_03",
+      "text": "个东西各搁一年。",
+      "timestamp": "00:02:22"
+    },
+    {
+      "id": "seg_0059",
+      "start": 143.86,
+      "end": 145.58,
+      "speaker": "SPEAKER_03",
+      "text": "所以是租用的哦这个同学，",
+      "timestamp": "00:02:23"
+    },
+    {
+      "id": "seg_0060",
+      "start": 145.58,
+      "end": 146.76,
+      "speaker": "SPEAKER_03",
+      "text": "a 说了一下场，",
+      "timestamp": "00:02:25"
+    },
+    {
+      "id": "seg_0061",
+      "start": 146.76,
+      "end": 149.26,
+      "speaker": "SPEAKER_03",
+      "text": "会的布置和那个场地还有赞，",
+      "timestamp": "00:02:26"
+    },
+    {
+      "id": "seg_0062",
+      "start": 149.26,
+      "end": 153.85,
+      "speaker": "SPEAKER_03",
+      "text": "助的事还有第一。",
+      "timestamp": "00:02:29"
+    },
+    {
+      "id": "seg_0063",
+      "start": 153.85,
+      "end": 154.99,
+      "speaker": "SPEAKER_01",
+      "text": "个节目他也说了，",
+      "timestamp": "00:02:33"
+    },
+    {
+      "id": "seg_0064",
+      "start": 154.99,
+      "end": 158.27,
+      "speaker": "SPEAKER_01",
+      "text": "还有这个场地啊咱租用的毕，",
+      "timestamp": "00:02:34"
+    },
+    {
+      "id": "seg_0065",
+      "start": 158.33,
+      "end": 159.33,
+      "speaker": "SPEAKER_01",
+      "text": "竟要是体育啊。",
+      "timestamp": "00:02:38"
+    },
+    {
+      "id": "seg_0066",
+      "start": 160.11,
+      "end": 161.99,
+      "speaker": "SPEAKER_01",
+      "text": "因为有个篮球架它是可以，",
+      "timestamp": "00:02:40"
+    },
+    {
+      "id": "seg_0067",
+      "start": 161.99,
+      "end": 162.95,
+      "speaker": "SPEAKER_01",
+      "text": "推动所以需要咱，",
+      "timestamp": "00:02:41"
+    },
+    {
+      "id": "seg_0068",
+      "start": 162.95,
+      "end": 164.49,
+      "speaker": "SPEAKER_01",
+      "text": "们布的男生到时候你帮忙，",
+      "timestamp": "00:02:42"
+    },
+    {
+      "id": "seg_0069",
+      "start": 164.49,
+      "end": 167.09,
+      "speaker": "SPEAKER_01",
+      "text": "推一下然后女生由他们来布置，",
+      "timestamp": "00:02:44"
+    },
+    {
+      "id": "seg_0070",
+      "start": 167.31,
+      "end": 169.69,
+      "speaker": "SPEAKER_01",
+      "text": "会场什么粘气球啊什么之类的家里之类对然，",
+      "timestamp": "00:02:47"
+    },
+    {
+      "id": "seg_0071",
+      "start": 169.97,
+      "end": 172.21,
+      "speaker": "SPEAKER_01",
+      "text": "后还有让女生印一下咱们学，",
+      "timestamp": "00:02:49"
+    },
+    {
+      "id": "seg_0072",
+      "start": 172.21,
+      "end": 173.97,
+      "speaker": "SPEAKER_01",
+      "text": "校的宣传报对然后还有上面，",
+      "timestamp": "00:02:52"
+    },
+    {
+      "id": "seg_0073",
+      "start": 173.97,
+      "end": 174.49,
+      "speaker": "SPEAKER_01",
+      "text": "对还有条。",
+      "timestamp": "00:02:53"
+    },
+    {
+      "id": "seg_0074",
+      "start": 174.49,
+      "end": 174.65,
+      "speaker": "SPEAKER_01",
+      "text": "幅，",
+      "timestamp": "00:02:54"
+    },
+    {
+      "id": "seg_0075",
+      "start": 174.65,
+      "end": 178.27,
+      "speaker": "SPEAKER_01",
+      "text": "上面写上什么拉赞助之类的活动然后这个女生前。",
+      "timestamp": "00:02:54"
+    },
+    {
+      "id": "seg_0076",
+      "start": 178.27,
+      "end": 178.51,
+      "speaker": "SPEAKER_01",
+      "text": "一，",
+      "timestamp": "00:02:58"
+    },
+    {
+      "id": "seg_0077",
+      "start": 179.19,
+      "end": 181.03,
+      "speaker": "SPEAKER_01",
+      "text": "段说话也就是必须，",
+      "timestamp": "00:02:59"
+    },
+    {
+      "id": "seg_0078",
+      "start": 181.03,
+      "end": 184.485,
+      "speaker": "SPEAKER_01",
+      "text": "来说关于这个嗯好对首先刚才部长说有二十四个节目。",
+      "timestamp": "00:03:01"
+    },
+    {
+      "id": "seg_0079",
+      "start": 184.78,
+      "end": 187.35,
+      "speaker": "SPEAKER_01",
+      "text": "我觉得最开始最这场节目应，",
+      "timestamp": "00:03:04"
+    },
+    {
+      "id": "seg_0080",
+      "start": 187.35,
+      "end": 195.3,
+      "speaker": "SPEAKER_02",
+      "text": "该是比较带动气氛的唱歌的那我然，",
+      "timestamp": "00:03:07"
+    },
+    {
+      "id": "seg_0081",
+      "start": 195.3,
+      "end": 195.54,
+      "speaker": "SPEAKER_06",
+      "text": "后现，",
+      "timestamp": "00:03:15"
+    },
+    {
+      "id": "seg_0082",
+      "start": 195.65,
+      "end": 195.935,
+      "speaker": "SPEAKER_06",
+      "text": "在，",
+      "timestamp": "00:03:15"
+    },
+    {
+      "id": "seg_0083",
+      "start": 196.93,
+      "end": 200.05,
+      "speaker": "SPEAKER_07",
+      "text": "一共嗯进行市场好大概两个多小时是吧中间，",
+      "timestamp": "00:03:16"
+    },
+    {
+      "id": "seg_0084",
+      "start": 200.05,
+      "end": 204.43,
+      "speaker": "SPEAKER_07",
+      "text": "应该还有跳舞唱歌相声小品然后各种然后等到最后。",
+      "timestamp": "00:03:20"
+    },
+    {
+      "id": "seg_0085",
+      "start": 204.69,
+      "end": 210.98,
+      "speaker": "SPEAKER_06",
+      "text": "的时候可能会再给枣园儿或者延级主任是吗专业的那些老师们一个嗯这个这？",
+      "timestamp": "00:03:24"
+    },
+    {
+      "id": "seg_0086",
+      "start": 211.16,
+      "end": 212.7,
+      "speaker": "SPEAKER_07",
+      "text": "个先洗吧再对合影惊喜当、",
+      "timestamp": "00:03:31"
+    },
+    {
+      "id": "seg_0087",
+      "start": 212.94,
+      "end": 213.42,
+      "speaker": "SPEAKER_07",
+      "text": "做是、",
+      "timestamp": "00:03:32"
+    },
+    {
+      "id": "seg_0088",
+      "start": 213.52,
+      "end": 214.505,
+      "speaker": "SPEAKER_07",
+      "text": "留念然后是然后嗯也，",
+      "timestamp": "00:03:33"
+    },
+    {
+      "id": "seg_0089",
+      "start": 215.08,
+      "end": 217.06,
+      "speaker": "SPEAKER_07",
+      "text": "可以进行一些互动然后让场上，",
+      "timestamp": "00:03:35"
+    },
+    {
+      "id": "seg_0090",
+      "start": 217.06,
+      "end": 222.565,
+      "speaker": "SPEAKER_07",
+      "text": "的气氛更家更加活跃吧更加融洽然后大家？",
+      "timestamp": "00:03:37"
+    },
+    {
+      "id": "seg_0091",
+      "start": 223.11,
+      "end": 225.27,
+      "speaker": "SPEAKER_07",
+      "text": "都比较这个就需要有，",
+      "timestamp": "00:03:43"
+    },
+    {
+      "id": "seg_0092",
+      "start": 225.27,
+      "end": 229.63,
+      "speaker": "SPEAKER_06",
+      "text": "请咱们本部老师帮助咱，",
+      "timestamp": "00:03:45"
+    },
+    {
+      "id": "seg_0093",
+      "start": 229.63,
+      "end": 232.295,
+      "speaker": "SPEAKER_07",
+      "text": "们要找几个评委最好再加，",
+      "timestamp": "00:03:49"
+    },
+    {
+      "id": "seg_0094",
+      "start": 232.54,
+      "end": 237.18,
+      "speaker": "SPEAKER_06",
+      "text": "上哪有这边有人这边有没有人好然后，",
+      "timestamp": "00:03:52"
+    },
+    {
+      "id": "seg_0095",
+      "start": 237.26,
+      "end": 240.94,
+      "speaker": "SPEAKER_07",
+      "text": "这是同学说的然后是什么呢活动它，",
+      "timestamp": "00:03:57"
+    },
+    {
+      "id": "seg_0096",
+      "start": 240.94,
+      "end": 241.78,
+      "speaker": "SPEAKER_07",
+      "text": "肯定是有。",
+      "timestamp": "00:04:00"
+    },
+    {
+      "id": "seg_0097",
+      "start": 241.78,
+      "end": 249.16,
+      "speaker": "SPEAKER_07",
+      "text": "具体内容的对吧毕竟二十四个活动咱们肯定是有规，",
+      "timestamp": "00:04:01"
+    },
+    {
+      "id": "seg_0098",
+      "start": 249.16,
+      "end": 251.7,
+      "speaker": "SPEAKER_01",
+      "text": "划咱们咱们想肯定是要，",
+      "timestamp": "00:04:09"
+    },
+    {
+      "id": "seg_0099",
+      "start": 251.7,
+      "end": 254.48,
+      "speaker": "SPEAKER_04",
+      "text": "出两个活动的对咱们不可能也是要。",
+      "timestamp": "00:04:11"
+    },
+    {
+      "id": "seg_0100",
+      "start": 256.38,
+      "end": 256.62,
+      "speaker": "SPEAKER_01",
+      "text": "出，",
+      "timestamp": "00:04:16"
+    },
+    {
+      "id": "seg_0101",
+      "start": 257.54,
+      "end": 259.64,
+      "speaker": "SPEAKER_01",
+      "text": "活动的然后咱们就，",
+      "timestamp": "00:04:17"
+    },
+    {
+      "id": "seg_0102",
+      "start": 259.84,
+      "end": 261.26,
+      "speaker": "SPEAKER_01",
+      "text": "是怎么向学生？",
+      "timestamp": "00:04:19"
+    },
+    {
+      "id": "seg_0103",
+      "start": 261.6,
+      "end": 263.96,
+      "speaker": "SPEAKER_01",
+      "text": "们对刚才这个通知这件事情刚才就？",
+      "timestamp": "00:04:21"
+    },
+    {
+      "id": "seg_0104",
+      "start": 263.96,
+      "end": 267.1,
+      "speaker": "SPEAKER_01",
+      "text": "是印海报你发海报对去学校校门口发，",
+      "timestamp": "00:04:23"
+    },
+    {
+      "id": "seg_0105",
+      "start": 267.62,
+      "end": 270.48,
+      "speaker": "SPEAKER_01",
+      "text": "海报或者去食堂贴一下海报传单也可，",
+      "timestamp": "00:04:27"
+    },
+    {
+      "id": "seg_0106",
+      "start": 270.48,
+      "end": 272.12,
+      "speaker": "SPEAKER_05",
+      "text": "以应该有奖品嗯可以任一一。",
+      "timestamp": "00:04:30"
+    },
+    {
+      "id": "seg_0107",
+      "start": 272.12,
+      "end": 277.48,
+      "speaker": "SPEAKER_05",
+      "text": "个奖品每个节目表现的比较少毕竟咱们这学校我们可，",
+      "timestamp": "00:04:32"
+    },
+    {
+      "id": "seg_0108",
+      "start": 277.48,
+      "end": 278.76,
+      "speaker": "SPEAKER_01",
+      "text": "以以按第一名第，",
+      "timestamp": "00:04:37"
+    },
+    {
+      "id": "seg_0109",
+      "start": 279.48,
+      "end": 280.3,
+      "speaker": "SPEAKER_01",
+      "text": "二名第三。",
+      "timestamp": "00:04:39"
+    },
+    {
+      "id": "seg_0110",
+      "start": 280.42,
+      "end": 280.66,
+      "speaker": "SPEAKER_01",
+      "text": "名，",
+      "timestamp": "00:04:40"
+    },
+    {
+      "id": "seg_0111",
+      "start": 280.72,
+      "end": 283.94,
+      "speaker": "SPEAKER_01",
+      "text": "的这个奖品和比方说第一名是会给价值学分啊然，",
+      "timestamp": "00:04:40"
+    },
+    {
+      "id": "seg_0112",
+      "start": 284.56,
+      "end": 286.38,
+      "speaker": "SPEAKER_05",
+      "text": "后给他点儿吃的呀是吧对对，",
+      "timestamp": "00:04:44"
+    },
+    {
+      "id": "seg_0113",
+      "start": 287.16,
+      "end": 287.4,
+      "speaker": "SPEAKER_01",
+      "text": "对咱，",
+      "timestamp": "00:04:47"
+    },
+    {
+      "id": "seg_0114",
+      "start": 287.56,
+      "end": 289.24,
+      "speaker": "SPEAKER_01",
+      "text": "们可以从八十三去购，",
+      "timestamp": "00:04:47"
+    },
+    {
+      "id": "seg_0115",
+      "start": 289.68,
+      "end": 290.88,
+      "speaker": "SPEAKER_05",
+      "text": "买一些小礼品而且也要礼。",
+      "timestamp": "00:04:49"
+    },
+    {
+      "id": "seg_0116",
+      "start": 290.88,
+      "end": 301.32,
+      "speaker": "SPEAKER_01",
+      "text": "品也要买六份虽然是三元呃分三年但是要买六分因为通知他已经了这个冰箱里头的因为他是会讲的啊职务要求还有就，",
+      "timestamp": "00:04:50"
+    },
+    {
+      "id": "seg_0117",
+      "start": 301.58,
+      "end": 303.76,
+      "speaker": "SPEAKER_01",
+      "text": "是现场布置大家看想法吗灯，",
+      "timestamp": "00:05:01"
+    },
+    {
+      "id": "seg_0118",
+      "start": 303.79,
+      "end": 303.89,
+      "speaker": "SPEAKER_02",
+      "text": "光我觉？",
+      "timestamp": "00:05:03"
+    },
+    {
+      "id": "seg_0119",
+      "start": 303.89,
+      "end": 304.26,
+      "speaker": "SPEAKER_02",
+      "text": "得我觉得，",
+      "timestamp": "00:05:03"
+    },
+    {
+      "id": "seg_0120",
+      "start": 304.81,
+      "end": 308.79,
+      "speaker": "SPEAKER_05",
+      "text": "我们你的晚会可以在学校操场然进行那个比较比，",
+      "timestamp": "00:05:04"
+    },
+    {
+      "id": "seg_0121",
+      "start": 310.87,
+      "end": 313.63,
+      "speaker": "SPEAKER_01",
+      "text": "较布置的比较精细一点然。",
+      "timestamp": "00:05:10"
+    },
+    {
+      "id": "seg_0122",
+      "start": 314.07,
+      "end": 315.81,
+      "speaker": "SPEAKER_01",
+      "text": "后灯光什么比较，",
+      "timestamp": "00:05:14"
+    },
+    {
+      "id": "seg_0123",
+      "start": 315.85,
+      "end": 316.41,
+      "speaker": "SPEAKER_02",
+      "text": "到位一，",
+      "timestamp": "00:05:15"
+    },
+    {
+      "id": "seg_0124",
+      "start": 316.41,
+      "end": 317.38,
+      "speaker": "SPEAKER_02",
+      "text": "点然后做的比较要。",
+      "timestamp": "00:05:16"
+    },
+    {
+      "id": "seg_0125",
+      "start": 317.38,
+      "end": 322.12,
+      "speaker": "SPEAKER_02",
+      "text": "专业一点用摄像机什么的做好我们的，",
+      "timestamp": "00:05:17"
+    },
+    {
+      "id": "seg_0126",
+      "start": 322.53,
+      "end": 326.075,
+      "speaker": "SPEAKER_02",
+      "text": "学校宣传吧因为我们的活动我觉得不，",
+      "timestamp": "00:05:22"
+    },
+    {
+      "id": "seg_0127",
+      "start": 326.82,
+      "end": 328.025,
+      "speaker": "SPEAKER_05",
+      "text": "只是一年一次的活，",
+      "timestamp": "00:05:26"
+    },
+    {
+      "id": "seg_0128",
+      "start": 328.48,
+      "end": 329.39,
+      "speaker": "SPEAKER_02",
+      "text": "动这个意义比？",
+      "timestamp": "00:05:28"
+    },
+    {
+      "id": "seg_0129",
+      "start": 333.02,
+      "end": 333.555,
+      "speaker": "SPEAKER_02",
+      "text": "较大，",
+      "timestamp": "00:05:33"
+    },
+    {
+      "id": "seg_0130",
+      "start": 334.12,
+      "end": 344.25,
+      "speaker": "SPEAKER_08",
+      "text": "然后我们也拉了很然后赞助啊不仅宣传我们学校就是要促进一下师生关系还要往向外宣传一下我。",
+      "timestamp": "00:05:34"
+    },
+    {
+      "id": "seg_0131",
+      "start": 344.25,
+      "end": 347.34,
+      "speaker": "SPEAKER_08",
+      "text": "们学校的校园文化我们要做好，",
+      "timestamp": "00:05:44"
+    },
+    {
+      "id": "seg_0132",
+      "start": 347.34,
+      "end": 349.655,
+      "speaker": "SPEAKER_08",
+      "text": "这个方面干什么灯光啊怎么安排嗯，",
+      "timestamp": "00:05:47"
+    },
+    {
+      "id": "seg_0133",
+      "start": 350.01,
+      "end": 353.54,
+      "speaker": "SPEAKER_08",
+      "text": "摆一个在操场摆一个比较大一点的然后下。",
+      "timestamp": "00:05:50"
+    },
+    {
+      "id": "seg_0134",
+      "start": 353.97,
+      "end": 358.78,
+      "speaker": "SPEAKER_08",
+      "text": "面来两台摄像机然后嗯可以呃那个舞蹈啊什么一些 yeah 服装然，",
+      "timestamp": "00:05:53"
+    },
+    {
+      "id": "seg_0135",
+      "start": 358.82,
+      "end": 359.96,
+      "speaker": "SPEAKER_08",
+      "text": "后我都要求的稍微。",
+      "timestamp": "00:05:58"
+    },
+    {
+      "id": "seg_0136",
+      "start": 360.06,
+      "end": 362.01,
+      "speaker": "SPEAKER_08",
+      "text": "严格一嗯之后可以做成宣传画然，",
+      "timestamp": "00:06:00"
+    },
+    {
+      "id": "seg_0137",
+      "start": 363.55,
+      "end": 365.52,
+      "speaker": "SPEAKER_08",
+      "text": "后在学校啊或者贴出，",
+      "timestamp": "00:06:03"
+    },
+    {
+      "id": "seg_0138",
+      "start": 365.56,
+      "end": 367.74,
+      "speaker": "SPEAKER_08",
+      "text": "来让更多吸引更多的人然后也，",
+      "timestamp": "00:06:05"
+    },
+    {
+      "id": "seg_0139",
+      "start": 367.74,
+      "end": 371.525,
+      "speaker": "SPEAKER_08",
+      "text": "可以可以为我们以后的学校拉赞助就有对方很，",
+      "timestamp": "00:06:07"
+    },
+    {
+      "id": "seg_0140",
+      "start": 372.29,
+      "end": 375.34,
+      "speaker": "SPEAKER_08",
+      "text": "多你说刚才你们说部门要出现哪些对这一方，",
+      "timestamp": "00:06:12"
+    },
+    {
+      "id": "seg_0141",
+      "start": 375.34,
+      "end": 375.845,
+      "speaker": "SPEAKER_06",
+      "text": "面呢嗯好的嗯咱？",
+      "timestamp": "00:06:15"
+    },
+    {
+      "id": "seg_0142",
+      "start": 378.74,
+      "end": 378.96,
+      "speaker": "SPEAKER_08",
+      "text": "们，",
+      "timestamp": "00:06:18"
+    },
+    {
+      "id": "seg_0143",
+      "start": 378.96,
+      "end": 381.475,
+      "speaker": "SPEAKER_08",
+      "text": "部门的会员们有什么特长吗想们不会园，",
+      "timestamp": "00:06:18"
+    },
+    {
+      "id": "seg_0144",
+      "start": 383.36,
+      "end": 385.535,
+      "speaker": "SPEAKER_08",
+      "text": "a 可以表演演个架给给，",
+      "timestamp": "00:06:23"
+    },
+    {
+      "id": "seg_0145",
+      "start": 386.27,
+      "end": 390.94,
+      "speaker": "SPEAKER_06",
+      "text": "找个家档啊这个 a 这边可以 a 和 d 可以搞。",
+      "timestamp": "00:06:26"
+    },
+    {
+      "id": "seg_0146",
+      "start": 391.04,
+      "end": 396.21,
+      "speaker": "SPEAKER_08",
+      "text": "一个相声啊他们俩可以搞个下比如说咱们这儿女生，",
+      "timestamp": "00:06:31"
+    },
+    {
+      "id": "seg_0147",
+      "start": 396.21,
+      "end": 402.535,
+      "speaker": "SPEAKER_08",
+      "text": "身材好让他们是吧找那个好看跳个舞跟舞蹈社。",
+      "timestamp": "00:06:36"
+    },
+    {
+      "id": "seg_0148",
+      "start": 402.75,
+      "end": 405.71,
+      "speaker": "SPEAKER_08",
+      "text": "再学两天对借着服装然后刚才 c 也说了说，",
+      "timestamp": "00:06:42"
+    },
+    {
+      "id": "seg_0149",
+      "start": 405.71,
+      "end": 407.305,
+      "speaker": "SPEAKER_08",
+      "text": "的是她不是要。",
+      "timestamp": "00:06:45"
+    },
+    {
+      "id": "seg_0150",
+      "start": 408.22,
+      "end": 414.415,
+      "speaker": "SPEAKER_04",
+      "text": "去操场嘛就从体育馆搬到操场嘛操场的地方大？",
+      "timestamp": "00:06:48"
+    },
+    {
+      "id": "seg_0151",
+      "start": 414.52,
+      "end": 414.7,
+      "speaker": "SPEAKER_02",
+      "text": "嘛，",
+      "timestamp": "00:06:54"
+    },
+    {
+      "id": "seg_0152",
+      "start": 414.7,
+      "end": 414.965,
+      "speaker": "SPEAKER_02",
+      "text": "所以，",
+      "timestamp": "00:06:54"
+    },
+    {
+      "id": "seg_0153",
+      "start": 415.03,
+      "end": 415.27,
+      "speaker": "SPEAKER_02",
+      "text": "咱，",
+      "timestamp": "00:06:55"
+    },
+    {
+      "id": "seg_0154",
+      "start": 415.86,
+      "end": 418.365,
+      "speaker": "SPEAKER_05",
+      "text": "们这个费用最好再拉一个赞助十？",
+      "timestamp": "00:06:55"
+    },
+    {
+      "id": "seg_0155",
+      "start": 422.96,
+      "end": 425.58,
+      "speaker": "SPEAKER_01",
+      "text": "万块钱可能不够因为音箱还要，",
+      "timestamp": "00:07:02"
+    },
+    {
+      "id": "seg_0156",
+      "start": 426.34,
+      "end": 429.32,
+      "speaker": "SPEAKER_01",
+      "text": "读灯光也要打的。",
+      "timestamp": "00:07:06"
+    },
+    {
+      "id": "seg_0157",
+      "start": 429.32,
+      "end": 432.88,
+      "speaker": "SPEAKER_03",
+      "text": "多最好都是租用这样便宜服装呢找咱们社，",
+      "timestamp": "00:07:09"
+    },
+    {
+      "id": "seg_0158",
+      "start": 432.94,
+      "end": 434.18,
+      "speaker": "SPEAKER_01",
+      "text": "团的嗯准备从那个。",
+      "timestamp": "00:07:12"
+    },
+    {
+      "id": "seg_0159",
+      "start": 434.24,
+      "end": 436.26,
+      "speaker": "SPEAKER_01",
+      "text": "体育馆搬到操场对因为什么，",
+      "timestamp": "00:07:14"
+    },
+    {
+      "id": "seg_0160",
+      "start": 436.26,
+      "end": 437.1,
+      "speaker": "SPEAKER_01",
+      "text": "时候挺喜欢，",
+      "timestamp": "00:07:16"
+    },
+    {
+      "id": "seg_0161",
+      "start": 437.1,
+      "end": 441.72,
+      "speaker": "SPEAKER_01",
+      "text": "什么时候候开的肯定是要十二月三十一。",
+      "timestamp": "00:07:17"
+    },
+    {
+      "id": "seg_0162",
+      "start": 441.72,
+      "end": 441.82,
+      "speaker": "SPEAKER_01",
+      "text": "号，",
+      "timestamp": "00:07:21"
+    },
+    {
+      "id": "seg_0163",
+      "start": 441.82,
+      "end": 442.72,
+      "speaker": "SPEAKER_01",
+      "text": "热冷很冷对。",
+      "timestamp": "00:07:21"
+    },
+    {
+      "id": "seg_0164",
+      "start": 442.72,
+      "end": 444.88,
+      "speaker": "SPEAKER_01",
+      "text": "考虑这个觉得还是，",
+      "timestamp": "00:07:22"
+    },
+    {
+      "id": "seg_0165",
+      "start": 444.88,
+      "end": 448.4,
+      "speaker": "SPEAKER_01",
+      "text": "室内比较好因为天气元元，",
+      "timestamp": "00:07:24"
+    },
+    {
+      "id": "seg_0166",
+      "start": 448.4,
+      "end": 450.08,
+      "speaker": "SPEAKER_01",
+      "text": "旦说天气比较都暖了他们晚，",
+      "timestamp": "00:07:28"
+    },
+    {
+      "id": "seg_0167",
+      "start": 450.42,
+      "end": 451.52,
+      "speaker": "SPEAKER_01",
+      "text": "上晚上吧晚上开晚。",
+      "timestamp": "00:07:30"
+    },
+    {
+      "id": "seg_0168",
+      "start": 451.82,
+      "end": 454.34,
+      "speaker": "SPEAKER_01",
+      "text": "上六点六点开始六点开始入这个人多的话。",
+      "timestamp": "00:07:31"
+    },
+    {
+      "id": "seg_0169",
+      "start": 454.34,
+      "end": 455.42,
+      "speaker": "SPEAKER_01",
+      "text": "也未来元旦了能看清啊看那，",
+      "timestamp": "00:07:34"
+    },
+    {
+      "id": "seg_0170",
+      "start": 455.44,
+      "end": 457.28,
+      "speaker": "SPEAKER_01",
+      "text": "个天气情行吧要做到，",
+      "timestamp": "00:07:35"
+    },
+    {
+      "id": "seg_0171",
+      "start": 457.36,
+      "end": 458.48,
+      "speaker": "SPEAKER_01",
+      "text": "两百个如果经济好，",
+      "timestamp": "00:07:37"
+    },
+    {
+      "id": "seg_0172",
+      "start": 458.54,
+      "end": 459.98,
+      "speaker": "SPEAKER_01",
+      "text": "的话相对来说那但是如果说如过。",
+      "timestamp": "00:07:38"
+    },
+    {
+      "id": "seg_0173",
+      "start": 460.3,
+      "end": 462.14,
+      "speaker": "SPEAKER_01",
+      "text": "前提买太小不可以向外另一，",
+      "timestamp": "00:07:40"
+    },
+    {
+      "id": "seg_0174",
+      "start": 462.88,
+      "end": 462.98,
+      "speaker": "SPEAKER_04",
+      "text": "个，",
+      "timestamp": "00:07:42"
+    },
+    {
+      "id": "seg_0175",
+      "start": 462.98,
+      "end": 465.04,
+      "speaker": "SPEAKER_04",
+      "text": "体育这毕竟我们八三十六个肯定是。",
+      "timestamp": "00:07:42"
+    },
+    {
+      "id": "seg_0176",
+      "start": 466.2,
+      "end": 466.44,
+      "speaker": "SPEAKER_01",
+      "text": "要，",
+      "timestamp": "00:07:46"
+    },
+    {
+      "id": "seg_0177",
+      "start": 466.5,
+      "end": 467.96,
+      "speaker": "SPEAKER_01",
+      "text": "找消外人员进行合作的呃，",
+      "timestamp": "00:07:46"
+    },
+    {
+      "id": "seg_0178",
+      "start": 468.0,
+      "end": 469.49,
+      "speaker": "SPEAKER_04",
+      "text": "所以说我们要在我，",
+      "timestamp": "00:07:48"
+    },
+    {
+      "id": "seg_0179",
+      "start": 471.13,
+      "end": 473.15,
+      "speaker": "SPEAKER_05",
+      "text": "觉得吧对也需要上三大点因为要邀。",
+      "timestamp": "00:07:51"
+    },
+    {
+      "id": "seg_0180",
+      "start": 473.45,
+      "end": 474.215,
+      "speaker": "SPEAKER_04",
+      "text": "请到很如果。",
+      "timestamp": "00:07:53"
+    },
+    {
+      "id": "seg_0181",
+      "start": 476.17,
+      "end": 476.41,
+      "speaker": "SPEAKER_07",
+      "text": "说我一，",
+      "timestamp": "00:07:56"
+    },
+    {
+      "id": "seg_0182",
+      "start": 476.53,
+      "end": 478.31,
+      "speaker": "SPEAKER_07",
+      "text": "万不够超量听不到所以说需要向外走我。",
+      "timestamp": "00:07:56"
+    },
+    {
+      "id": "seg_0183",
+      "start": 478.31,
+      "end": 481.8,
+      "speaker": "SPEAKER_07",
+      "text": "的话呃那么如何提前那他如果刚才你说，",
+      "timestamp": "00:07:58"
+    },
+    {
+      "id": "seg_0184",
+      "start": 481.8,
+      "end": 484.205,
+      "speaker": "SPEAKER_07",
+      "text": "其外面的成本也大我，",
+      "timestamp": "00:08:01"
+    },
+    {
+      "id": "seg_0185",
+      "start": 484.52,
+      "end": 485.12,
+      "speaker": "SPEAKER_04",
+      "text": "觉得咱，",
+      "timestamp": "00:08:04"
+    },
+    {
+      "id": "seg_0186",
+      "start": 485.18,
+      "end": 486.41,
+      "speaker": "SPEAKER_04",
+      "text": "们学校的，",
+      "timestamp": "00:08:05"
+    },
+    {
+      "id": "seg_0187",
+      "start": 486.41,
+      "end": 487.865,
+      "speaker": "SPEAKER_01",
+      "text": "体育馆面积就足够大。",
+      "timestamp": "00:08:06"
+    },
+    {
+      "id": "seg_0188",
+      "start": 488.61,
+      "end": 489.97,
+      "speaker": "SPEAKER_04",
+      "text": "对学校里的礼，",
+      "timestamp": "00:08:08"
+    },
+    {
+      "id": "seg_0189",
+      "start": 490.01,
+      "end": 492.53,
+      "speaker": "SPEAKER_02",
+      "text": "堂或者体育馆，",
+      "timestamp": "00:08:10"
+    },
+    {
+      "id": "seg_0190",
+      "start": 493.5,
+      "end": 494.32,
+      "speaker": "SPEAKER_04",
+      "text": "我觉得应，",
+      "timestamp": "00:08:13"
+    },
+    {
+      "id": "seg_0191",
+      "start": 494.44,
+      "end": 496.09,
+      "speaker": "SPEAKER_04",
+      "text": "该可以节省更多的，",
+      "timestamp": "00:08:14"
+    },
+    {
+      "id": "seg_0192",
+      "start": 496.16,
+      "end": 497.015,
+      "speaker": "SPEAKER_02",
+      "text": "成本然后布置。",
+      "timestamp": "00:08:16"
+    },
+    {
+      "id": "seg_0193",
+      "start": 498.56,
+      "end": 499.435,
+      "speaker": "SPEAKER_02",
+      "text": "然后花更多的精，",
+      "timestamp": "00:08:18"
+    },
+    {
+      "id": "seg_0194",
+      "start": 501.77,
+      "end": 512.785,
+      "speaker": "SPEAKER_02",
+      "text": "力在服装装饰然后宣传上面就定在体育馆，",
+      "timestamp": "00:08:21"
+    },
+    {
+      "id": "seg_0195",
+      "start": 513.1,
+      "end": 515.69,
+      "speaker": "SPEAKER_02",
+      "text": "内吧就是搞一些搞点时。",
+      "timestamp": "00:08:33"
+    },
+    {
+      "id": "seg_0196",
+      "start": 516.56,
+      "end": 522.655,
+      "speaker": "SPEAKER_02",
+      "text": "间布置不要这样也不用咱们就多花时间花在控制上还有策。",
+      "timestamp": "00:08:36"
+    },
+    {
+      "id": "seg_0197",
+      "start": 523.24,
+      "end": 523.48,
+      "speaker": "SPEAKER_05",
+      "text": "划，",
+      "timestamp": "00:08:43"
+    },
+    {
+      "id": "seg_0198",
+      "start": 523.74,
+      "end": 526.565,
+      "speaker": "SPEAKER_05",
+      "text": "这布置上面那个什么计划呢布，",
+      "timestamp": "00:08:43"
+    },
+    {
+      "id": "seg_0199",
+      "start": 526.7,
+      "end": 527.055,
+      "speaker": "SPEAKER_02",
+      "text": "纸，",
+      "timestamp": "00:08:46"
+    },
+    {
+      "id": "seg_0200",
+      "start": 528.08,
+      "end": 529.265,
+      "speaker": "SPEAKER_02",
+      "text": "上面毕竟运动厂。",
+      "timestamp": "00:08:48"
+    },
+    {
+      "id": "seg_0201",
+      "start": 530.91,
+      "end": 531.935,
+      "speaker": "SPEAKER_02",
+      "text": "和呃首先这个这，",
+      "timestamp": "00:08:50"
+    },
+    {
+      "id": "seg_0202",
+      "start": 532.67,
+      "end": 534.605,
+      "speaker": "SPEAKER_02",
+      "text": "个环节都要做主题嗯现在这，",
+      "timestamp": "00:08:52"
+    },
+    {
+      "id": "seg_0203",
+      "start": 535.44,
+      "end": 535.975,
+      "speaker": "SPEAKER_02",
+      "text": "个大毕竟政，",
+      "timestamp": "00:08:55"
+    },
+    {
+      "id": "seg_0204",
+      "start": 536.33,
+      "end": 539.625,
+      "speaker": "SPEAKER_02",
+      "text": "治的工作肯不要准备因为学校，",
+      "timestamp": "00:08:56"
+    },
+    {
+      "id": "seg_0205",
+      "start": 540.16,
+      "end": 540.34,
+      "speaker": "SPEAKER_05",
+      "text": "的，",
+      "timestamp": "00:09:00"
+    },
+    {
+      "id": "seg_0206",
+      "start": 540.34,
+      "end": 542.08,
+      "speaker": "SPEAKER_05",
+      "text": "领导人红地盘最？",
+      "timestamp": "00:09:00"
+    },
+    {
+      "id": "seg_0207",
+      "start": 544.1,
+      "end": 549.4,
+      "speaker": "SPEAKER_04",
+      "text": "好然后让他们让咱们学生部的到主要是邓，",
+      "timestamp": "00:09:04"
+    },
+    {
+      "id": "seg_0208",
+      "start": 549.4,
+      "end": 557.71,
+      "speaker": "SPEAKER_05",
+      "text": "子咱们觉得体育馆都有在兰州这个为什么主要是人太多了在租两千个豆因为他那个座位。",
+      "timestamp": "00:09:09"
+    },
+    {
+      "id": "seg_0209",
+      "start": 557.71,
+      "end": 560.17,
+      "speaker": "SPEAKER_07",
+      "text": "只有四五个座位抽牌的走一下然后装饰，",
+      "timestamp": "00:09:17"
+    },
+    {
+      "id": "seg_0210",
+      "start": 560.17,
+      "end": 560.83,
+      "speaker": "SPEAKER_07",
+      "text": "上面为了我，",
+      "timestamp": "00:09:20"
+    },
+    {
+      "id": "seg_0211",
+      "start": 560.89,
+      "end": 564.59,
+      "speaker": "SPEAKER_07",
+      "text": "又气愤然后买一些气球然后我们就有会，",
+      "timestamp": "00:09:20"
+    },
+    {
+      "id": "seg_0212",
+      "start": 564.73,
+      "end": 570.63,
+      "speaker": "SPEAKER_07",
+      "text": "员就就在下面也就是然后再带动别的同，",
+      "timestamp": "00:09:24"
+    },
+    {
+      "id": "seg_0213",
+      "start": 570.97,
+      "end": 572.95,
+      "speaker": "SPEAKER_05",
+      "text": "学一请帮忙做一下那其他的对对我，",
+      "timestamp": "00:09:30"
+    },
+    {
+      "id": "seg_0214",
+      "start": 574.15,
+      "end": 582.06,
+      "speaker": "SPEAKER_05",
+      "text": "把那个装饰的稍微好看一点让彩带气球条幅特种还。",
+      "timestamp": "00:09:34"
+    },
+    {
+      "id": "seg_0215",
+      "start": 582.08,
+      "end": 586.78,
+      "speaker": "SPEAKER_04",
+      "text": "有灯光可以感觉以及其他的代人然后灯光闪？",
+      "timestamp": "00:09:42"
+    },
+    {
+      "id": "seg_0216",
+      "start": 590.76,
+      "end": 600.325,
+      "speaker": "SPEAKER_01",
+      "text": "动了 a 同学这边有什么想法 a 同学这边我觉得可以找一。",
+      "timestamp": "00:09:50"
+    },
+    {
+      "id": "seg_0217",
+      "start": 600.39,
+      "end": 600.63,
+      "speaker": "SPEAKER_05",
+      "text": "个，",
+      "timestamp": "00:10:00"
+    },
+    {
+      "id": "seg_0218",
+      "start": 606.96,
+      "end": 612.13,
+      "speaker": "SPEAKER_02",
+      "text": "专门干这个的灯光公司然后给他们搞一，",
+      "timestamp": "00:10:06"
+    },
+    {
+      "id": "seg_0219",
+      "start": 612.71,
+      "end": 615.365,
+      "speaker": "SPEAKER_02",
+      "text": "套专业的设备备然后看具体要，",
+      "timestamp": "00:10:12"
+    },
+    {
+      "id": "seg_0220",
+      "start": 619.06,
+      "end": 622.87,
+      "speaker": "SPEAKER_01",
+      "text": "用到哪个节目上咱们就具体安。",
+      "timestamp": "00:10:19"
+    },
+    {
+      "id": "seg_0221",
+      "start": 623.23,
+      "end": 623.965,
+      "speaker": "SPEAKER_02",
+      "text": "排到哪个节，",
+      "timestamp": "00:10:23"
+    },
+    {
+      "id": "seg_0222",
+      "start": 625.09,
+      "end": 626.46,
+      "speaker": "SPEAKER_02",
+      "text": "目上然后比如像一些，",
+      "timestamp": "00:10:25"
+    },
+    {
+      "id": "seg_0223",
+      "start": 626.46,
+      "end": 627.095,
+      "speaker": "SPEAKER_05",
+      "text": "什么日，",
+      "timestamp": "00:10:26"
+    },
+    {
+      "id": "seg_0224",
+      "start": 629.45,
+      "end": 630.105,
+      "speaker": "SPEAKER_02",
+      "text": "光灯啊之类？",
+      "timestamp": "00:10:29"
+    },
+    {
+      "id": "seg_0225",
+      "start": 630.72,
+      "end": 631.98,
+      "speaker": "SPEAKER_02",
+      "text": "的啊这样效果会，",
+      "timestamp": "00:10:30"
+    },
+    {
+      "id": "seg_0226",
+      "start": 632.0,
+      "end": 634.885,
+      "speaker": "SPEAKER_02",
+      "text": "好好很多啊二，",
+      "timestamp": "00:10:32"
+    },
+    {
+      "id": "seg_0227",
+      "start": 636.34,
+      "end": 638.305,
+      "speaker": "SPEAKER_01",
+      "text": "十四个节目咱也定定好了还行嗯，",
+      "timestamp": "00:10:36"
+    },
+    {
+      "id": "seg_0228",
+      "start": 638.57,
+      "end": 639.765,
+      "speaker": "SPEAKER_02",
+      "text": "现在还没有还，",
+      "timestamp": "00:10:38"
+    },
+    {
+      "id": "seg_0229",
+      "start": 642.29,
+      "end": 644.39,
+      "speaker": "SPEAKER_07",
+      "text": "没有开始制作海报嘛咱们只，",
+      "timestamp": "00:10:42"
+    },
+    {
+      "id": "seg_0230",
+      "start": 644.39,
+      "end": 646.435,
+      "speaker": "SPEAKER_07",
+      "text": "能说是户内进行，",
+      "timestamp": "00:10:44"
+    },
+    {
+      "id": "seg_0231",
+      "start": 646.87,
+      "end": 648.45,
+      "speaker": "SPEAKER_06",
+      "text": "策划一下策划策划，",
+      "timestamp": "00:10:46"
+    },
+    {
+      "id": "seg_0232",
+      "start": 648.47,
+      "end": 650.185,
+      "speaker": "SPEAKER_06",
+      "text": "二十四个节，",
+      "timestamp": "00:10:48"
+    },
+    {
+      "id": "seg_0233",
+      "start": 650.93,
+      "end": 654.185,
+      "speaker": "SPEAKER_07",
+      "text": "目对大概是二十四整一个节目他是大概有七分钟那。",
+      "timestamp": "00:10:50"
+    },
+    {
+      "id": "seg_0234",
+      "start": 655.58,
+      "end": 656.8,
+      "speaker": "SPEAKER_06",
+      "text": "肯定会有时，",
+      "timestamp": "00:10:55"
+    },
+    {
+      "id": "seg_0235",
+      "start": 656.8,
+      "end": 659.81,
+      "speaker": "SPEAKER_07",
+      "text": "间长的啊那个一个这个晚会你一万计划是三，",
+      "timestamp": "00:10:56"
+    },
+    {
+      "id": "seg_0236",
+      "start": 659.81,
+      "end": 660.47,
+      "speaker": "SPEAKER_07",
+      "text": "个小时三、",
+      "timestamp": "00:10:59"
+    },
+    {
+      "id": "seg_0237",
+      "start": 660.93,
+      "end": 661.41,
+      "speaker": "SPEAKER_07",
+      "text": "千一、",
+      "timestamp": "00:11:00"
+    },
+    {
+      "id": "seg_0238",
+      "start": 661.63,
+      "end": 662.11,
+      "speaker": "SPEAKER_07",
+      "text": "百八、",
+      "timestamp": "00:11:01"
+    },
+    {
+      "id": "seg_0239",
+      "start": 662.53,
+      "end": 663.045,
+      "speaker": "SPEAKER_07",
+      "text": "十个这，",
+      "timestamp": "00:11:02"
+    },
+    {
+      "id": "seg_0240",
+      "start": 666.52,
+      "end": 677.375,
+      "speaker": "SPEAKER_02",
+      "text": "四个节目你们想好分哪几类的歌舞之一周，",
+      "timestamp": "00:11:06"
+    },
+    {
+      "id": "seg_0241",
+      "start": 680.71,
+      "end": 682.65,
+      "speaker": "SPEAKER_05",
+      "text": "围像产业保险想打嘞我觉。",
+      "timestamp": "00:11:20"
+    },
+    {
+      "id": "seg_0242",
+      "start": 682.65,
+      "end": 684.41,
+      "speaker": "SPEAKER_04",
+      "text": "得你加入那个故事表演的情景剧仅？",
+      "timestamp": "00:11:22"
+    },
+    {
+      "id": "seg_0243",
+      "start": 684.43,
+      "end": 690.27,
+      "speaker": "SPEAKER_03",
+      "text": "仅历历史去然后上上师声大合唱我觉得是领导参加当嗯所以说会比较轻同时这，",
+      "timestamp": "00:11:24"
+    },
+    {
+      "id": "seg_0244",
+      "start": 690.27,
+      "end": 693.55,
+      "speaker": "SPEAKER_03",
+      "text": "一下过所以说有利用心理的现在真比较小到时候，",
+      "timestamp": "00:11:30"
+    },
+    {
+      "id": "seg_0245",
+      "start": 693.57,
+      "end": 697.49,
+      "speaker": "SPEAKER_03",
+      "text": "相对于也是有还有这个呃准备好了就需要，",
+      "timestamp": "00:11:33"
+    },
+    {
+      "id": "seg_0246",
+      "start": 697.81,
+      "end": 699.69,
+      "speaker": "SPEAKER_03",
+      "text": "就选一下因为那一方面几个人要四个。",
+      "timestamp": "00:11:37"
+    },
+    {
+      "id": "seg_0247",
+      "start": 700.41,
+      "end": 703.11,
+      "speaker": "SPEAKER_03",
+      "text": "人最好男生在一米八左右就能在一米七左右两，",
+      "timestamp": "00:11:40"
+    },
+    {
+      "id": "seg_0248",
+      "start": 703.51,
+      "end": 705.19,
+      "speaker": "SPEAKER_03",
+      "text": "男两女咱们三十号的控不器空程。",
+      "timestamp": "00:11:43"
+    },
+    {
+      "id": "seg_0249",
+      "start": 705.67,
+      "end": 707.73,
+      "speaker": "SPEAKER_04",
+      "text": "器可以招司机一位空调性呢还有，",
+      "timestamp": "00:11:45"
+    },
+    {
+      "id": "seg_0250",
+      "start": 707.73,
+      "end": 708.55,
+      "speaker": "SPEAKER_04",
+      "text": "那个。",
+      "timestamp": "00:11:47"
+    },
+    {
+      "id": "seg_0251",
+      "start": 708.75,
+      "end": 708.99,
+      "speaker": "SPEAKER_05",
+      "text": "播，",
+      "timestamp": "00:11:48"
+    },
+    {
+      "id": "seg_0252",
+      "start": 709.21,
+      "end": 713.45,
+      "speaker": "SPEAKER_05",
+      "text": "音专业播音专业哎思维专业也可以空乘，",
+      "timestamp": "00:11:49"
+    },
+    {
+      "id": "seg_0253",
+      "start": 713.45,
+      "end": 716.19,
+      "speaker": "SPEAKER_05",
+      "text": "器可以找司仪咱们到时候淘宝上竞竞。",
+      "timestamp": "00:11:53"
+    },
+    {
+      "id": "seg_0254",
+      "start": 716.19,
+      "end": 718.03,
+      "speaker": "SPEAKER_04",
+      "text": "选一下对对对对上因为这。",
+      "timestamp": "00:11:56"
+    },
+    {
+      "id": "seg_0255",
+      "start": 718.03,
+      "end": 718.27,
+      "speaker": "SPEAKER_04",
+      "text": "个对，",
+      "timestamp": "00:11:58"
+    },
+    {
+      "id": "seg_0256",
+      "start": 718.73,
+      "end": 721.065,
+      "speaker": "SPEAKER_05",
+      "text": "也要提前就是依旧活动很大我，",
+      "timestamp": "00:11:58"
+    },
+    {
+      "id": "seg_0257",
+      "start": 721.8,
+      "end": 725.48,
+      "speaker": "SPEAKER_02",
+      "text": "觉得主城这个也是应，",
+      "timestamp": "00:12:01"
+    },
+    {
+      "id": "seg_0258",
+      "start": 725.48,
+      "end": 727.28,
+      "speaker": "SPEAKER_04",
+      "text": "该在提前对一两周之前先。",
+      "timestamp": "00:12:05"
+    },
+    {
+      "id": "seg_0259",
+      "start": 727.53,
+      "end": 729.07,
+      "speaker": "SPEAKER_02",
+      "text": "竞选一下选出来四个，",
+      "timestamp": "00:12:07"
+    },
+    {
+      "id": "seg_0260",
+      "start": 729.07,
+      "end": 735.685,
+      "speaker": "SPEAKER_02",
+      "text": "比较合格的啊我觉得应，",
+      "timestamp": "00:12:09"
+    },
+    {
+      "id": "seg_0261",
+      "start": 739.09,
+      "end": 739.96,
+      "speaker": "SPEAKER_02",
+      "text": "该六个吧咱们还。",
+      "timestamp": "00:12:19"
+    },
+    {
+      "id": "seg_0262",
+      "start": 753.39,
+      "end": 761.03,
+      "speaker": "SPEAKER_04",
+      "text": "有有两个至少有两个备用也也有也要有对对，",
+      "timestamp": "00:12:33"
+    },
+    {
+      "id": "seg_0263",
+      "start": 761.88,
+      "end": 770.305,
+      "speaker": "SPEAKER_02",
+      "text": "备选对万一嫌疑人时有事。",
+      "timestamp": "00:12:41"
+    },
+    {
+      "id": "seg_0264",
+      "start": 772.4,
+      "end": 778.475,
+      "speaker": "SPEAKER_06",
+      "text": "的话可以替上去那这个就由我跟他部长两个人去工，",
+      "timestamp": "00:12:52"
+    },
+    {
+      "id": "seg_0265",
+      "start": 778.92,
+      "end": 780.47,
+      "speaker": "SPEAKER_02",
+      "text": "程关系播音和波音，",
+      "timestamp": "00:12:58"
+    },
+    {
+      "id": "seg_0266",
+      "start": 780.47,
+      "end": 788.5,
+      "speaker": "SPEAKER_06",
+      "text": "转半截请发一下通知报一，",
+      "timestamp": "00:13:00"
+    },
+    {
+      "id": "seg_0267",
+      "start": 788.54,
+      "end": 795.09,
+      "speaker": "SPEAKER_02",
+      "text": "下名然后咱们再挑，",
+      "timestamp": "00:13:08"
+    },
+    {
+      "id": "seg_0268",
+      "start": 796.02,
+      "end": 796.82,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:13:16"
+    },
+    {
+      "id": "seg_0269",
+      "start": 797.8,
+      "end": 802.515,
+      "speaker": "SPEAKER_02",
+      "text": "。",
+      "timestamp": "00:13:17"
+    },
+    {
+      "id": "seg_0270",
+      "start": 804.46,
+      "end": 807.245,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:13:24"
+    },
+    {
+      "id": "seg_0271",
+      "start": 807.72,
+      "end": 811.46,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:13:27"
+    },
+    {
+      "id": "seg_0272",
+      "start": 814.11,
+      "end": 815.875,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:13:34"
+    },
+    {
+      "id": "seg_0273",
+      "start": 817.23,
+      "end": 820.255,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:13:37"
+    },
+    {
+      "id": "seg_0274",
+      "start": 825.66,
+      "end": 829.865,
+      "speaker": "SPEAKER_02",
+      "text": "。",
+      "timestamp": "00:13:45"
+    },
+    {
+      "id": "seg_0275",
+      "start": 831.7,
+      "end": 837.08,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:13:51"
+    },
+    {
+      "id": "seg_0276",
+      "start": 837.43,
+      "end": 840.545,
+      "speaker": "SPEAKER_01",
+      "text": "。",
+      "timestamp": "00:13:57"
+    },
+    {
+      "id": "seg_0277",
+      "start": 841.93,
+      "end": 842.5,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:14:01"
+    },
+    {
+      "id": "seg_0278",
+      "start": 842.8,
+      "end": 848.88,
+      "speaker": "SPEAKER_02",
+      "text": "。",
+      "timestamp": "00:14:02"
+    },
+    {
+      "id": "seg_0279",
+      "start": 848.88,
+      "end": 853.46,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:14:08"
+    },
+    {
+      "id": "seg_0280",
+      "start": 854.0,
+      "end": 855.72,
+      "speaker": "SPEAKER_04",
+      "text": "，",
+      "timestamp": "00:14:14"
+    },
+    {
+      "id": "seg_0281",
+      "start": 855.72,
+      "end": 856.605,
+      "speaker": "SPEAKER_04",
+      "text": "，",
+      "timestamp": "00:14:15"
+    },
+    {
+      "id": "seg_0282",
+      "start": 856.95,
+      "end": 857.19,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:14:16"
+    },
+    {
+      "id": "seg_0283",
+      "start": 857.27,
+      "end": 858.275,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:14:17"
+    },
+    {
+      "id": "seg_0284",
+      "start": 858.66,
+      "end": 859.865,
+      "speaker": "SPEAKER_01",
+      "text": "，",
+      "timestamp": "00:14:18"
+    },
+    {
+      "id": "seg_0285",
+      "start": 861.05,
+      "end": 863.32,
+      "speaker": "SPEAKER_03",
+      "text": "。",
+      "timestamp": "00:14:21"
+    },
+    {
+      "id": "seg_0286",
+      "start": 863.32,
+      "end": 864.3,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:14:23"
+    },
+    {
+      "id": "seg_0287",
+      "start": 864.98,
+      "end": 865.85,
+      "speaker": "SPEAKER_05",
+      "text": "，",
+      "timestamp": "00:14:24"
+    },
+    {
+      "id": "seg_0288",
+      "start": 865.85,
+      "end": 866.47,
+      "speaker": "SPEAKER_07",
+      "text": "，",
+      "timestamp": "00:14:25"
+    },
+    {
+      "id": "seg_0289",
+      "start": 866.55,
+      "end": 868.76,
+      "speaker": "SPEAKER_07",
+      "text": "。",
+      "timestamp": "00:14:26"
+    },
+    {
+      "id": "seg_0290",
+      "start": 868.76,
+      "end": 871.32,
+      "speaker": "SPEAKER_07",
+      "text": "。",
+      "timestamp": "00:14:28"
+    },
+    {
+      "id": "seg_0291",
+      "start": 871.86,
+      "end": 872.04,
+      "speaker": "SPEAKER_07",
+      "text": "，",
+      "timestamp": "00:14:31"
+    },
+    {
+      "id": "seg_0292",
+      "start": 872.04,
+      "end": 874.055,
+      "speaker": "SPEAKER_07",
+      "text": "，",
+      "timestamp": "00:14:32"
+    },
+    {
+      "id": "seg_0293",
+      "start": 874.41,
+      "end": 876.19,
+      "speaker": "SPEAKER_07",
+      "text": "。",
+      "timestamp": "00:14:34"
+    },
+    {
+      "id": "seg_0294",
+      "start": 876.19,
+      "end": 877.21,
+      "speaker": "SPEAKER_03",
+      "text": "，",
+      "timestamp": "00:14:36"
+    },
+    {
+      "id": "seg_0295",
+      "start": 877.21,
+      "end": 878.17,
+      "speaker": "SPEAKER_03",
+      "text": "，",
+      "timestamp": "00:14:37"
+    },
+    {
+      "id": "seg_0296",
+      "start": 878.17,
+      "end": 880.23,
+      "speaker": "SPEAKER_03",
+      "text": "。",
+      "timestamp": "00:14:38"
+    },
+    {
+      "id": "seg_0297",
+      "start": 880.93,
+      "end": 881.27,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:14:40"
+    },
+    {
+      "id": "seg_0298",
+      "start": 881.27,
+      "end": 881.75,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:14:41"
+    },
+    {
+      "id": "seg_0299",
+      "start": 882.13,
+      "end": 883.875,
+      "speaker": "SPEAKER_03",
+      "text": "。",
+      "timestamp": "00:14:42"
+    },
+    {
+      "id": "seg_0300",
+      "start": 884.83,
+      "end": 895.175,
+      "speaker": "SPEAKER_01",
+      "text": "，",
+      "timestamp": "00:14:44"
+    },
+    {
+      "id": "seg_0301",
+      "start": 895.99,
+      "end": 897.85,
+      "speaker": "SPEAKER_02",
+      "text": "，",
+      "timestamp": "00:14:55"
+    },
+    {
+      "id": "seg_0302",
+      "start": 897.87,
+      "end": 898.855,
+      "speaker": "SPEAKER_01",
+      "text": "。",
+      "timestamp": "00:14:57"
+    }
+  ]
+}

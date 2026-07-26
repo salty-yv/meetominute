@@ -1,0 +1,4481 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2011.088
+tiers? <exists> 
+size = 7 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "001-M" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 313 
+        intervals [1]:
+            xmin = 0 
+            xmax = 33.63536 
+            text = "" 
+        intervals [2]:
+            xmin = 33.63536 
+            xmax = 35.99036 
+            text = "零零二我是指导老师" 
+        intervals [3]:
+            xmin = 35.99036 
+            xmax = 48.14036 
+            text = "" 
+        intervals [4]:
+            xmin = 48.14036 
+            xmax = 56.79536 
+            text = "行，好的，今天<sil>是这样的，我来听一下你们嗯这个<sil>咱们这个
+" 
+        intervals [5]:
+            xmin = 56.79536 
+            xmax = 58.54536 
+            text = "" 
+        intervals [6]:
+            xmin = 58.54536 
+            xmax = 59.03484733880555 
+            text = "对" 
+        intervals [7]:
+            xmin = 59.03484733880555 
+            xmax = 59.76286 
+            text = "" 
+        intervals [8]:
+            xmin = 59.76286 
+            xmax = 64.58286 
+            text = "现在由咱们这个<$>呃部长这边儿主持一下儿会议" 
+        intervals [9]:
+            xmin = 64.58286 
+            xmax = 153.07652065865662 
+            text = "" 
+        intervals [10]:
+            xmin = 153.07652065865662 
+            xmax = 154.44629121453386 
+            text = "老老师" 
+        intervals [11]:
+            xmin = 154.44629121453386 
+            xmax = 155.72825596554716 
+            text = "" 
+        intervals [12]:
+            xmin = 155.72825596554716 
+            xmax = 157.46681090185288 
+            text = "老师跟学生一起" 
+        intervals [13]:
+            xmin = 157.46681090185288 
+            xmax = 159.8024453112333 
+            text = "" 
+        intervals [14]:
+            xmin = 159.8024453112333 
+            xmax = 162.59961333577368 
+            text = "嗯这一块儿你准备请哪些老师呢" 
+        intervals [15]:
+            xmin = 162.59961333577368 
+            xmax = 170.65669166720664 
+            text = "" 
+        intervals [16]:
+            xmin = 170.65669166720664 
+            xmax = 171.23925 
+            text = "啊" 
+        intervals [17]:
+            xmin = 171.23925 
+            xmax = 172.39537 
+            text = "" 
+        intervals [18]:
+            xmin = 172.39537 
+            xmax = 173.37037 
+            text = "嗯行" 
+        intervals [19]:
+            xmin = 173.37037 
+            xmax = 173.79787 
+            text = "" 
+        intervals [20]:
+            xmin = 173.79787 
+            xmax = 177.829423722255 
+            text = "这一块儿如果需要帮助，我可以给你提供的帮助" 
+        intervals [21]:
+            xmin = 177.829423722255 
+            xmax = 180.0637588234139 
+            text = "" 
+        intervals [22]:
+            xmin = 180.0637588234139 
+            xmax = 181.33286116087217 
+            text = "嗯行" 
+        intervals [23]:
+            xmin = 181.33286116087217 
+            xmax = 236.03038 
+            text = "" 
+        intervals [24]:
+            xmin = 236.03038 
+            xmax = 241.241 
+            text = "目前你们在拉赞助这个<sil>环节上，目前做的怎么样呢现在
+" 
+        intervals [25]:
+            xmin = 241.241 
+            xmax = 245.9640534583092 
+            text = "" 
+        intervals [26]:
+            xmin = 245.9640534583092 
+            xmax = 246.711 
+            text = "嗯" 
+        intervals [27]:
+            xmin = 246.711 
+            xmax = 252.77778391574984 
+            text = "" 
+        intervals [28]:
+            xmin = 252.77778391574984 
+            xmax = 253.353125 
+            text = "啊" 
+        intervals [29]:
+            xmin = 253.353125 
+            xmax = 254.79538 
+            text = "" 
+        intervals [30]:
+            xmin = 254.79538 
+            xmax = 255.58538 
+            text = "行" 
+        intervals [31]:
+            xmin = 255.58538 
+            xmax = 372.4835993702953 
+            text = "" 
+        intervals [32]:
+            xmin = 372.4835993702953 
+            xmax = 377.1548681890561 
+            text = "这边儿我们这边儿会为大家提供这方面儿的帮助的嗯" 
+        intervals [33]:
+            xmin = 377.1548681890561 
+            xmax = 528.05042 
+            text = "" 
+        intervals [34]:
+            xmin = 528.05042 
+            xmax = 532.86542 
+            text = "嗯刚刚才你们说嗯部门要出两个节目是吧？" 
+        intervals [35]:
+            xmin = 532.86542 
+            xmax = 533.49542 
+            text = "" 
+        intervals [36]:
+            xmin = 533.49542 
+            xmax = 535.44042 
+            text = "这一方面你们有考虑吗？" 
+        intervals [37]:
+            xmin = 535.44042 
+            xmax = 582.5396846685003 
+            text = "" 
+        intervals [38]:
+            xmin = 582.5396846685003 
+            xmax = 585.26043 
+            text = "你准备从这个体育馆搬到操场" 
+        intervals [39]:
+            xmin = 585.26043 
+            xmax = 586.7192409800232 
+            text = "" 
+        intervals [40]:
+            xmin = 586.7192409800232 
+            xmax = 590.21543 
+            text = "什么时候儿进行安排什么时候儿开这个晚会" 
+        intervals [41]:
+            xmin = 590.21543 
+            xmax = 593.39043 
+            text = "" 
+        intervals [42]:
+            xmin = 593.39043 
+            xmax = 594.61543 
+            text = "就是冷不冷" 
+        intervals [43]:
+            xmin = 594.61543 
+            xmax = 596.7673529516502 
+            text = "" 
+        intervals [44]:
+            xmin = 596.7673529516502 
+            xmax = 599.5068940634046 
+            text = "这这<$>" 
+        intervals [45]:
+            xmin = 599.5068940634046 
+            xmax = 600.46543 
+            text = "" 
+        intervals [46]:
+            xmin = 600.46543 
+            xmax = 607.8330500600753 
+            text = "这个是晚上开吗还是什么时候儿这个是晚上开晚上开晚上这个
+" 
+        intervals [47]:
+            xmin = 607.8330500600753 
+            xmax = 608.48043 
+            text = "" 
+        intervals [48]:
+            xmin = 608.48043 
+            xmax = 613.36543 
+            text = "这个人多的话也不会感觉冷。元旦的时候儿" 
+        intervals [49]:
+            xmin = 613.36543 
+            xmax = 613.40293 
+            text = "" 
+        intervals [50]:
+            xmin = 613.40293 
+            xmax = 618.20293 
+            text = "你们看情况吧，看这个天气情况，要做两手准备" 
+        intervals [51]:
+            xmin = 618.20293 
+            xmax = 623.80837712652 
+            text = "" 
+        intervals [52]:
+            xmin = 623.80837712652 
+            xmax = 624.4153125 
+            text = "嗯" 
+        intervals [53]:
+            xmin = 624.4153125 
+            xmax = 625.65793 
+            text = "" 
+        intervals [54]:
+            xmin = 625.65793 
+            xmax = 626.41293 
+            text = "行" 
+        intervals [55]:
+            xmin = 626.41293 
+            xmax = 663.9537415987363 
+            text = "" 
+        intervals [56]:
+            xmin = 663.9537415987363 
+            xmax = 667.83544 
+            text = "还有这个刚才你说去外面租个场地" 
+        intervals [57]:
+            xmin = 667.83544 
+            xmax = 668.51544 
+            text = "" 
+        intervals [58]:
+            xmin = 668.51544 
+            xmax = 672.8720018404051 
+            text = "这这个成本儿也是个问题，这方面你们有考虑吗
+" 
+        intervals [59]:
+            xmin = 672.8720018404051 
+            xmax = 684.8873919348831 
+            text = "" 
+        intervals [60]:
+            xmin = 684.8873919348831 
+            xmax = 686.651625 
+            text = "嗯宣传上面" 
+        intervals [61]:
+            xmin = 686.651625 
+            xmax = 704.71294 
+            text = "" 
+        intervals [62]:
+            xmin = 704.71294 
+            xmax = 708.00794 
+            text = "布置上面你们有什么计划没，目前" 
+        intervals [63]:
+            xmin = 708.00794 
+            xmax = 719.1732447170912 
+            text = "" 
+        intervals [64]:
+            xmin = 719.1732447170912 
+            xmax = 720.786625 
+            text = "要要个主题
+" 
+        intervals [65]:
+            xmin = 720.786625 
+            xmax = 722.8819348248406 
+            text = "" 
+        intervals [66]:
+            xmin = 722.8819348248406 
+            xmax = 725.21294 
+            text = "啊有有考虑没" 
+        intervals [67]:
+            xmin = 725.21294 
+            xmax = 760.07045 
+            text = "" 
+        intervals [68]:
+            xmin = 760.07045 
+            xmax = 761.93545 
+            text = "啊嗯" 
+        intervals [69]:
+            xmin = 761.93545 
+            xmax = 785.20545 
+            text = "" 
+        intervals [70]:
+            xmin = 785.20545 
+            xmax = 786.4361573320788 
+            text = "嗯" 
+        intervals [71]:
+            xmin = 786.4361573320788 
+            xmax = 802.1897958671106 
+            text = "" 
+        intervals [72]:
+            xmin = 802.1897958671106 
+            xmax = 804.09545 
+            text = "A同学这边儿有什么想法" 
+        intervals [73]:
+            xmin = 804.09545 
+            xmax = 809.6178238781123 
+            text = "" 
+        intervals [74]:
+            xmin = 809.6178238781123 
+            xmax = 810.2112500000001 
+            text = "嗯" 
+        intervals [75]:
+            xmin = 810.2112500000001 
+            xmax = 812.6032212434858 
+            text = "" 
+        intervals [76]:
+            xmin = 812.6032212434858 
+            xmax = 813.2941875 
+            text = "嗯" 
+        intervals [77]:
+            xmin = 813.2941875 
+            xmax = 823.2129381608432 
+            text = "" 
+        intervals [78]:
+            xmin = 823.2129381608432 
+            xmax = 823.8304375 
+            text = "嗯" 
+        intervals [79]:
+            xmin = 823.8304375 
+            xmax = 825.68796 
+            text = "" 
+        intervals [80]:
+            xmin = 825.68796 
+            xmax = 828.70296 
+            text = "这二十四个节目你们已经定好啦还是怎么
+" 
+        intervals [81]:
+            xmin = 828.70296 
+            xmax = 836.4736061711059 
+            text = "" 
+        intervals [82]:
+            xmin = 836.4736061711059 
+            xmax = 838.55296 
+            text = "策划策划二十四个节目" 
+        intervals [83]:
+            xmin = 838.55296 
+            xmax = 839.9350547622637 
+            text = "" 
+        intervals [84]:
+            xmin = 839.9350547622637 
+            xmax = 840.82525 
+            text = "二十四个节目" 
+        intervals [85]:
+            xmin = 840.82525 
+            xmax = 844.7643740297797 
+            text = "" 
+        intervals [86]:
+            xmin = 844.7643740297797 
+            xmax = 851.1215143019279 
+            text = "六七分钟那肯定会有时间长的咱这个已经这个晚会你计划多长时间" 
+        intervals [87]:
+            xmin = 851.1215143019279 
+            xmax = 855.0552143598318 
+            text = "" 
+        intervals [88]:
+            xmin = 855.0552143598318 
+            xmax = 855.973375 
+            text = "三个小时" 
+        intervals [89]:
+            xmin = 855.973375 
+            xmax = 856.96296 
+            text = "" 
+        intervals [90]:
+            xmin = 856.96296 
+            xmax = 860.86796 
+            text = "嗯三个小时就是。三六一百八一百八十分钟" 
+        intervals [91]:
+            xmin = 860.86796 
+            xmax = 862.06296 
+            text = "" 
+        intervals [92]:
+            xmin = 862.06296 
+            xmax = 866.85796 
+            text = "嗯然后领导讲讲话儿就要刨去几分钟
+" 
+        intervals [93]:
+            xmin = 866.85796 
+            xmax = 870.33046 
+            text = "" 
+        intervals [94]:
+            xmin = 870.33046 
+            xmax = 872.43046 
+            text = "嗯二十四个节目" 
+        intervals [95]:
+            xmin = 872.43046 
+            xmax = 873.21546 
+            text = "" 
+        intervals [96]:
+            xmin = 873.21546 
+            xmax = 878.12046 
+            text = "二十四个节目你们想好分哪几类了吗？几大类？" 
+        intervals [97]:
+            xmin = 878.12046 
+            xmax = 881.69046 
+            text = "" 
+        intervals [98]:
+            xmin = 881.69046 
+            xmax = 882.69546 
+            text = "歌舞一类" 
+        intervals [99]:
+            xmin = 882.69546 
+            xmax = 884.42546 
+            text = "" 
+        intervals [100]:
+            xmin = 884.42546 
+            xmax = 885.90046 
+            text = "相声一类还有" 
+        intervals [101]:
+            xmin = 885.90046 
+            xmax = 887.45546 
+            text = "" 
+        intervals [102]:
+            xmin = 887.45546 
+            xmax = 888.66546 
+            text = "才艺表演" 
+        intervals [103]:
+            xmin = 888.66546 
+            xmax = 889.54546 
+            text = "" 
+        intervals [104]:
+            xmin = 889.54546 
+            xmax = 890.5829945613782 
+            text = "三大类" 
+        intervals [105]:
+            xmin = 890.5829945613782 
+            xmax = 898.8931165214243 
+            text = "" 
+        intervals [106]:
+            xmin = 898.8931165214243 
+            xmax = 899.9715625 
+            text = "情景剧" 
+        intervals [107]:
+            xmin = 899.9715625 
+            xmax = 926.3554662000579 
+            text = "" 
+        intervals [108]:
+            xmin = 926.3554662000579 
+            xmax = 927.0024375 
+            text = "对" 
+        intervals [109]:
+            xmin = 927.0024375 
+            xmax = 934.2931109597568 
+            text = "" 
+        intervals [110]:
+            xmin = 934.2931109597568 
+            xmax = 934.92575 
+            text = "嗯" 
+        intervals [111]:
+            xmin = 934.92575 
+            xmax = 936.611106824813 
+            text = "" 
+        intervals [112]:
+            xmin = 936.611106824813 
+            xmax = 937.140625 
+            text = "嗯" 
+        intervals [113]:
+            xmin = 937.140625 
+            xmax = 943.2588608149971 
+            text = "" 
+        intervals [114]:
+            xmin = 943.2588608149971 
+            xmax = 944.409125 
+            text = "嗯对" 
+        intervals [115]:
+            xmin = 944.409125 
+            xmax = 944.75047 
+            text = "" 
+        intervals [116]:
+            xmin = 944.75047 
+            xmax = 946.0514219759699 
+            text = "嗯" 
+        intervals [117]:
+            xmin = 946.0514219759699 
+            xmax = 950.79547 
+            text = "" 
+        intervals [118]:
+            xmin = 950.79547 
+            xmax = 953.22047 
+            text = "嗯主持人这一方面" 
+        intervals [119]:
+            xmin = 953.22047 
+            xmax = 953.25047 
+            text = "" 
+        intervals [120]:
+            xmin = 953.25047 
+            xmax = 956.684233434648 
+            text = "有考虑什么人吗几个主持人准备找几个人主持人" 
+        intervals [121]:
+            xmin = 956.684233434648 
+            xmax = 960.85297 
+            text = "" 
+        intervals [122]:
+            xmin = 960.85297 
+            xmax = 962.1455625 
+            text = "一男一女" 
+        intervals [123]:
+            xmin = 962.1455625 
+            xmax = 972.6603310784597 
+            text = "" 
+        intervals [124]:
+            xmin = 972.6603310784597 
+            xmax = 973.77548 
+            text = "空乘系还" 
+        intervals [125]:
+            xmin = 973.77548 
+            xmax = 973.83548 
+            text = "" 
+        intervals [126]:
+            xmin = 973.83548 
+            xmax = 977.839 
+            text = "还有那个播音专业播音系
+" 
+        intervals [127]:
+            xmin = 977.839 
+            xmax = 1044.73548 
+            text = "" 
+        intervals [128]:
+            xmin = 1044.73548 
+            xmax = 1045.8783815272147 
+            text = "穿插
+" 
+        intervals [129]:
+            xmin = 1045.8783815272147 
+            xmax = 1062.09549 
+            text = "" 
+        intervals [130]:
+            xmin = 1062.09549 
+            xmax = 1064.73049 
+            text = "嗯商量一个游戏" 
+        intervals [131]:
+            xmin = 1064.73049 
+            xmax = 1065.85799 
+            text = "" 
+        intervals [132]:
+            xmin = 1065.85799 
+            xmax = 1067.1765031369428 
+            text = "游戏方面有什么" 
+        intervals [133]:
+            xmin = 1067.1765031369428 
+            xmax = 1069.1257920049218 
+            text = "" 
+        intervals [134]:
+            xmin = 1069.1257920049218 
+            xmax = 1071.11799 
+            text = "师生互动游戏" 
+        intervals [135]:
+            xmin = 1071.11799 
+            xmax = 1161.4205 
+            text = "" 
+        intervals [136]:
+            xmin = 1161.4205 
+            xmax = 1166.3105 
+            text = "目前咱们这个十万块钱，目前这个" 
+        intervals [137]:
+            xmin = 1166.3105 
+            xmax = 1166.6105 
+            text = "" 
+        intervals [138]:
+            xmin = 1166.6105 
+            xmax = 1171.0724609510714 
+            text = "预算咱需要花多少钱，这边儿部长这边儿嗯" 
+        intervals [139]:
+            xmin = 1171.0724609510714 
+            xmax = 1175.2306712842021 
+            text = "" 
+        intervals [140]:
+            xmin = 1175.2306712842021 
+            xmax = 1175.7941875000001 
+            text = "嗯" 
+        intervals [141]:
+            xmin = 1175.7941875000001 
+            xmax = 1177.7419173033104 
+            text = "" 
+        intervals [142]:
+            xmin = 1177.7419173033104 
+            xmax = 1178.366875 
+            text = "嗯" 
+        intervals [143]:
+            xmin = 1178.366875 
+            xmax = 1185.013 
+            text = "" 
+        intervals [144]:
+            xmin = 1185.013 
+            xmax = 1191.496375 
+            text = "这个账一定要做清晰，做清楚一些。然后要公示一下你那个账单
+" 
+        intervals [145]:
+            xmin = 1191.496375 
+            xmax = 1194.2605 
+            text = "" 
+        intervals [146]:
+            xmin = 1194.2605 
+            xmax = 1195.4855 
+            text = "行" 
+        intervals [147]:
+            xmin = 1195.4855 
+            xmax = 1196.728 
+            text = "" 
+        intervals [148]:
+            xmin = 1196.728 
+            xmax = 1197.593 
+            text = "继续" 
+        intervals [149]:
+            xmin = 1197.593 
+            xmax = 1198.1555 
+            text = "" 
+        intervals [150]:
+            xmin = 1198.1555 
+            xmax = 1199.4755 
+            text = "还有什么事情" 
+        intervals [151]:
+            xmin = 1199.4755 
+            xmax = 1242.3673030298205 
+            text = "" 
+        intervals [152]:
+            xmin = 1242.3673030298205 
+            xmax = 1243.1275625 
+            text = "嗯" 
+        intervals [153]:
+            xmin = 1243.1275625 
+            xmax = 1260.39301 
+            text = "" 
+        intervals [154]:
+            xmin = 1260.39301 
+            xmax = 1261.27801 
+            text = "嗯" 
+        intervals [155]:
+            xmin = 1261.27801 
+            xmax = 1318.2395148248406 
+            text = "" 
+        intervals [156]:
+            xmin = 1318.2395148248406 
+            xmax = 1318.974875 
+            text = "嗯" 
+        intervals [157]:
+            xmin = 1318.974875 
+            xmax = 1344.2253251172554 
+            text = "" 
+        intervals [158]:
+            xmin = 1344.2253251172554 
+            xmax = 1347.3131250000001 
+            text = "要调动他们积极性" 
+        intervals [159]:
+            xmin = 1347.3131250000001 
+            xmax = 1347.50302 
+            text = "" 
+        intervals [160]:
+            xmin = 1347.50302 
+            xmax = 1353.34802 
+            text = "嗯全对这方面调动积极性有都有什么好的办法" 
+        intervals [161]:
+            xmin = 1353.34802 
+            xmax = 1353.57052 
+            text = "" 
+        intervals [162]:
+            xmin = 1353.57052 
+            xmax = 1360.23052 
+            text = "越踊跃越好，因为咱们是二十四个暂定二十四个项目，肯定是种类越多越好" 
+        intervals [163]:
+            xmin = 1360.23052 
+            xmax = 1360.26552 
+            text = "" 
+        intervals [164]:
+            xmin = 1360.26552 
+            xmax = 1367.18553 
+            text = "比如来个魔术嗯来个武术，来个跳舞" 
+        intervals [165]:
+            xmin = 1367.18553 
+            xmax = 1367.68303 
+            text = "" 
+        intervals [166]:
+            xmin = 1367.68303 
+            xmax = 1368.6260586870294 
+            text = "这些" 
+        intervals [167]:
+            xmin = 1368.6260586870294 
+            xmax = 1398.16303 
+            text = "" 
+        intervals [168]:
+            xmin = 1398.16303 
+            xmax = 1399.55803 
+            text = "嗯行" 
+        intervals [169]:
+            xmin = 1399.55803 
+            xmax = 1399.92053 
+            text = "" 
+        intervals [170]:
+            xmin = 1399.92053 
+            xmax = 1406.31053 
+            text = "呃那咱们这个呃刚才呃和物质跟这个学分儿
+" 
+        intervals [171]:
+            xmin = 1406.31053 
+            xmax = 1407.04553 
+            text = "" 
+        intervals [172]:
+            xmin = 1407.04553 
+            xmax = 1407.81053 
+            text = "双重" 
+        intervals [173]:
+            xmin = 1407.81053 
+            xmax = 1408.92053 
+            text = "" 
+        intervals [174]:
+            xmin = 1408.92053 
+            xmax = 1411.83553 
+            text = "这边儿你准备设置几个奖项部长" 
+        intervals [175]:
+            xmin = 1411.83553 
+            xmax = 1418.9671864598124 
+            text = "" 
+        intervals [176]:
+            xmin = 1418.9671864598124 
+            xmax = 1420.98803 
+            text = "三个奖项会不会太少" 
+        intervals [177]:
+            xmin = 1420.98803 
+            xmax = 1421.27303 
+            text = "" 
+        intervals [178]:
+            xmin = 1421.27303 
+            xmax = 1422.1480625 
+            text = "咱们二" 
+        intervals [179]:
+            xmin = 1422.1480625 
+            xmax = 1424.07553 
+            text = "" 
+        intervals [180]:
+            xmin = 1424.07553 
+            xmax = 1426.3855356999131 
+            text = "三个等级四个等级
+" 
+        intervals [181]:
+            xmin = 1426.3855356999131 
+            xmax = 1428.12330884337 
+            text = "" 
+        intervals [182]:
+            xmin = 1428.12330884337 
+            xmax = 1428.9670263629125 
+            text = "参与奖
+" 
+        intervals [183]:
+            xmin = 1428.9670263629125 
+            xmax = 1433.73053 
+            text = "" 
+        intervals [184]:
+            xmin = 1433.73053 
+            xmax = 1434.36553 
+            text = "嗯" 
+        intervals [185]:
+            xmin = 1434.36553 
+            xmax = 1447.65804 
+            text = "" 
+        intervals [186]:
+            xmin = 1447.65804 
+            xmax = 1450.2936402099015 
+            text = "送个围脖行吗" 
+        intervals [187]:
+            xmin = 1450.2936402099015 
+            xmax = 1452.98054 
+            text = "" 
+        intervals [188]:
+            xmin = 1452.98054 
+            xmax = 1456.18554 
+            text = "参与奖对我就说参与奖咱们从参与奖开始说
+" 
+        intervals [189]:
+            xmin = 1456.18554 
+            xmax = 1456.85804 
+            text = "" 
+        intervals [190]:
+            xmin = 1456.85804 
+            xmax = 1461.64304 
+            text = "参与奖得种类多一点围脖手套儿" 
+        intervals [191]:
+            xmin = 1461.64304 
+            xmax = 1462.7875852735958 
+            text = "" 
+        intervals [192]:
+            xmin = 1462.7875852735958 
+            xmax = 1463.5953986783438 
+            text = "帽子" 
+        intervals [193]:
+            xmin = 1463.5953986783438 
+            xmax = 1464.403212083092 
+            text = "" 
+        intervals [194]:
+            xmin = 1464.403212083092 
+            xmax = 1465.407 
+            text = "水杯" 
+        intervals [195]:
+            xmin = 1465.407 
+            xmax = 1466.2295728242616 
+            text = "" 
+        intervals [196]:
+            xmin = 1466.2295728242616 
+            xmax = 1467.2129978387377 
+            text = "保温杯" 
+        intervals [197]:
+            xmin = 1467.2129978387377 
+            xmax = 1474.26804 
+            text = "" 
+        intervals [198]:
+            xmin = 1474.26804 
+            xmax = 1475.47304 
+            text = "嗯<sil>" 
+        intervals [199]:
+            xmin = 1475.47304 
+            xmax = 1494.80804 
+            text = "" 
+        intervals [200]:
+            xmin = 1494.80804 
+            xmax = 1495.3187397321944 
+            text = "嗯" 
+        intervals [201]:
+            xmin = 1495.3187397321944 
+            xmax = 1499.22804 
+            text = "" 
+        intervals [202]:
+            xmin = 1499.22804 
+            xmax = 1502.6237519490642 
+            text = "那B这B A同学这边儿有什么考虑
+" 
+        intervals [203]:
+            xmin = 1502.6237519490642 
+            xmax = 1508.96054 
+            text = "" 
+        intervals [204]:
+            xmin = 1508.96054 
+            xmax = 1509.374623673018 
+            text = "嗯" 
+        intervals [205]:
+            xmin = 1509.374623673018 
+            xmax = 1517.4878800424447 
+            text = "" 
+        intervals [206]:
+            xmin = 1517.4878800424447 
+            xmax = 1518.23554 
+            text = "啊" 
+        intervals [207]:
+            xmin = 1518.23554 
+            xmax = 1518.80886205414 
+            text = "" 
+        intervals [208]:
+            xmin = 1518.80886205414 
+            xmax = 1521.879125 
+            text = "那B同学B同学有什么想考虑的
+" 
+        intervals [209]:
+            xmin = 1521.879125 
+            xmax = 1524.8263312927043 
+            text = "" 
+        intervals [210]:
+            xmin = 1524.8263312927043 
+            xmax = 1526.5473250680373 
+            text = "对针对女<->" 
+        intervals [211]:
+            xmin = 1526.5473250680373 
+            xmax = 1529.5854059163291 
+            text = "" 
+        intervals [212]:
+            xmin = 1529.5854059163291 
+            xmax = 1530.5884375 
+            text = "暖手宝" 
+        intervals [213]:
+            xmin = 1530.5884375 
+            xmax = 1533.6947175839607 
+            text = "" 
+        intervals [214]:
+            xmin = 1533.6947175839607 
+            xmax = 1534.3180625 
+            text = "嗯" 
+        intervals [215]:
+            xmin = 1534.3180625 
+            xmax = 1536.36055 
+            text = "" 
+        intervals [216]:
+            xmin = 1536.36055 
+            xmax = 1537.77555 
+            text = "嗯暖手宝" 
+        intervals [217]:
+            xmin = 1537.77555 
+            xmax = 1538.23305 
+            text = "" 
+        intervals [218]:
+            xmin = 1538.23305 
+            xmax = 1539.60805 
+            text = "那C同学这边儿" 
+        intervals [219]:
+            xmin = 1539.60805 
+            xmax = 1544.684284619282 
+            text = "" 
+        intervals [220]:
+            xmin = 1544.684284619282 
+            xmax = 1545.696875 
+            text = "蓝牙耳机" 
+        intervals [221]:
+            xmin = 1545.696875 
+            xmax = 1547.93055 
+            text = "" 
+        intervals [222]:
+            xmin = 1547.93055 
+            xmax = 1548.62055 
+            text = "嗯" 
+        intervals [223]:
+            xmin = 1548.62055 
+            xmax = 1557.07305 
+            text = "" 
+        intervals [224]:
+            xmin = 1557.07305 
+            xmax = 1557.80805 
+            text = "继续" 
+        intervals [225]:
+            xmin = 1557.80805 
+            xmax = 1568.46055 
+            text = "" 
+        intervals [226]:
+            xmin = 1568.46055 
+            xmax = 1569.78555 
+            text = "嗯行" 
+        intervals [227]:
+            xmin = 1569.78555 
+            xmax = 1571.0284515272147 
+            text = "" 
+        intervals [228]:
+            xmin = 1571.0284515272147 
+            xmax = 1575.9806989215401 
+            text = "充电宝、蓝牙耳机这些小的呃产品" 
+        intervals [229]:
+            xmin = 1575.9806989215401 
+            xmax = 1576.52805 
+            text = "" 
+        intervals [230]:
+            xmin = 1576.52805 
+            xmax = 1577.87805 
+            text = "那这这边儿" 
+        intervals [231]:
+            xmin = 1577.87805 
+            xmax = 1577.92305 
+            text = "" 
+        intervals [232]:
+            xmin = 1577.92305 
+            xmax = 1579.4171747466705 
+            text = "D同学有什么" 
+        intervals [233]:
+            xmin = 1579.4171747466705 
+            xmax = 1581.99866540967 
+            text = "" 
+        intervals [234]:
+            xmin = 1581.99866540967 
+            xmax = 1583.0347739070642 
+            text = "就这些" 
+        intervals [235]:
+            xmin = 1583.0347739070642 
+            xmax = 1588.0628627171395 
+            text = "" 
+        intervals [236]:
+            xmin = 1588.0628627171395 
+            xmax = 1588.9363125 
+            text = "嗯" 
+        intervals [237]:
+            xmin = 1588.9363125 
+            xmax = 1594.21305 
+            text = "" 
+        intervals [238]:
+            xmin = 1594.21305 
+            xmax = 1596.427625 
+            text = "行那二等奖吧二等奖
+" 
+        intervals [239]:
+            xmin = 1596.427625 
+            xmax = 1618.96556 
+            text = "" 
+        intervals [240]:
+            xmin = 1618.96556 
+            xmax = 1620.10556 
+            text = "那一等奖呢" 
+        intervals [241]:
+            xmin = 1620.10556 
+            xmax = 1622.3236985712217 
+            text = "" 
+        intervals [242]:
+            xmin = 1622.3236985712217 
+            xmax = 1624.6242106586567 
+            text = "大的那个折叠车呢" 
+        intervals [243]:
+            xmin = 1624.6242106586567 
+            xmax = 1638.57056 
+            text = "" 
+        intervals [244]:
+            xmin = 1638.57056 
+            xmax = 1643.61556 
+            text = "但虽然咱们是这样的，虽然咱们拉赞助比较充裕，但是这个" 
+        intervals [245]:
+            xmin = 1643.61556 
+            xmax = 1644.1485762492762 
+            text = "" 
+        intervals [246]:
+            xmin = 1644.1485762492762 
+            xmax = 1650.0140040141864 
+            text = "经费钱方面咱也要节约，因为到时候儿要嗯<sil>" 
+        intervals [247]:
+            xmin = 1650.0140040141864 
+            xmax = 1650.39556 
+            text = "" 
+        intervals [248]:
+            xmin = 1650.39556 
+            xmax = 1654.61056 
+            text = "咱们要这个让咱们学生会这些人要对这个账
+" 
+        intervals [249]:
+            xmin = 1654.61056 
+            xmax = 1655.07056 
+            text = "" 
+        intervals [250]:
+            xmin = 1655.07056 
+            xmax = 1661.48556 
+            text = "咱们这个嗯这些这个不能乱花这一块儿要节约一下
+" 
+        intervals [251]:
+            xmin = 1661.48556 
+            xmax = 1666.4170164635207 
+            text = "" 
+        intervals [252]:
+            xmin = 1666.4170164635207 
+            xmax = 1667.1483125 
+            text = "对" 
+        intervals [253]:
+            xmin = 1667.1483125 
+            xmax = 1667.540930765779 
+            text = "" 
+        intervals [254]:
+            xmin = 1667.540930765779 
+            xmax = 1668.1990625 
+            text = "对" 
+        intervals [255]:
+            xmin = 1668.1990625 
+            xmax = 1675.2824905515345 
+            text = "" 
+        intervals [256]:
+            xmin = 1675.2824905515345 
+            xmax = 1677.5127579950781 
+            text = "咱一个团队只能送他一辆" 
+        intervals [257]:
+            xmin = 1677.5127579950781 
+            xmax = 1701.21057 
+            text = "" 
+        intervals [258]:
+            xmin = 1701.21057 
+            xmax = 1703.47557 
+            text = "那C同学这边儿有什么考虑
+" 
+        intervals [259]:
+            xmin = 1703.47557 
+            xmax = 1736.21057 
+            text = "" 
+        intervals [260]:
+            xmin = 1736.21057 
+            xmax = 1738.50057 
+            text = "节省经费，那B同学这边儿" 
+        intervals [261]:
+            xmin = 1738.50057 
+            xmax = 1747.2969573407643 
+            text = "" 
+        intervals [262]:
+            xmin = 1747.2969573407643 
+            xmax = 1749.7374375 
+            text = "就是现在一一二等奖" 
+        intervals [263]:
+            xmin = 1749.7374375 
+            xmax = 1766.45058 
+            text = "" 
+        intervals [264]:
+            xmin = 1766.45058 
+            xmax = 1767.0490855370583 
+            text = "行" 
+        intervals [265]:
+            xmin = 1767.0490855370583 
+            xmax = 1770.6140012145338 
+            text = "" 
+        intervals [266]:
+            xmin = 1770.6140012145338 
+            xmax = 1772.40058 
+            text = "对这个" 
+        intervals [267]:
+            xmin = 1772.40058 
+            xmax = 1772.50308 
+            text = "" 
+        intervals [268]:
+            xmin = 1772.50308 
+            xmax = 1774.6942129526346 
+            text = "这个成本儿太大了<$>" 
+        intervals [269]:
+            xmin = 1774.6942129526346 
+            xmax = 1777.8025384448176 
+            text = "" 
+        intervals [270]:
+            xmin = 1777.8025384448176 
+            xmax = 1778.48425 
+            text = "啊" 
+        intervals [271]:
+            xmin = 1778.48425 
+            xmax = 1780.4718349126808 
+            text = "" 
+        intervals [272]:
+            xmin = 1780.4718349126808 
+            xmax = 1780.9811085808917 
+            text = "嗯" 
+        intervals [273]:
+            xmin = 1780.9811085808917 
+            xmax = 1798.5949106673424 
+            text = "" 
+        intervals [274]:
+            xmin = 1798.5949106673424 
+            xmax = 1799.92558 
+            text = "咱肯定要" 
+        intervals [275]:
+            xmin = 1799.92558 
+            xmax = 1800.05058 
+            text = "" 
+        intervals [276]:
+            xmin = 1800.05058 
+            xmax = 1803.2832596829762 
+            text = "对，肯定要这个选择往上" 
+        intervals [277]:
+            xmin = 1803.2832596829762 
+            xmax = 1805.2325485509555 
+            text = "" 
+        intervals [278]:
+            xmin = 1805.2325485509555 
+            xmax = 1805.8242500000001 
+            text = "嗯" 
+        intervals [279]:
+            xmin = 1805.8242500000001 
+            xmax = 1812.03558 
+            text = "" 
+        intervals [280]:
+            xmin = 1812.03558 
+            xmax = 1812.87558 
+            text = "嗯行" 
+        intervals [281]:
+            xmin = 1812.87558 
+            xmax = 1832.50308 
+            text = "" 
+        intervals [282]:
+            xmin = 1832.50308 
+            xmax = 1834.92808 
+            text = "嗯报名方面也要有限制" 
+        intervals [283]:
+            xmin = 1834.92808 
+            xmax = 1835.1238161935437 
+            text = "" 
+        intervals [284]:
+            xmin = 1835.1238161935437 
+            xmax = 1836.361878042125 
+            text = "不是这个
+" 
+        intervals [285]:
+            xmin = 1836.361878042125 
+            xmax = 1838.4692173588594 
+            text = "" 
+        intervals [286]:
+            xmin = 1838.4692173588594 
+            xmax = 1840.043375 
+            text = "对这方面<$>
+" 
+        intervals [287]:
+            xmin = 1840.043375 
+            xmax = 1840.295578100029 
+            text = "" 
+        intervals [288]:
+            xmin = 1840.295578100029 
+            xmax = 1845.89559 
+            text = "首先就奔奔着这个学分儿来的，这方面咱们要注意一下儿，部长这边儿
+" 
+        intervals [289]:
+            xmin = 1845.89559 
+            xmax = 1851.8177470073153 
+            text = "" 
+        intervals [290]:
+            xmin = 1851.8177470073153 
+            xmax = 1853.1678170186947 
+            text = "对这种
+" 
+        intervals [291]:
+            xmin = 1853.1678170186947 
+            xmax = 1854.4974858428275 
+            text = "" 
+        intervals [292]:
+            xmin = 1854.4974858428275 
+            xmax = 1859.792875 
+            text = "加学分儿，我觉得建议就是获奖这种一等奖二等奖三等奖这种" 
+        intervals [293]:
+            xmin = 1859.792875 
+            xmax = 1865.2624775191448 
+            text = "" 
+        intervals [294]:
+            xmin = 1865.2624775191448 
+            xmax = 1865.8515625 
+            text = "对" 
+        intervals [295]:
+            xmin = 1865.8515625 
+            xmax = 1870.4605811670892 
+            text = "" 
+        intervals [296]:
+            xmin = 1870.4605811670892 
+            xmax = 1871.0752218011369 
+            text = "嗯" 
+        intervals [297]:
+            xmin = 1871.0752218011369 
+            xmax = 1871.5838138312574 
+            text = "" 
+        intervals [298]:
+            xmin = 1871.5838138312574 
+            xmax = 1877.9490216519002 
+            text = "参与奖参与奖尽量不要再加了，因为参与奖人太多了
+" 
+        intervals [299]:
+            xmin = 1877.9490216519002 
+            xmax = 1879.71809 
+            text = "" 
+        intervals [300]:
+            xmin = 1879.71809 
+            xmax = 1882.30809 
+            text = "行还有什么想要说的吗" 
+        intervals [301]:
+            xmin = 1882.30809 
+            xmax = 1910.8915723755065 
+            text = "" 
+        intervals [302]:
+            xmin = 1910.8915723755065 
+            xmax = 1911.621875 
+            text = "嗯" 
+        intervals [303]:
+            xmin = 1911.621875 
+            xmax = 1942.3556 
+            text = "" 
+        intervals [304]:
+            xmin = 1942.3556 
+            xmax = 1944.0056 
+            text = "嗯行" 
+        intervals [305]:
+            xmin = 1944.0056 
+            xmax = 1944.6231 
+            text = "" 
+        intervals [306]:
+            xmin = 1944.6231 
+            xmax = 1948.3826145121598 
+            text = "呃那咱你这边儿还有问题吗？部长这边儿" 
+        intervals [307]:
+            xmin = 1948.3826145121598 
+            xmax = 1949.4056 
+            text = "" 
+        intervals [308]:
+            xmin = 1949.4056 
+            xmax = 1952.5106 
+            text = "没有什么问题那，暂时就这样行
+" 
+        intervals [309]:
+            xmin = 1952.5106 
+            xmax = 1952.6456 
+            text = "" 
+        intervals [310]:
+            xmin = 1952.6456 
+            xmax = 1954.9056 
+            text = "那咱本次会议就到此结束" 
+        intervals [311]:
+            xmin = 1954.9056 
+            xmax = 1955.0331 
+            text = "" 
+        intervals [312]:
+            xmin = 1955.0331 
+            xmax = 1955.7722338846263 
+            text = "散会" 
+        intervals [313]:
+            xmin = 1955.7722338846263 
+            xmax = 2011.088 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "002-M" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 251 
+        intervals [1]:
+            xmin = 0 
+            xmax = 36.05286 
+            text = "" 
+        intervals [2]:
+            xmin = 36.05286 
+            xmax = 37.44786 
+            text = "零二二我是部长" 
+        intervals [3]:
+            xmin = 37.44786 
+            xmax = 57.63036 
+            text = "" 
+        intervals [4]:
+            xmin = 57.63036 
+            xmax = 58.45536 
+            text = "学生会开会" 
+        intervals [5]:
+            xmin = 58.45536 
+            xmax = 58.90972457314065 
+            text = "" 
+        intervals [6]:
+            xmin = 58.90972457314065 
+            xmax = 59.529625 
+            text = "嗯" 
+        intervals [7]:
+            xmin = 59.529625 
+            xmax = 63.87888583811806 
+            text = "" 
+        intervals [8]:
+            xmin = 63.87888583811806 
+            xmax = 64.58286 
+            text = "好的" 
+        intervals [9]:
+            xmin = 64.58286 
+            xmax = 64.79786 
+            text = "" 
+        intervals [10]:
+            xmin = 64.79786 
+            xmax = 71.89786 
+            text = "呃<sil>指导老师好，同学们好，今天咱这次会议主要就是讲讲元旦晚会咱们学校该怎么举行" 
+        intervals [11]:
+            xmin = 71.89786 
+            xmax = 72.72036 
+            text = "" 
+        intervals [12]:
+            xmin = 72.72036 
+            xmax = 78.90036 
+            text = "呃就大家有什么想法都可以积极发言首先由我们的副部长<$>" 
+        intervals [13]:
+            xmin = 78.90036 
+            xmax = 80.49786 
+            text = "" 
+        intervals [14]:
+            xmin = 80.49786 
+            xmax = 82.24786 
+            text = "发言一下说说他的想法" 
+        intervals [15]:
+            xmin = 82.24786 
+            xmax = 258.79837210443804 
+            text = "" 
+        intervals [16]:
+            xmin = 258.79837210443804 
+            xmax = 263.0594375 
+            text = "咱们的设备是自己购买呢，还是租用别的公司的" 
+        intervals [17]:
+            xmin = 263.0594375 
+            xmax = 270.7224004049592 
+            text = "" 
+        intervals [18]:
+            xmin = 270.7224004049592 
+            xmax = 272.8236875 
+            text = "嗯可以" 
+        intervals [19]:
+            xmin = 272.8236875 
+            xmax = 387.6190430587724 
+            text = "" 
+        intervals [20]:
+            xmin = 387.6190430587724 
+            xmax = 388.2105 
+            text = "咱们" 
+        intervals [21]:
+            xmin = 388.2105 
+            xmax = 390.2529 
+            text = "" 
+        intervals [22]:
+            xmin = 390.2529 
+            xmax = 395.2179 
+            text = "对咱们部肯能也是要出活动的，然后咱们就是怎么向学生们通知这件事情" 
+        intervals [23]:
+            xmin = 395.2179 
+            xmax = 404.49959350335286 
+            text = "" 
+        intervals [24]:
+            xmin = 404.49959350335286 
+            xmax = 406.6929 
+            text = "我觉得也可以应该有奖品，" 
+        intervals [25]:
+            xmin = 406.6929 
+            xmax = 409.4679 
+            text = "" 
+        intervals [26]:
+            xmin = 409.4679 
+            xmax = 411.54200000000003 
+            text = "哪个节目表现的比较好的咱们" 
+        intervals [27]:
+            xmin = 411.54200000000003 
+            xmax = 424.26041 
+            text = "" 
+        intervals [28]:
+            xmin = 424.26041 
+            xmax = 429.11041 
+            text = "嗯咱们可以从拉助赞助里边儿的钱去购买一些小礼品" 
+        intervals [29]:
+            xmin = 429.11041 
+            xmax = 444.42041 
+            text = "" 
+        intervals [30]:
+            xmin = 444.42041 
+            xmax = 445.09541 
+            text = "啊<sil>" 
+        intervals [31]:
+            xmin = 445.09541 
+            xmax = 446.81541 
+            text = "" 
+        intervals [32]:
+            xmin = 446.81541 
+            xmax = 449.96041 
+            text = "还有就现场布置，大家有什么想法吗" 
+        intervals [33]:
+            xmin = 449.96041 
+            xmax = 452.85791 
+            text = "" 
+        intervals [34]:
+            xmin = 452.85791 
+            xmax = 453.89291 
+            text = "灯光" 
+        intervals [35]:
+            xmin = 453.89291 
+            xmax = 454.38830392733064 
+            text = "" 
+        intervals [36]:
+            xmin = 454.38830392733064 
+            xmax = 455.2385625 
+            text = "设备" 
+        intervals [37]:
+            xmin = 455.2385625 
+            xmax = 462.0033473250511 
+            text = "" 
+        intervals [38]:
+            xmin = 462.0033473250511 
+            xmax = 462.830625 
+            text = "嗯" 
+        intervals [39]:
+            xmin = 462.830625 
+            xmax = 532.89542 
+            text = "" 
+        intervals [40]:
+            xmin = 532.89542 
+            xmax = 533.40542 
+            text = "对" 
+        intervals [41]:
+            xmin = 533.40542 
+            xmax = 535.74542 
+            text = "" 
+        intervals [42]:
+            xmin = 535.74542 
+            xmax = 541.22042 
+            text = "咱们部门的部员们有什么特长吗？都可以说出来" 
+        intervals [43]:
+            xmin = 541.22042 
+            xmax = 548.80292 
+            text = "" 
+        intervals [44]:
+            xmin = 548.80292 
+            xmax = 552.7380461218876 
+            text = "啊这个A这边儿可以A和D可以搞一段儿相声" 
+        intervals [45]:
+            xmin = 552.7380461218876 
+            xmax = 568.3183439649681 
+            text = "" 
+        intervals [46]:
+            xmin = 568.3183439649681 
+            xmax = 568.8804375 
+            text = "啊" 
+        intervals [47]:
+            xmin = 568.8804375 
+            xmax = 569.5476252330631 
+            text = "" 
+        intervals [48]:
+            xmin = 569.5476252330631 
+            xmax = 570.0579375 
+            text = "啊" 
+        intervals [49]:
+            xmin = 570.0579375 
+            xmax = 590.91793 
+            text = "" 
+        intervals [50]:
+            xmin = 590.91793 
+            xmax = 593.30293 
+            text = "肯定是要十二月三十一号儿" 
+        intervals [51]:
+            xmin = 593.30293 
+            xmax = 595.20043 
+            text = "" 
+        intervals [52]:
+            xmin = 595.20043 
+            xmax = 595.76543 
+            text = "对呀" 
+        intervals [53]:
+            xmin = 595.76543 
+            xmax = 602.584392875663 
+            text = "" 
+        intervals [54]:
+            xmin = 602.584392875663 
+            xmax = 603.7998711706935 
+            text = "晚上开吧" 
+        intervals [55]:
+            xmin = 603.7998711706935 
+            xmax = 605.9364446750145 
+            text = "" 
+        intervals [56]:
+            xmin = 605.9364446750145 
+            xmax = 608.201 
+            text = "六点六点开始六点开始入席
+" 
+        intervals [57]:
+            xmin = 608.201 
+            xmax = 618.34543 
+            text = "" 
+        intervals [58]:
+            xmin = 618.34543 
+            xmax = 624.85043 
+            text = "如果天气好的话，那咱们就室外如果天气呃相对寒冷一些的话，那咱们在室内" 
+        intervals [59]:
+            xmin = 624.85043 
+            xmax = 677.8796946685003 
+            text = "" 
+        intervals [60]:
+            xmin = 677.8796946685003 
+            xmax = 680.1626455949623 
+            text = "对面积应该应
+" 
+        intervals [61]:
+            xmin = 680.1626455949623 
+            xmax = 686.2929978446978 
+            text = "" 
+        intervals [62]:
+            xmin = 686.2929978446978 
+            xmax = 693.2113822359833 
+            text = "嗯毕竟已经是寒冬腊月了，那咱们就定在体育馆内吧就是早一些早点时间布置" 
+        intervals [63]:
+            xmin = 693.2113822359833 
+            xmax = 694.13794 
+            text = "" 
+        intervals [64]:
+            xmin = 694.13794 
+            xmax = 704.16794 
+            text = "主要这样儿也不用做两手准备，这样儿的话容易仓促好吧咱们就多花时间花在布置上，还有策划这个执行上" 
+        intervals [65]:
+            xmin = 704.16794 
+            xmax = 716.0677223176027 
+            text = "" 
+        intervals [66]:
+            xmin = 716.0677223176027 
+            xmax = 719.1644641366048 
+            text = "咱们呃首先这个这个" 
+        intervals [67]:
+            xmin = 719.1644641366048 
+            xmax = 722.14294 
+            text = "" 
+        intervals [68]:
+            xmin = 722.14294 
+            xmax = 723.2155968833235 
+            text = "主题" 
+        intervals [69]:
+            xmin = 723.2155968833235 
+            xmax = 725.34794 
+            text = "" 
+        intervals [70]:
+            xmin = 725.34794 
+            xmax = 728.50275 
+            text = "呃暂时还没有考虑，但是现在可以大家伙儿一起想一个呀
+" 
+        intervals [71]:
+            xmin = 728.50275 
+            xmax = 744.5521815069484 
+            text = "" 
+        intervals [72]:
+            xmin = 744.5521815069484 
+            xmax = 750.61045 
+            text = "嗯咱们学校体育馆都有，在篮球座儿那儿都有位置这个位置可以用" 
+        intervals [73]:
+            xmin = 750.61045 
+            xmax = 766.8101555949623 
+            text = "" 
+        intervals [74]:
+            xmin = 766.8101555949623 
+            xmax = 767.5303125 
+            text = "嗯" 
+        intervals [75]:
+            xmin = 767.5303125 
+            xmax = 774.9818577625839 
+            text = "" 
+        intervals [76]:
+            xmin = 774.9818577625839 
+            xmax = 776.5799234111074 
+            text = "联合一下儿其他部的" 
+        intervals [77]:
+            xmin = 776.5799234111074 
+            xmax = 785.8039555370585 
+            text = "" 
+        intervals [78]:
+            xmin = 785.8039555370585 
+            xmax = 786.342 
+            text = "嗯" 
+        intervals [79]:
+            xmin = 786.342 
+            xmax = 786.4537184930515 
+            text = "" 
+        intervals [80]:
+            xmin = 786.4537184930515 
+            xmax = 787.474875 
+            text = "还有灯光" 
+        intervals [81]:
+            xmin = 787.474875 
+            xmax = 792.0043225028951 
+            text = "" 
+        intervals [82]:
+            xmin = 792.0043225028951 
+            xmax = 798.8408360707813 
+            text = "爆闪咱们可以找那个专业的灯光公司，也可以请他们专业人士来给咱们当后台" 
+        intervals [83]:
+            xmin = 798.8408360707813 
+            xmax = 799.1744981292642 
+            text = "" 
+        intervals [84]:
+            xmin = 799.1744981292642 
+            xmax = 802.6815083743485 
+            text = "后台配音呀，还有这个灯光闪动啊" 
+        intervals [85]:
+            xmin = 802.6815083743485 
+            xmax = 828.75046 
+            text = "" 
+        intervals [86]:
+            xmin = 828.75046 
+            xmax = 835.11546 
+            text = "嗯现在还没有还没有开始制作海报儿，咱们只能说是部内" 
+        intervals [87]:
+            xmin = 835.11546 
+            xmax = 835.26046 
+            text = "" 
+        intervals [88]:
+            xmin = 835.26046 
+            xmax = 836.8423905515343 
+            text = "先行策划一下儿" 
+        intervals [89]:
+            xmin = 836.8423905515343 
+            xmax = 838.4033424023024 
+            text = "" 
+        intervals [90]:
+            xmin = 838.4033424023024 
+            xmax = 845.0769505824467 
+            text = "对，大概是二十四个节目，一个是一个节目平均时长是六七分钟，咱们这个联欢晚会大概" 
+        intervals [91]:
+            xmin = 845.0769505824467 
+            xmax = 851.33796 
+            text = "" 
+        intervals [92]:
+            xmin = 851.33796 
+            xmax = 855.0516900149886 
+            text = "计划是三个小时" 
+        intervals [93]:
+            xmin = 855.0516900149886 
+            xmax = 860.90796 
+            text = "" 
+        intervals [94]:
+            xmin = 860.90796 
+            xmax = 861.56296 
+            text = "嗯" 
+        intervals [95]:
+            xmin = 861.56296 
+            xmax = 867.02046 
+            text = "" 
+        intervals [96]:
+            xmin = 867.02046 
+            xmax = 870.28546 
+            text = "那就根据实际情况适当的增或减吧
+" 
+        intervals [97]:
+            xmin = 870.28546 
+            xmax = 878.39796 
+            text = "" 
+        intervals [98]:
+            xmin = 878.39796 
+            xmax = 881.58796 
+            text = "大概主要有歌舞是一类" 
+        intervals [99]:
+            xmin = 881.58796 
+            xmax = 882.81546 
+            text = "" 
+        intervals [100]:
+            xmin = 882.81546 
+            xmax = 884.36046 
+            text = "相声小品是一类" 
+        intervals [101]:
+            xmin = 884.36046 
+            xmax = 885.93796 
+            text = "" 
+        intervals [102]:
+            xmin = 885.93796 
+            xmax = 887.40296 
+            text = "还有才艺表演是一类" 
+        intervals [103]:
+            xmin = 887.40296 
+            xmax = 890.3722606297048 
+            text = "" 
+        intervals [104]:
+            xmin = 890.3722606297048 
+            xmax = 892.02546 
+            text = "三大类还有" 
+        intervals [105]:
+            xmin = 892.02546 
+            xmax = 892.07796 
+            text = "" 
+        intervals [106]:
+            xmin = 892.07796 
+            xmax = 893.8179410002894 
+            text = "如果说有同学" 
+        intervals [107]:
+            xmin = 893.8179410002894 
+            xmax = 897.74047 
+            text = "" 
+        intervals [108]:
+            xmin = 897.74047 
+            xmax = 898.9282388433699 
+            text = "情景剧" 
+        intervals [109]:
+            xmin = 898.9282388433699 
+            xmax = 911.15797 
+            text = "" 
+        intervals [110]:
+            xmin = 911.15797 
+            xmax = 923.13297 
+            text = "好，咱们学院主要是是领导参加，还有大大部分的学生要参加，所以说这次晚会咱们主题的话也可以定做，稍微比较轻松一点儿" 
+        intervals [111]:
+            xmin = 923.13297 
+            xmax = 923.17547 
+            text = "" 
+        intervals [112]:
+            xmin = 923.17547 
+            xmax = 927.57047 
+            text = "然后同同时和那个指导师们进行一下互动" 
+        intervals [113]:
+            xmin = 927.57047 
+            xmax = 927.63047 
+            text = "" 
+        intervals [114]:
+            xmin = 927.63047 
+            xmax = 936.46547 
+            text = "所以说咱们可以用一种比较呃引进一种新颖的节目嘛，比如什么cos展，毕竟现在很多年轻人都比较喜欢这个" 
+        intervals [115]:
+            xmin = 936.46547 
+            xmax = 936.52047 
+            text = "" 
+        intervals [116]:
+            xmin = 936.52047 
+            xmax = 941.62047 
+            text = "嗯到时候儿像对于拉赞助什么的也会有很大的帮助
+" 
+        intervals [117]:
+            xmin = 941.62047 
+            xmax = 961.8296535996741 
+            text = "" 
+        intervals [118]:
+            xmin = 961.8296535996741 
+            xmax = 965.93297 
+            text = "两男两女咱们可以从咱们学校的<sil>空乘系" 
+        intervals [119]:
+            xmin = 965.93297 
+            xmax = 967.9880119364541 
+            text = "" 
+        intervals [120]:
+            xmin = 967.9880119364541 
+            xmax = 971.0515135364794 
+            text = "选出选出四位那个" 
+        intervals [121]:
+            xmin = 971.0515135364794 
+            xmax = 971.67548 
+            text = "" 
+        intervals [122]:
+            xmin = 971.67548 
+            xmax = 972.9175625 
+            text = "代表比较" 
+        intervals [123]:
+            xmin = 972.9175625 
+            xmax = 977.2065777386936 
+            text = "" 
+        intervals [124]:
+            xmin = 977.2065777386936 
+            xmax = 978.49548 
+            text = "播音专业也可以" 
+        intervals [125]:
+            xmin = 978.49548 
+            xmax = 983.1703669888445 
+            text = "" 
+        intervals [126]:
+            xmin = 983.1703669888445 
+            xmax = 985.9099081005991 
+            text = "可以对，可以让这两个系都过来竞选一下" 
+        intervals [127]:
+            xmin = 985.9099081005991 
+            xmax = 1015.4351016343371 
+            text = "" 
+        intervals [128]:
+            xmin = 1015.4351016343371 
+            xmax = 1016.164625 
+            text = "发通知" 
+        intervals [129]:
+            xmin = 1016.164625 
+            xmax = 1019.0878231166764 
+            text = "" 
+        intervals [130]:
+            xmin = 1019.0878231166764 
+            xmax = 1020.4338750000001 
+            text = "嗯可以" 
+        intervals [131]:
+            xmin = 1020.4338750000001 
+            xmax = 1025.44548 
+            text = "" 
+        intervals [132]:
+            xmin = 1025.44548 
+            xmax = 1034.83548 
+            text = "对，还需要节目排序，这得等到这个海报儿发出去以后，学生们踊跃报名，把名单提交上来以后，咱们再进行排序" 
+        intervals [133]:
+            xmin = 1034.83548 
+            xmax = 1036.83048 
+            text = "" 
+        intervals [134]:
+            xmin = 1036.83048 
+            xmax = 1042.8202619557035 
+            text = "分好类咱们不能说每呃一类的一直让观众们看穿插着" 
+        intervals [135]:
+            xmin = 1042.8202619557035 
+            xmax = 1072.80049 
+            text = "" 
+        intervals [136]:
+            xmin = 1072.80049 
+            xmax = 1074.33049 
+            text = "C同学有什么意见吗" 
+        intervals [137]:
+            xmin = 1074.33049 
+            xmax = 1084.0298517906774 
+            text = "" 
+        intervals [138]:
+            xmin = 1084.0298517906774 
+            xmax = 1088.7011206094382 
+            text = "以抛绣球的方式吗，以抛绣球的方呃你那你说你说
+" 
+        intervals [139]:
+            xmin = 1088.7011206094382 
+            xmax = 1157.7505 
+            text = "" 
+        intervals [140]:
+            xmin = 1157.7505 
+            xmax = 1161.1505 
+            text = "嗯也是一个也是一个想法也挺好" 
+        intervals [141]:
+            xmin = 1161.1505 
+            xmax = 1170.703676570643 
+            text = "" 
+        intervals [142]:
+            xmin = 1170.703676570643 
+            xmax = 1172.8255 
+            text = "咱们的租用设备" 
+        intervals [143]:
+            xmin = 1172.8255 
+            xmax = 1172.9105 
+            text = "" 
+        intervals [144]:
+            xmin = 1172.9105 
+            xmax = 1179.7805 
+            text = "因为咱们设备是租用的，所以相对来说便宜一点呃主要是花在了请专业人员呃<sil>" 
+        intervals [145]:
+            xmin = 1179.7805 
+            xmax = 1180.223 
+            text = "" 
+        intervals [146]:
+            xmin = 1180.223 
+            xmax = 1184.558 
+            text = "设备加上人员大概需要" 
+        intervals [147]:
+            xmin = 1184.558 
+            xmax = 1187.1656088562631 
+            text = "" 
+        intervals [148]:
+            xmin = 1187.1656088562631 
+            xmax = 1187.7333125 
+            text = "嗯" 
+        intervals [149]:
+            xmin = 1187.7333125 
+            xmax = 1191.4856544555682 
+            text = "" 
+        intervals [150]:
+            xmin = 1191.4856544555682 
+            xmax = 1192.853 
+            text = "好的好的" 
+        intervals [151]:
+            xmin = 1192.853 
+            xmax = 1244.1839360333781 
+            text = "" 
+        intervals [152]:
+            xmin = 1244.1839360333781 
+            xmax = 1252.60051 
+            text = "嗯我我把那个预算所有的清单都发给你，然后你做一个excel做出一个清单就是咱们的消费记录
+" 
+        intervals [153]:
+            xmin = 1252.60051 
+            xmax = 1266.83301 
+            text = "" 
+        intervals [154]:
+            xmin = 1266.83301 
+            xmax = 1267.46801 
+            text = "嗯" 
+        intervals [155]:
+            xmin = 1267.46801 
+            xmax = 1267.52051 
+            text = "" 
+        intervals [156]:
+            xmin = 1267.52051 
+            xmax = 1276.84051 
+            text = "还有就是现在咱们现阶段的任务就是我和副部长去空乘系和播音系先去去挑选主持人，然后" 
+        intervals [157]:
+            xmin = 1276.84051 
+            xmax = 1317.50052 
+            text = "" 
+        intervals [158]:
+            xmin = 1317.50052 
+            xmax = 1318.380004112623 
+            text = "行" 
+        intervals [159]:
+            xmin = 1318.380004112623 
+            xmax = 1362.4620911855818 
+            text = "" 
+        intervals [160]:
+            xmin = 1362.4620911855818 
+            xmax = 1364.077717995078 
+            text = "对对对对" 
+        intervals [161]:
+            xmin = 1364.077717995078 
+            xmax = 1368.4328859163288 
+            text = "" 
+        intervals [162]:
+            xmin = 1368.4328859163288 
+            xmax = 1371.30803 
+            text = "肯定还是物质奖励比较吸引人呀" 
+        intervals [163]:
+            xmin = 1371.30803 
+            xmax = 1411.87303 
+            text = "" 
+        intervals [164]:
+            xmin = 1411.87303 
+            xmax = 1415.66803 
+            text = "设置<sil>按照团体来说吧" 
+        intervals [165]:
+            xmin = 1415.66803 
+            xmax = 1417.50553 
+            text = "" 
+        intervals [166]:
+            xmin = 1417.50553 
+            xmax = 1419.08053 
+            text = "咱们就设置三个奖项" 
+        intervals [167]:
+            xmin = 1419.08053 
+            xmax = 1422.0822694687322 
+            text = "" 
+        intervals [168]:
+            xmin = 1422.0822694687322 
+            xmax = 1423.35803 
+            text = "三到五个吧" 
+        intervals [169]:
+            xmin = 1423.35803 
+            xmax = 1424.540832004922 
+            text = "" 
+        intervals [170]:
+            xmin = 1424.540832004922 
+            xmax = 1428.2111146482341 
+            text = "四个等级的奖项一等奖、二等奖、三等奖还有参与奖" 
+        intervals [171]:
+            xmin = 1428.2111146482341 
+            xmax = 1428.659706045889 
+            text = "" 
+        intervals [172]:
+            xmin = 1428.659706045889 
+            xmax = 1429.3311875 
+            text = "啊" 
+        intervals [173]:
+            xmin = 1429.3311875 
+            xmax = 1429.51303 
+            text = "" 
+        intervals [174]:
+            xmin = 1429.51303 
+            xmax = 1433.57803 
+            text = "然后这个礼物的价值肯定也是随着等级的一半儿吧" 
+        intervals [175]:
+            xmin = 1433.57803 
+            xmax = 1434.45053 
+            text = "" 
+        intervals [176]:
+            xmin = 1434.45053 
+            xmax = 1440.10553 
+            text = "咱们一等奖可以给他们送一些生活用品啊你比如说" 
+        intervals [177]:
+            xmin = 1440.10553 
+            xmax = 1441.52053 
+            text = "" 
+        intervals [178]:
+            xmin = 1441.52053 
+            xmax = 1443.11053 
+            text = "现在是" 
+        intervals [179]:
+            xmin = 1443.11053 
+            xmax = 1444.96554 
+            text = "" 
+        intervals [180]:
+            xmin = 1444.96554 
+            xmax = 1446.10554 
+            text = "快要冬天了" 
+        intervals [181]:
+            xmin = 1446.10554 
+            xmax = 1465.1056585220033 
+            text = "" 
+        intervals [182]:
+            xmin = 1465.1056585220033 
+            xmax = 1468.8461858092066 
+            text = "保温杯也可以这是这都是参与奖
+" 
+        intervals [183]:
+            xmin = 1468.8461858092066 
+            xmax = 1468.93554 
+            text = "" 
+        intervals [184]:
+            xmin = 1468.93554 
+            xmax = 1472.95554 
+            text = "然后三等奖咱们可以稍微提高一下档次，比如说" 
+        intervals [185]:
+            xmin = 1472.95554 
+            xmax = 1475.62554 
+            text = "" 
+        intervals [186]:
+            xmin = 1475.62554 
+            xmax = 1477.35554 
+            text = "呃有什么想想法儿" 
+        intervals [187]:
+            xmin = 1477.35554 
+            xmax = 1495.1431281224666 
+            text = "" 
+        intervals [188]:
+            xmin = 1495.1431281224666 
+            xmax = 1497.6016906586565 
+            text = "或者可以买一些手办便宜点儿" 
+        intervals [189]:
+            xmin = 1497.6016906586565 
+            xmax = 1498.5148710292412 
+            text = "" 
+        intervals [190]:
+            xmin = 1498.5148710292412 
+            xmax = 1499.1765625 
+            text = "嗯" 
+        intervals [191]:
+            xmin = 1499.1765625 
+            xmax = 1591.56055 
+            text = "" 
+        intervals [192]:
+            xmin = 1591.56055 
+            xmax = 1593.56055 
+            text = "嗯咱们现在可以聊聊二等奖" 
+        intervals [193]:
+            xmin = 1593.56055 
+            xmax = 1595.3941939564138 
+            text = "" 
+        intervals [194]:
+            xmin = 1595.3941939564138 
+            xmax = 1597.08805 
+            text = "二等奖有什么想法吗大家" 
+        intervals [195]:
+            xmin = 1597.08805 
+            xmax = 1606.94056 
+            text = "" 
+        intervals [196]:
+            xmin = 1606.94056 
+            xmax = 1613.87056 
+            text = "因为咱们学校那个校园面积比较大，咱们可以给学生们可以给二等奖学生搞几个" 
+        intervals [197]:
+            xmin = 1613.87056 
+            xmax = 1614.50056 
+            text = "" 
+        intervals [198]:
+            xmin = 1614.50056 
+            xmax = 1617.25056 
+            text = "电瓶车折叠的那种小电瓶车" 
+        intervals [199]:
+            xmin = 1617.25056 
+            xmax = 1620.15556 
+            text = "" 
+        intervals [200]:
+            xmin = 1620.15556 
+            xmax = 1621.76056 
+            text = "一等奖可以更大一些" 
+        intervals [201]:
+            xmin = 1621.76056 
+            xmax = 1621.83056 
+            text = "" 
+        intervals [202]:
+            xmin = 1621.83056 
+            xmax = 1626.2047151462073 
+            text = "咱们因为咱们啊不不不不就是价值更高一些" 
+        intervals [203]:
+            xmin = 1626.2047151462073 
+            xmax = 1628.16056 
+            text = "" 
+        intervals [204]:
+            xmin = 1628.16056 
+            xmax = 1631.52556 
+            text = "啊对像这种小折叠车也就几百块钱" 
+        intervals [205]:
+            xmin = 1631.52556 
+            xmax = 1631.57056 
+            text = "" 
+        intervals [206]:
+            xmin = 1631.57056 
+            xmax = 1634.3283888645362 
+            text = "因为咱们拉了赞助资金比较充裕" 
+        intervals [207]:
+            xmin = 1634.3283888645362 
+            xmax = 1673.70056 
+            text = "" 
+        intervals [208]:
+            xmin = 1673.70056 
+            xmax = 1675.4784375 
+            text = "咱们相当于一个" 
+        intervals [209]:
+            xmin = 1675.4784375 
+            xmax = 1699.10307 
+            text = "" 
+        intervals [210]:
+            xmin = 1699.10307 
+            xmax = 1700.91807 
+            text = "对对对对对对" 
+        intervals [211]:
+            xmin = 1700.91807 
+            xmax = 1763.4901654133523 
+            text = "" 
+        intervals [212]:
+            xmin = 1763.4901654133523 
+            xmax = 1765.61558 
+            text = "啊嗯可以" 
+        intervals [213]:
+            xmin = 1765.61558 
+            xmax = 1774.2727450892878 
+            text = "" 
+        intervals [214]:
+            xmin = 1774.2727450892878 
+            xmax = 1782.77808 
+            text = "那咱们就一等奖设置成折叠电车<->那个电瓶车，二等奖设置成蓝牙音响，三等奖设置成" 
+        intervals [215]:
+            xmin = 1782.77808 
+            xmax = 1783.805308756514 
+            text = "" 
+        intervals [216]:
+            xmin = 1783.805308756514 
+            xmax = 1789.07058 
+            text = "暖手宝呀什么的小电器四等奖，咱们就是因为冬天嘛围巾围脖儿" 
+        intervals [217]:
+            xmin = 1789.07058 
+            xmax = 1789.14558 
+            text = "" 
+        intervals [218]:
+            xmin = 1789.14558 
+            xmax = 1791.0436114490449 
+            text = "对吧手套儿什么，" 
+        intervals [219]:
+            xmin = 1791.0436114490449 
+            xmax = 1792.2202092342213 
+            text = "" 
+        intervals [220]:
+            xmin = 1792.2202092342213 
+            xmax = 1794.9948726679215 
+            text = "对这样儿资金可以" 
+        intervals [221]:
+            xmin = 1794.9948726679215 
+            xmax = 1808.375996365084 
+            text = "" 
+        intervals [222]:
+            xmin = 1808.375996365084 
+            xmax = 1811.99058 
+            text = "那就是参与奖啊手套儿啊什么的什么围脖儿" 
+        intervals [223]:
+            xmin = 1811.99058 
+            xmax = 1824.64058 
+            text = "" 
+        intervals [224]:
+            xmin = 1824.64058 
+            xmax = 1827.75058 
+            text = "嗯那至<->那你这样的话学分儿就太不值钱了呀" 
+        intervals [225]:
+            xmin = 1827.75058 
+            xmax = 1827.8188541929646 
+            text = "" 
+        intervals [226]:
+            xmin = 1827.8188541929646 
+            xmax = 1829.5634887652 
+            text = "谁只要报" 
+        intervals [227]:
+            xmin = 1829.5634887652 
+            xmax = 1836.4584644274755 
+            text = "" 
+        intervals [228]:
+            xmin = 1836.4584644274755 
+            xmax = 1838.7414153539376 
+            text = "不是什么都可以报的
+" 
+        intervals [229]:
+            xmin = 1838.7414153539376 
+            xmax = 1846.24309 
+            text = "" 
+        intervals [230]:
+            xmin = 1846.24309 
+            xmax = 1848.92309 
+            text = "咱们只能说是选上了以后" 
+        intervals [231]:
+            xmin = 1848.92309 
+            xmax = 1849.23809 
+            text = "" 
+        intervals [232]:
+            xmin = 1849.23809 
+            xmax = 1854.5677304867188 
+            text = "真正参加表演了，真正参加晚会的这种这种学生可以加适当" 
+        intervals [233]:
+            xmin = 1854.5677304867188 
+            xmax = 1861.1531658515132 
+            text = "" 
+        intervals [234]:
+            xmin = 1861.1531658515132 
+            xmax = 1861.87309 
+            text = "这个" 
+        intervals [235]:
+            xmin = 1861.87309 
+            xmax = 1862.48809 
+            text = "" 
+        intervals [236]:
+            xmin = 1862.48809 
+            xmax = 1867.40809 
+            text = "获奖等级越高就可以多加一些学分儿嘛，比如说一等奖是两学分儿" 
+        intervals [237]:
+            xmin = 1867.40809 
+            xmax = 1867.82809 
+            text = "" 
+        intervals [238]:
+            xmin = 1867.82809 
+            xmax = 1871.19809 
+            text = "二等奖是一学分儿，三等奖是零点五学分儿" 
+        intervals [239]:
+            xmin = 1871.19809 
+            xmax = 1871.58559 
+            text = "" 
+        intervals [240]:
+            xmin = 1871.58559 
+            xmax = 1873.9275157891323 
+            text = "然后参与奖就不要再加了我觉得" 
+        intervals [241]:
+            xmin = 1873.9275157891323 
+            xmax = 1874.9811854474995 
+            text = "" 
+        intervals [242]:
+            xmin = 1874.9811854474995 
+            xmax = 1875.6805 
+            text = "嗯" 
+        intervals [243]:
+            xmin = 1875.6805 
+            xmax = 1948.0138301317313 
+            text = "" 
+        intervals [244]:
+            xmin = 1948.0138301317313 
+            xmax = 1949.6315557360779 
+            text = "我这边儿没有什么问题了
+" 
+        intervals [245]:
+            xmin = 1949.6315557360779 
+            xmax = 1951.7719185799074 
+            text = "" 
+        intervals [246]:
+            xmin = 1951.7719185799074 
+            xmax = 1952.3583125 
+            text = "嗯" 
+        intervals [247]:
+            xmin = 1952.3583125 
+            xmax = 1955.6704963158656 
+            text = "" 
+        intervals [248]:
+            xmin = 1955.6704963158656 
+            xmax = 1956.3381 
+            text = "好的" 
+        intervals [249]:
+            xmin = 1956.3381 
+            xmax = 1966.80045 
+            text = "" 
+        intervals [250]:
+            xmin = 1966.80045 
+            xmax = 1967.6153383365768 
+            text = "好尬呀" 
+        intervals [251]:
+            xmin = 1967.6153383365768 
+            xmax = 2011.088 
+            text = "" 
+    item [3]:
+        class = "IntervalTier" 
+        name = "003-M" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 229 
+        intervals [1]:
+            xmin = 0 
+            xmax = 37.86036 
+            text = "" 
+        intervals [2]:
+            xmin = 37.86036 
+            xmax = 39.51036 
+            text = "零二六我是副部长" 
+        intervals [3]:
+            xmin = 39.51036 
+            xmax = 82.74036 
+            text = "" 
+        intervals [4]:
+            xmin = 82.74036 
+            xmax = 87.74536 
+            text = "好，同学们好，老师好这个学校举行的元旦联欢晚会呢" 
+        intervals [5]:
+            xmin = 87.74536 
+            xmax = 88.30286 
+            text = "" 
+        intervals [6]:
+            xmin = 88.30286 
+            xmax = 98.75786 
+            text = "首先是前一段儿时间都让同学四个同学来写了一下儿策划，这个策划呢是让安排这个联欢会的这个活动" 
+        intervals [7]:
+            xmin = 98.75786 
+            xmax = 99.62286 
+            text = "" 
+        intervals [8]:
+            xmin = 99.62286 
+            xmax = 108.36787 
+            text = "活动晚上举行呢要租场地，要租学校的运动场，然后还要找学校老师借大鼓和那个<sil>红地毯" 
+        intervals [9]:
+            xmin = 108.36787 
+            xmax = 108.65287 
+            text = "" 
+        intervals [10]:
+            xmin = 108.65287 
+            xmax = 120.44787 
+            text = "还有咱们学生部要凑钱买那个气球，然后由咱们学生部的女同学去布置现场，然后晚上会有二十四个节目" 
+        intervals [11]:
+            xmin = 120.44787 
+            xmax = 120.80287 
+            text = "" 
+        intervals [12]:
+            xmin = 120.80287 
+            xmax = 124.74787 
+            text = "由大家策划，前一段儿时间的策划也也让大家说了" 
+        intervals [13]:
+            xmin = 124.74787 
+            xmax = 125.33037 
+            text = "" 
+        intervals [14]:
+            xmin = 125.33037 
+            xmax = 136.53537 
+            text = "反正开场的节目<sil>是肯定是有老师和学生组织的跳舞和唱歌儿一个大节目，然后就有请下边儿同学说一说自己的策划" 
+        intervals [15]:
+            xmin = 136.53537 
+            xmax = 136.66537 
+            text = "" 
+        intervals [16]:
+            xmin = 136.66537 
+            xmax = 138.83037 
+            text = "就是有什么活动可以说一下" 
+        intervals [17]:
+            xmin = 138.83037 
+            xmax = 273.45039 
+            text = "" 
+        intervals [18]:
+            xmin = 273.45039 
+            xmax = 285.83539 
+            text = "好，这个同学A说了一下儿场会的布置和那个场地，还有赞助的事儿。还有第一个节目他也说了，还有这个场地啊，他租用的毕竟是体育馆，因为有个篮球架" 
+        intervals [19]:
+            xmin = 285.83539 
+            xmax = 285.89289 
+            text = "" 
+        intervals [20]:
+            xmin = 285.89289 
+            xmax = 291.29289 
+            text = "它是可以推动的，所以需要咱们部的男生到时候儿去帮忙推一下，然后女生由" 
+        intervals [21]:
+            xmin = 291.29289 
+            xmax = 291.34039 
+            text = "" 
+        intervals [22]:
+            xmin = 291.34039 
+            xmax = 298.79539 
+            text = "她们来布置会场，什么粘气球啊什么之类的，对，然后还有让女生印一下儿咱们学校的宣传报" 
+        intervals [23]:
+            xmin = 298.79539 
+            xmax = 299.152916961494 
+            text = "" 
+        intervals [24]:
+            xmin = 299.152916961494 
+            xmax = 309.34539 
+            text = "然后<sil>上对还有条幅上面儿写上什么拉赞助之类的活动，然后这个女生前一段儿策划也是有准备的，所以由" 
+        intervals [25]:
+            xmin = 309.34539 
+            xmax = 310.01289 
+            text = "" 
+        intervals [26]:
+            xmin = 310.01289 
+            xmax = 311.45789 
+            text = "B学员说一下" 
+        intervals [27]:
+            xmin = 311.45789 
+            xmax = 348.67836268818763 
+            text = "" 
+        intervals [28]:
+            xmin = 348.67836268818763 
+            xmax = 350.1008167269832 
+            text = "合影吗啊" 
+        intervals [29]:
+            xmin = 350.1008167269832 
+            xmax = 366.2304 
+            text = "" 
+        intervals [30]:
+            xmin = 366.2304 
+            xmax = 373.5197078676896 
+            text = "这个就需要有请咱们本部老师帮助咱们啦要找几个评委，最好再加上打分儿活动" 
+        intervals [31]:
+            xmin = 373.5197078676896 
+            xmax = 376.1823773059546 
+            text = "" 
+        intervals [32]:
+            xmin = 376.1823773059546 
+            xmax = 376.8844375 
+            text = "好" 
+        intervals [33]:
+            xmin = 376.8844375 
+            xmax = 377.4979 
+            text = "" 
+        intervals [34]:
+            xmin = 377.4979 
+            xmax = 385.4079 
+            text = "然后这是同学说的，然后是什么呢活动，它肯定是有具体内容的是吧？毕竟二十四个活动" 
+        intervals [35]:
+            xmin = 385.4079 
+            xmax = 385.5454 
+            text = "" 
+        intervals [36]:
+            xmin = 385.5454 
+            xmax = 390.2304 
+            text = "咱们肯定是有规划的，咱们部肯定是要出两个活动的" 
+        intervals [37]:
+            xmin = 390.2304 
+            xmax = 395.5779 
+            text = "" 
+        intervals [38]:
+            xmin = 395.5779 
+            xmax = 404.1779 
+            text = "对，刚才这个通知这件事儿情，刚才就是印海报，你发海报，对去学校校门口儿发海报，或者去食堂贴一下海报" 
+        intervals [39]:
+            xmin = 404.1779 
+            xmax = 404.3229 
+            text = "" 
+        intervals [40]:
+            xmin = 404.3229 
+            xmax = 405.32496806907375 
+            text = "传单" 
+        intervals [41]:
+            xmin = 405.32496806907375 
+            xmax = 407.0904 
+            text = "" 
+        intervals [42]:
+            xmin = 407.0904 
+            xmax = 409.4004 
+            text = "嗯可以有一个奖品" 
+        intervals [43]:
+            xmin = 409.4004 
+            xmax = 411.08495287348006 
+            text = "" 
+        intervals [44]:
+            xmin = 411.08495287348006 
+            xmax = 413.7829 
+            text = "毕竟咱们是学校吗？可以按" 
+        intervals [45]:
+            xmin = 413.7829 
+            xmax = 414.0204 
+            text = "" 
+        intervals [46]:
+            xmin = 414.0204 
+            xmax = 424.19541 
+            text = "第一名第二名第三名的这个奖品和比方说第一名是给加几学分儿啊，然后给他点儿吃的呀什么的" 
+        intervals [47]:
+            xmin = 424.19541 
+            xmax = 429.18041 
+            text = "" 
+        intervals [48]:
+            xmin = 429.18041 
+            xmax = 429.7789155370585 
+            text = "对" 
+        intervals [49]:
+            xmin = 429.7789155370585 
+            xmax = 430.72291 
+            text = "" 
+        intervals [50]:
+            xmin = 430.72291 
+            xmax = 439.0160862087435 
+            text = "而且也要礼品也要买六份儿，虽然是三名呃分三名，但是要买六分儿，因为里头有男女生" 
+        intervals [51]:
+            xmin = 439.0160862087435 
+            xmax = 440.52541 
+            text = "" 
+        intervals [52]:
+            xmin = 440.52541 
+            xmax = 444.38041 
+            text = "不这个毕竟里头有男女生，因为他谁获奖咱还说不准" 
+        intervals [53]:
+            xmin = 444.38041 
+            xmax = 445.14541 
+            text = "" 
+        intervals [54]:
+            xmin = 445.14541 
+            xmax = 446.77041 
+            text = "对要礼物要准备充足" 
+        intervals [55]:
+            xmin = 446.77041 
+            xmax = 502.7951843558194 
+            text = "" 
+        intervals [56]:
+            xmin = 502.7951843558194 
+            xmax = 503.4036875 
+            text = "嗯" 
+        intervals [57]:
+            xmin = 503.4036875 
+            xmax = 542.68542 
+            text = "" 
+        intervals [58]:
+            xmin = 542.68542 
+            xmax = 547.66042 
+            text = "然后部部员A可以表演个相儿声给他找个搭档" 
+        intervals [59]:
+            xmin = 547.66042 
+            xmax = 552.4746287072959 
+            text = "" 
+        intervals [60]:
+            xmin = 552.4746287072959 
+            xmax = 559.15292 
+            text = "啊他们俩可以搞相声女生咱们这儿女生身材好，让她们是吧长得又好看，跳个舞" 
+        intervals [61]:
+            xmin = 559.15292 
+            xmax = 559.27292 
+            text = "" 
+        intervals [62]:
+            xmin = 559.27292 
+            xmax = 570.35792 
+            text = "跟舞蹈社的学两天，然后借个服装，然后刚才C也说了，说的是她不是要去操场吗就从体育馆搬到操场了嘛" 
+        intervals [63]:
+            xmin = 570.35792 
+            xmax = 570.42292 
+            text = "" 
+        intervals [64]:
+            xmin = 570.42292 
+            xmax = 580.15793 
+            text = "操场的地方大嘛，所以咱们这个费用最好再拉一个赞助，十万块钱可能不够，因为音箱它要多，灯光也要打得多，最好都是租用这样便宜" 
+        intervals [65]:
+            xmin = 580.15793 
+            xmax = 580.29043 
+            text = "" 
+        intervals [66]:
+            xmin = 580.29043 
+            xmax = 582.890907887956 
+            text = "服装呢，找咱们社团的" 
+        intervals [67]:
+            xmin = 582.890907887956 
+            xmax = 586.12543 
+            text = "" 
+        intervals [68]:
+            xmin = 586.12543 
+            xmax = 587.228514648234 
+            text = "对因为" 
+        intervals [69]:
+            xmin = 587.228514648234 
+            xmax = 642.5622306297047 
+            text = "" 
+        intervals [70]:
+            xmin = 642.5622306297047 
+            xmax = 643.1926875 
+            text = "嗯" 
+        intervals [71]:
+            xmin = 643.1926875 
+            xmax = 649.5691338578459 
+            text = "" 
+        intervals [72]:
+            xmin = 649.5691338578459 
+            xmax = 650.1228125 
+            text = "嗯" 
+        intervals [73]:
+            xmin = 650.1228125 
+            xmax = 710.67794 
+            text = "" 
+        intervals [74]:
+            xmin = 710.67794 
+            xmax = 715.16294 
+            text = "布置上面<sil>毕竟<sil>运动场" 
+        intervals [75]:
+            xmin = 715.16294 
+            xmax = 715.82044 
+            text = "" 
+        intervals [76]:
+            xmin = 715.82044 
+            xmax = 717.4726151954255 
+            text = "和礼堂" 
+        intervals [77]:
+            xmin = 717.4726151954255 
+            xmax = 719.1584866488129 
+            text = "" 
+        intervals [78]:
+            xmin = 719.1584866488129 
+            xmax = 720.0135 
+            text = "环境" 
+        intervals [79]:
+            xmin = 720.0135 
+            xmax = 728.413700531268 
+            text = "" 
+        intervals [80]:
+            xmin = 728.413700531268 
+            xmax = 729.504125 
+            text = "毕竟" 
+        intervals [81]:
+            xmin = 729.504125 
+            xmax = 730.67294 
+            text = "" 
+        intervals [82]:
+            xmin = 730.67294 
+            xmax = 737.71795 
+            text = "正式的工作肯定要准备好，因为学校的领导要来，红地毯最好从礼堂口儿一直铺进去" 
+        intervals [83]:
+            xmin = 737.71795 
+            xmax = 738.72045 
+            text = "" 
+        intervals [84]:
+            xmin = 738.72045 
+            xmax = 745.4302395555876 
+            text = "然后让他们让咱们学生部的准备好，凳子主要是凳子这方面坐" 
+        intervals [85]:
+            xmin = 745.4302395555876 
+            xmax = 750.4973573711518 
+            text = "" 
+        intervals [86]:
+            xmin = 750.4973573711518 
+            xmax = 755.25545 
+            text = "主要是人太多了，再租<sil>两千个凳子" 
+        intervals [87]:
+            xmin = 755.25545 
+            xmax = 756.17045 
+            text = "" 
+        intervals [88]:
+            xmin = 756.17045 
+            xmax = 759.93545 
+            text = "因为他那个座位只有四五个座位是成排的，他坐不下" 
+        intervals [89]:
+            xmin = 759.93545 
+            xmax = 788.59545 
+            text = "" 
+        intervals [90]:
+            xmin = 788.59545 
+            xmax = 790.47045 
+            text = "灯光可以买那种" 
+        intervals [91]:
+            xmin = 790.47045 
+            xmax = 791.30045 
+            text = "" 
+        intervals [92]:
+            xmin = 791.30045 
+            xmax = 794.3926403951939 
+            text = "圆形的那种彩灯对爆闪
+" 
+        intervals [93]:
+            xmin = 794.3926403951939 
+            xmax = 798.76545 
+            text = "" 
+        intervals [94]:
+            xmin = 798.76545 
+            xmax = 799.53806056022 
+            text = "嗯" 
+        intervals [95]:
+            xmin = 799.53806056022 
+            xmax = 853.4571487113083 
+            text = "" 
+        intervals [96]:
+            xmin = 853.4571487113083 
+            xmax = 854.2825625 
+            text = "三个小时" 
+        intervals [97]:
+            xmin = 854.2825625 
+            xmax = 945.5948317906774 
+            text = "" 
+        intervals [98]:
+            xmin = 945.5948317906774 
+            xmax = 950.64047 
+            text = "还有这个节目准备好了就需要竞选一下主持人" 
+        intervals [99]:
+            xmin = 950.64047 
+            xmax = 956.1398374444917 
+            text = "" 
+        intervals [100]:
+            xmin = 956.1398374444917 
+            xmax = 960.81047 
+            text = "要四个主持人，最好男生在一米八左右女生在一米七左右" 
+        intervals [101]:
+            xmin = 960.81047 
+            xmax = 962.655028165395 
+            text = "" 
+        intervals [102]:
+            xmin = 962.655028165395 
+            xmax = 963.583 
+            text = "对" 
+        intervals [103]:
+            xmin = 963.583 
+            xmax = 966.85297 
+            text = "" 
+        intervals [104]:
+            xmin = 966.85297 
+            xmax = 969.5939371757382 
+            text = "对，空乘系可以找司仪" 
+        intervals [105]:
+            xmin = 969.5939371757382 
+            xmax = 978.53298 
+            text = "" 
+        intervals [106]:
+            xmin = 978.53298 
+            xmax = 980.32798 
+            text = "空乘系可以找司仪的" 
+        intervals [107]:
+            xmin = 980.32798 
+            xmax = 983.4689067253819 
+            text = "" 
+        intervals [108]:
+            xmin = 983.4689067253819 
+            xmax = 983.925875 
+            text = "对" 
+        intervals [109]:
+            xmin = 983.925875 
+            xmax = 1004.64798 
+            text = "" 
+        intervals [110]:
+            xmin = 1004.64798 
+            xmax = 1012.81298 
+            text = "那这个就由我跟部长我们两个人去空乘班级" 
+        intervals [111]:
+            xmin = 1012.81298 
+            xmax = 1013.7667913419225 
+            text = "" 
+        intervals [112]:
+            xmin = 1013.7667913419225 
+            xmax = 1018.9122115069486 
+            text = "和播音专班级去发一下通知，让他们报一下名，然后咱们再挑" 
+        intervals [113]:
+            xmin = 1018.9122115069486 
+            xmax = 1020.99048 
+            text = "" 
+        intervals [114]:
+            xmin = 1020.99048 
+            xmax = 1025.34048 
+            text = "然后这个主持人弄完了，节目还需要排一下序" 
+        intervals [115]:
+            xmin = 1025.34048 
+            xmax = 1035.06048 
+            text = "" 
+        intervals [116]:
+            xmin = 1035.06048 
+            xmax = 1036.80048 
+            text = "对，最好要分好类" 
+        intervals [117]:
+            xmin = 1036.80048 
+            xmax = 1040.6251168341055 
+            text = "" 
+        intervals [118]:
+            xmin = 1040.6251168341055 
+            xmax = 1043.592953038506 
+            text = "不要一直唱歌儿对" 
+        intervals [119]:
+            xmin = 1043.592953038506 
+            xmax = 1054.67299 
+            text = "" 
+        intervals [120]:
+            xmin = 1054.67299 
+            xmax = 1061.39299 
+            text = "咱们不一定非要表演节目儿，咱们可以给他们整一个小游戏，商量一个小游戏让他们做" 
+        intervals [121]:
+            xmin = 1061.39299 
+            xmax = 1064.80549 
+            text = "" 
+        intervals [122]:
+            xmin = 1064.80549 
+            xmax = 1065.52549 
+            text = "对" 
+        intervals [123]:
+            xmin = 1065.52549 
+            xmax = 1067.1062584930514 
+            text = "" 
+        intervals [124]:
+            xmin = 1067.1062584930514 
+            xmax = 1068.9853027171396 
+            text = "最好是师生游戏啊" 
+        intervals [125]:
+            xmin = 1068.9853027171396 
+            xmax = 1074.71299 
+            text = "" 
+        intervals [126]:
+            xmin = 1074.71299 
+            xmax = 1076.96299 
+            text = "游戏，师生互动的游戏" 
+        intervals [127]:
+            xmin = 1076.96299 
+            xmax = 1119.78549 
+            text = "" 
+        intervals [128]:
+            xmin = 1119.78549 
+            xmax = 1121.6659602880718 
+            text = "啊对这个也可以" 
+        intervals [129]:
+            xmin = 1121.6659602880718 
+            xmax = 1134.8455 
+            text = "" 
+        intervals [130]:
+            xmin = 1134.8455 
+            xmax = 1135.520275351464 
+            text = "嗯" 
+        intervals [131]:
+            xmin = 1135.520275351464 
+            xmax = 1136.608 
+            text = "" 
+        intervals [132]:
+            xmin = 1136.608 
+            xmax = 1142.013 
+            text = "最好是能有一个什么游戏让师生直接上台动起来，这样直接活跃气氛" 
+        intervals [133]:
+            xmin = 1142.013 
+            xmax = 1142.308 
+            text = "" 
+        intervals [134]:
+            xmin = 1142.308 
+            xmax = 1147.893 
+            text = "还有咱们拉了十万块钱赞助，最好拿一千块钱分出来，这样的话咱们拉一个大点儿的群" 
+        intervals [135]:
+            xmin = 1147.893 
+            xmax = 1147.943 
+            text = "" 
+        intervals [136]:
+            xmin = 1147.943 
+            xmax = 1156.643 
+            text = "最好分四个或者五个群，然后给师生拉到那个群里头分开给他们发元旦红包，这也算是一种互动" 
+        intervals [137]:
+            xmin = 1156.643 
+            xmax = 1160.3158555660104 
+            text = "" 
+        intervals [138]:
+            xmin = 1160.3158555660104 
+            xmax = 1160.8800625000001 
+            text = "对" 
+        intervals [139]:
+            xmin = 1160.8800625000001 
+            xmax = 1223.48051 
+            text = "" 
+        intervals [140]:
+            xmin = 1223.48051 
+            xmax = 1224.42551 
+            text = "嗯对" 
+        intervals [141]:
+            xmin = 1224.42551 
+            xmax = 1224.46301 
+            text = "" 
+        intervals [142]:
+            xmin = 1224.46301 
+            xmax = 1231.73801 
+            text = "那由D同学做一个P P T吧，他是<sil>学计算机的，然后就让他" 
+        intervals [143]:
+            xmin = 1231.73801 
+            xmax = 1232.34551 
+            text = "" 
+        intervals [144]:
+            xmin = 1232.34551 
+            xmax = 1238.24051 
+            text = "然后就让他那个什么？让他做一个P P T，还有C同学也是学计算机的" 
+        intervals [145]:
+            xmin = 1238.24051 
+            xmax = 1238.38301 
+            text = "" 
+        intervals [146]:
+            xmin = 1238.38301 
+            xmax = 1242.08801 
+            text = "她可以做一个excel来拟定一下这个
+" 
+        intervals [147]:
+            xmin = 1242.08801 
+            xmax = 1242.26051 
+            text = "" 
+        intervals [148]:
+            xmin = 1242.26051 
+            xmax = 1244.8258655660104 
+            text = "预算呀什么的，由部长给他提供" 
+        intervals [149]:
+            xmin = 1244.8258655660104 
+            xmax = 1250.0415303749276 
+            text = "" 
+        intervals [150]:
+            xmin = 1250.0415303749276 
+            xmax = 1251.7134375 
+            text = "啊对然后" 
+        intervals [151]:
+            xmin = 1251.7134375 
+            xmax = 1252.83051 
+            text = "" 
+        intervals [152]:
+            xmin = 1252.83051 
+            xmax = 1258.44551 
+            text = "节目名单到后面儿也可以让她做的那个P P T一定要做的多样化" 
+        intervals [153]:
+            xmin = 1258.44551 
+            xmax = 1258.55301 
+            text = "" 
+        intervals [154]:
+            xmin = 1258.55301 
+            xmax = 1260.34301 
+            text = "然后我们可以投放那种" 
+        intervals [155]:
+            xmin = 1260.34301 
+            xmax = 1260.6754146395483 
+            text = "" 
+        intervals [156]:
+            xmin = 1260.6754146395483 
+            xmax = 1261.184688307759 
+            text = "可以" 
+        intervals [157]:
+            xmin = 1261.184688307759 
+            xmax = 1261.30551 
+            text = "" 
+        intervals [158]:
+            xmin = 1261.30551 
+            xmax = 1265.19051 
+            text = "然后条幅由A B两位同学来做吧" 
+        intervals [159]:
+            xmin = 1265.19051 
+            xmax = 1309.3411728499154 
+            text = "" 
+        intervals [160]:
+            xmin = 1309.3411728499154 
+            xmax = 1317.35302 
+            text = "先由部长计算出来那个<sil>预算设备和人员的钱，然后再看看要不要搞外联" 
+        intervals [161]:
+            xmin = 1317.35302 
+            xmax = 1320.06552 
+            text = "" 
+        intervals [162]:
+            xmin = 1320.06552 
+            xmax = 1330.75052 
+            text = "最主要的呢其实最主要的就是主持人这方面主持人好，他就能带动气氛，主持人不好他这气氛就死了" 
+        intervals [163]:
+            xmin = 1330.75052 
+            xmax = 1330.89802 
+            text = "" 
+        intervals [164]:
+            xmin = 1330.89802 
+            xmax = 1340.99302 
+            text = "然后这个联欢会开的就特别的尴尬。还有一部长一定要发活动就是报名的人员他肯定不能白报一定要加学分儿" 
+        intervals [165]:
+            xmin = 1340.99302 
+            xmax = 1341.81802 
+            text = "" 
+        intervals [166]:
+            xmin = 1341.81802 
+            xmax = 1343.680929127099 
+            text = "让他们生到那个活动里" 
+        intervals [167]:
+            xmin = 1343.680929127099 
+            xmax = 1346.5609595266358 
+            text = "" 
+        intervals [168]:
+            xmin = 1346.5609595266358 
+            xmax = 1347.0648125 
+            text = "对" 
+        intervals [169]:
+            xmin = 1347.0648125 
+            xmax = 1371.62053 
+            text = "" 
+        intervals [170]:
+            xmin = 1371.62053 
+            xmax = 1375.5380949609148 
+            text = "还有肯定也要带上学分儿啊学分儿加上物质奖励" 
+        intervals [171]:
+            xmin = 1375.5380949609148 
+            xmax = 1376.187857916908 
+            text = "" 
+        intervals [172]:
+            xmin = 1376.187857916908 
+            xmax = 1376.9781101606832 
+            text = "对" 
+        intervals [173]:
+            xmin = 1376.9781101606832 
+            xmax = 1381.1927887941515 
+            text = "" 
+        intervals [174]:
+            xmin = 1381.1927887941515 
+            xmax = 1382.95553 
+            text = "礼品是肯定都要给的" 
+        intervals [175]:
+            xmin = 1382.95553 
+            xmax = 1386.85553 
+            text = "" 
+        intervals [176]:
+            xmin = 1386.85553 
+            xmax = 1387.8275625 
+            text = "礼品" 
+        intervals [177]:
+            xmin = 1387.8275625 
+            xmax = 1389.53803 
+            text = "" 
+        intervals [178]:
+            xmin = 1389.53803 
+            xmax = 1393.22803 
+            text = "参与如果是报活动的话，只有学分奖励" 
+        intervals [179]:
+            xmin = 1393.22803 
+            xmax = 1394.83303 
+            text = "" 
+        intervals [180]:
+            xmin = 1394.83303 
+            xmax = 1396.64803 
+            text = "这个都会报名的" 
+        intervals [181]:
+            xmin = 1396.64803 
+            xmax = 1443.88554 
+            text = "" 
+        intervals [182]:
+            xmin = 1443.88554 
+            xmax = 1444.88054 
+            text = "快要冬天了" 
+        intervals [183]:
+            xmin = 1444.88054 
+            xmax = 1450.7853527171394 
+            text = "" 
+        intervals [184]:
+            xmin = 1450.7853527171394 
+            xmax = 1452.84304 
+            text = "围脖儿可以送参与奖" 
+        intervals [185]:
+            xmin = 1452.84304 
+            xmax = 1456.22304 
+            text = "" 
+        intervals [186]:
+            xmin = 1456.22304 
+            xmax = 1456.79804 
+            text = "嗯" 
+        intervals [187]:
+            xmin = 1456.79804 
+            xmax = 1461.89054 
+            text = "" 
+        intervals [188]:
+            xmin = 1461.89054 
+            xmax = 1462.7524629516502 
+            text = "帽子" 
+        intervals [189]:
+            xmin = 1462.7524629516502 
+            xmax = 1478.57804 
+            text = "" 
+        intervals [190]:
+            xmin = 1478.57804 
+            xmax = 1481.88804 
+            text = "三等奖到后面儿可以看吧，可以买一些" 
+        intervals [191]:
+            xmin = 1481.88804 
+            xmax = 1482.71804 
+            text = "" 
+        intervals [192]:
+            xmin = 1482.71804 
+            xmax = 1489.29804 
+            text = "男生女生比较时尚的啊什么首饰啊什么让他们选，这是女生的这方面男生的这方面" 
+        intervals [193]:
+            xmin = 1489.29804 
+            xmax = 1489.90304 
+            text = "" 
+        intervals [194]:
+            xmin = 1489.90304 
+            xmax = 1494.58304 
+            text = "可以买一些便宜的那些什么T恤呀衣服，让他们夏天再穿吧" 
+        intervals [195]:
+            xmin = 1494.58304 
+            xmax = 1496.828999575854 
+            text = "" 
+        intervals [196]:
+            xmin = 1496.828999575854 
+            xmax = 1498.7958496048059 
+            text = "啊对买一些便宜点儿手办" 
+        intervals [197]:
+            xmin = 1498.7958496048059 
+            xmax = 1571.976754219745 
+            text = "" 
+        intervals [198]:
+            xmin = 1571.976754219745 
+            xmax = 1572.6069375 
+            text = "嗯" 
+        intervals [199]:
+            xmin = 1572.6069375 
+            xmax = 1598.00055 
+            text = "" 
+        intervals [200]:
+            xmin = 1598.00055 
+            xmax = 1599.97555 
+            text = "二等奖可以稍高级一点儿" 
+        intervals [201]:
+            xmin = 1599.97555 
+            xmax = 1600.99556 
+            text = "" 
+        intervals [202]:
+            xmin = 1600.99556 
+            xmax = 1603.69556 
+            text = "赠一个P三呀什么的P四啊" 
+        intervals [203]:
+            xmin = 1603.69556 
+            xmax = 1604.03056 
+            text = "" 
+        intervals [204]:
+            xmin = 1604.03056 
+            xmax = 1606.0332453828892 
+            text = "但是这也是普通电子产品
+" 
+        intervals [205]:
+            xmin = 1606.0332453828892 
+            xmax = 1625.8886142486972 
+            text = "" 
+        intervals [206]:
+            xmin = 1625.8886142486972 
+            xmax = 1628.12056 
+            text = "一等奖可以赠一个ipad啊什么的" 
+        intervals [207]:
+            xmin = 1628.12056 
+            xmax = 1633.8717986792437 
+            text = "" 
+        intervals [208]:
+            xmin = 1633.8717986792437 
+            xmax = 1637.51056 
+            text = "但是如果一等奖是一个团队组合，咱怎么送呢" 
+        intervals [209]:
+            xmin = 1637.51056 
+            xmax = 1643.69056 
+            text = "" 
+        intervals [210]:
+            xmin = 1643.69056 
+            xmax = 1644.4471159858135 
+            text = "经费" 
+        intervals [211]:
+            xmin = 1644.4471159858135 
+            xmax = 1646.7125057513028 
+            text = "" 
+        intervals [212]:
+            xmin = 1646.7125057513028 
+            xmax = 1647.209 
+            text = "嗯" 
+        intervals [213]:
+            xmin = 1647.209 
+            xmax = 1659.0056861218875 
+            text = "" 
+        intervals [214]:
+            xmin = 1659.0056861218875 
+            xmax = 1659.5873125 
+            text = "嗯" 
+        intervals [215]:
+            xmin = 1659.5873125 
+            xmax = 1663.53556 
+            text = "" 
+        intervals [216]:
+            xmin = 1663.53556 
+            xmax = 1673.68556 
+            text = "要是一二等奖礼物太贵的话，咱们的预算就不够了，因为他怕有那种团体节目儿一个舞蹈七八个人，咱不能一人送一辆自行车儿啊" 
+        intervals [217]:
+            xmin = 1673.68556 
+            xmax = 1677.5127579950781 
+            text = "" 
+        intervals [218]:
+            xmin = 1677.5127579950781 
+            xmax = 1679.38056 
+            text = "对让他们自己分得骑" 
+        intervals [219]:
+            xmin = 1679.38056 
+            xmax = 1686.4764376534454 
+            text = "" 
+        intervals [220]:
+            xmin = 1686.4764376534454 
+            xmax = 1687.5723028474042 
+            text = "嗯嗯" 
+        intervals [221]:
+            xmin = 1687.5723028474042 
+            xmax = 1812.99058 
+            text = "" 
+        intervals [222]:
+            xmin = 1812.99058 
+            xmax = 1819.63558 
+            text = "那就可以让部长申两个活动，一个是<sil>联欢会的一个加分儿的项目，还有一个就是<sil>" 
+        intervals [223]:
+            xmin = 1819.63558 
+            xmax = 1820.28558 
+            text = "" 
+        intervals [224]:
+            xmin = 1820.28558 
+            xmax = 1821.66558 
+            text = "报名这个" 
+        intervals [225]:
+            xmin = 1821.66558 
+            xmax = 1821.95808 
+            text = "" 
+        intervals [226]:
+            xmin = 1821.95808 
+            xmax = 1823.2765931369427 
+            text = "普通的这个" 
+        intervals [227]:
+            xmin = 1823.2765931369427 
+            xmax = 1827.80058 
+            text = "" 
+        intervals [228]:
+            xmin = 1827.80058 
+            xmax = 1829.68558 
+            text = "学分儿变低一点儿" 
+        intervals [229]:
+            xmin = 1829.68558 
+            xmax = 2011.088 
+            text = "" 
+    item [4]:
+        class = "IntervalTier" 
+        name = "004-M" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 103 
+        intervals [1]:
+            xmin = 0 
+            xmax = 39.58536 
+            text = "" 
+        intervals [2]:
+            xmin = 39.58536 
+            xmax = 41.22536 
+            text = "零幺三我是部员儿A" 
+        intervals [3]:
+            xmin = 41.22536 
+            xmax = 139.87287 
+            text = "" 
+        intervals [4]:
+            xmin = 139.87287 
+            xmax = 150.23287 
+            text = "呃A这边儿活动的话，开场是一个老师和同学们的大合唱活动，有跳舞呃这个一定要给老师们呃准备好
+" 
+        intervals [5]:
+            xmin = 150.23287 
+            xmax = 150.28287 
+            text = "" 
+        intervals [6]:
+            xmin = 150.28287 
+            xmax = 154.18287379994206 
+            text = "服装和老师们说好时间，然后你这个" 
+        intervals [7]:
+            xmin = 154.18287379994206 
+            xmax = 155.06037 
+            text = "" 
+        intervals [8]:
+            xmin = 155.06037 
+            xmax = 155.78093944846552 
+            text = "对" 
+        intervals [9]:
+            xmin = 155.78093944846552 
+            xmax = 157.46681090185288 
+            text = "" 
+        intervals [10]:
+            xmin = 157.46681090185288 
+            xmax = 160.03074040387952 
+            text = "对老师合唱学生伴舞" 
+        intervals [11]:
+            xmin = 160.03074040387952 
+            xmax = 162.39037 
+            text = "" 
+        intervals [12]:
+            xmin = 162.39037 
+            xmax = 171.53037 
+            text = "呃这一块儿主要请咱们一个是咱们班班导，还有就是请咱们请咱们这个专业的老师，还有校长副校长之类的
+" 
+        intervals [13]:
+            xmin = 171.53037 
+            xmax = 177.81154904144574 
+            text = "" 
+        intervals [14]:
+            xmin = 177.81154904144574 
+            xmax = 180.24250563150662 
+            text = "啊好的到时候儿需要你的帮助" 
+        intervals [15]:
+            xmin = 180.24250563150662 
+            xmax = 181.48537 
+            text = "" 
+        intervals [16]:
+            xmin = 181.48537 
+            xmax = 190.76538 
+            text = "然后接下来就是一些节目节目的话，呃需要呃需要下边儿再具体安排，那些人在前那些人在后" 
+        intervals [17]:
+            xmin = 190.76538 
+            xmax = 190.87288 
+            text = "" 
+        intervals [18]:
+            xmin = 190.87288 
+            xmax = 200.83288 
+            text = "呃然后安排完了之后会跟这个每一个节目的负责人去联系呃，然后看他们需要什么道具，需要什么提前布置" 
+        intervals [19]:
+            xmin = 200.83288 
+            xmax = 200.90038 
+            text = "" 
+        intervals [20]:
+            xmin = 200.90038 
+            xmax = 207.65538 
+            text = "呃需要场地或者干嘛的，呃让他们及时的报备，我们也会提前给他们准备" 
+        intervals [21]:
+            xmin = 207.65538 
+            xmax = 207.84288 
+            text = "" 
+        intervals [22]:
+            xmin = 207.84288 
+            xmax = 215.89788 
+            text = "然后再一个就是拉赞助这块儿，拉赞助这块儿我们呃因为是元旦晚会嘛，我们肯定要需要去找一些
+" 
+        intervals [23]:
+            xmin = 215.89788 
+            xmax = 215.96788 
+            text = "" 
+        intervals [24]:
+            xmin = 215.96788 
+            xmax = 223.43788 
+            text = "呃吃的或者喝的，比如像这个怡宝啊，还有什么呃这这个" 
+        intervals [25]:
+            xmin = 223.43788 
+            xmax = 223.49038 
+            text = "" 
+        intervals [26]:
+            xmin = 223.49038 
+            xmax = 225.68538 
+            text = "康师傅啊就这一系列的
+" 
+        intervals [27]:
+            xmin = 225.68538 
+            xmax = 225.88288 
+            text = "" 
+        intervals [28]:
+            xmin = 225.88288 
+            xmax = 235.77788 
+            text = "呃吃的喝的喝的一些品牌让他们给咱们拉赞助，呃我们去拉赞助，让他们支持我们的一些设备啊还有器材什么的" 
+        intervals [29]:
+            xmin = 235.77788 
+            xmax = 236.2367520290709 
+            text = "" 
+        intervals [30]:
+            xmin = 236.2367520290709 
+            xmax = 236.85575 
+            text = "啊" 
+        intervals [31]:
+            xmin = 236.85575 
+            xmax = 241.01038 
+            text = "" 
+        intervals [32]:
+            xmin = 241.01038 
+            xmax = 249.97538 
+            text = "呃拉赞助这方面儿主要现在拉的是怡宝怡宝去<->确定是给我们其他的赞助，啊然后我们买一些设备什么的，可能" 
+        intervals [33]:
+            xmin = 249.97538 
+            xmax = 250.03538 
+            text = "" 
+        intervals [34]:
+            xmin = 250.03538 
+            xmax = 253.70038 
+            text = "后期还需要再去拉一些别的赞助啊" 
+        intervals [35]:
+            xmin = 253.70038 
+            xmax = 255.61538 
+            text = "" 
+        intervals [36]:
+            xmin = 255.61538 
+            xmax = 256.38538 
+            text = "嗯" 
+        intervals [37]:
+            xmin = 256.38538 
+            xmax = 257.25538 
+            text = "" 
+        intervals [38]:
+            xmin = 257.25538 
+            xmax = 259.29008461167604 
+            text = "然后我可以把我们钱" 
+        intervals [39]:
+            xmin = 259.29008461167604 
+            xmax = 262.5740217135869 
+            text = "" 
+        intervals [40]:
+            xmin = 262.5740217135869 
+            xmax = 270.88045085371425 
+            text = "啊租用别的公司的因为咱们这儿是开的话一学年一次不可能说这个东西一搁搁一年，所以说租用 " 
+        intervals [41]:
+            xmin = 270.88045085371425 
+            xmax = 289.9158219267516 
+            text = "" 
+        intervals [42]:
+            xmin = 289.9158219267516 
+            xmax = 290.623125 
+            text = "好" 
+        intervals [43]:
+            xmin = 290.623125 
+            xmax = 293.91976662854665 
+            text = "" 
+        intervals [44]:
+            xmin = 293.91976662854665 
+            xmax = 294.94156250000003 
+            text = "彩带之类" 
+        intervals [45]:
+            xmin = 294.94156250000003 
+            xmax = 298.83539 
+            text = "" 
+        intervals [46]:
+            xmin = 298.83539 
+            xmax = 301.19001163433705 
+            text = "对还有条幅" 
+        intervals [47]:
+            xmin = 301.19001163433705 
+            xmax = 399.5649072700002 
+            text = "" 
+        intervals [48]:
+            xmin = 399.5649072700002 
+            xmax = 400.835875 
+            text = "印海报啊" 
+        intervals [49]:
+            xmin = 400.835875 
+            xmax = 429.5506204444123 
+            text = "" 
+        intervals [50]:
+            xmin = 429.5506204444123 
+            xmax = 430.65541 
+            text = "发放给学生" 
+        intervals [51]:
+            xmin = 430.65541 
+            xmax = 437.3302147553561 
+            text = "" 
+        intervals [52]:
+            xmin = 437.3302147553561 
+            xmax = 440.36291 
+            text = "二等奖两名，三等奖三名对吧" 
+        intervals [53]:
+            xmin = 440.36291 
+            xmax = 615.8980409221193 
+            text = "" 
+        intervals [54]:
+            xmin = 615.8980409221193 
+            xmax = 616.4830000000001 
+            text = "对" 
+        intervals [55]:
+            xmin = 616.4830000000001 
+            xmax = 617.4961065706427 
+            text = "" 
+        intervals [56]:
+            xmin = 617.4961065706427 
+            xmax = 617.9565625 
+            text = "嗯" 
+        intervals [57]:
+            xmin = 617.9565625 
+            xmax = 670.1676151954256 
+            text = "" 
+        intervals [58]:
+            xmin = 670.1676151954256 
+            xmax = 670.703875 
+            text = "嗯" 
+        intervals [59]:
+            xmin = 670.703875 
+            xmax = 804.15045 
+            text = "" 
+        intervals [60]:
+            xmin = 804.15045 
+            xmax = 806.23045 
+            text = "A同学这边儿我觉得" 
+        intervals [61]:
+            xmin = 806.23045 
+            xmax = 806.47295 
+            text = "" 
+        intervals [62]:
+            xmin = 806.47295 
+            xmax = 813.35295 
+            text = "可以找一个专门儿干这个的灯光公司，然后给咱们搞来一套专业的设备
+" 
+        intervals [63]:
+            xmin = 813.35295 
+            xmax = 813.38545 
+            text = "" 
+        intervals [64]:
+            xmin = 813.38545 
+            xmax = 820.03046 
+            text = "啊然后看具体的要用到哪个节目上，咱们就具体安排到哪个节目上" 
+        intervals [65]:
+            xmin = 820.03046 
+            xmax = 820.09546 
+            text = "" 
+        intervals [66]:
+            xmin = 820.09546 
+            xmax = 825.61546 
+            text = "然后就像一些什么服装灯啊，啊这样儿效果就好好很多" 
+        intervals [67]:
+            xmin = 825.61546 
+            xmax = 974.9236268122315 
+            text = "" 
+        intervals [68]:
+            xmin = 974.9236268122315 
+            xmax = 975.9610935096988 
+            text = "播音专业" 
+        intervals [69]:
+            xmin = 975.9610935096988 
+            xmax = 980.37798 
+            text = "" 
+        intervals [70]:
+            xmin = 980.37798 
+            xmax = 983.994 
+            text = "嗯咱们到时候挑吧让比竞竞选一下嘛
+" 
+        intervals [71]:
+            xmin = 983.994 
+            xmax = 990.7106596829763 
+            text = "" 
+        intervals [72]:
+            xmin = 990.7106596829763 
+            xmax = 992.749375 
+            text = "考核一下儿
+" 
+        intervals [73]:
+            xmin = 992.749375 
+            xmax = 993.0462940923567 
+            text = "" 
+        intervals [74]:
+            xmin = 993.0462940923567 
+            xmax = 994.8298125 
+            text = "对然后
+" 
+        intervals [75]:
+            xmin = 994.8298125 
+            xmax = 996.0141302967573 
+            text = "" 
+        intervals [76]:
+            xmin = 996.0141302967573 
+            xmax = 1004.59298 
+            text = "我觉得应该六个吧咱们还要有两个至少有两个备用的对万一万一谁临时有事儿的话可以替上去
+" 
+        intervals [77]:
+            xmin = 1004.59298 
+            xmax = 1045.6325252735958 
+            text = "" 
+        intervals [78]:
+            xmin = 1045.6325252735958 
+            xmax = 1052.47049 
+            text = "然后穿插中间儿还可以搞一些时装，就是导演就是主持人和观众一些互动" 
+        intervals [79]:
+            xmin = 1052.47049 
+            xmax = 1052.72799 
+            text = "" 
+        intervals [80]:
+            xmin = 1052.72799 
+            xmax = 1054.00299 
+            text = "也可以" 
+        intervals [81]:
+            xmin = 1054.00299 
+            xmax = 1113.92299 
+            text = "" 
+        intervals [82]:
+            xmin = 1113.92299 
+            xmax = 1119.43299 
+            text = "我们可以搞一个直播，然后选取几名幸运观众，上来表演节目
+" 
+        intervals [83]:
+            xmin = 1119.43299 
+            xmax = 1121.0864419759698 
+            text = "" 
+        intervals [84]:
+            xmin = 1121.0864419759698 
+            xmax = 1123.26049 
+            text = "时不时的截个屏干嘛的
+" 
+        intervals [85]:
+            xmin = 1123.26049 
+            xmax = 1123.46049 
+            text = "" 
+        intervals [86]:
+            xmin = 1123.46049 
+            xmax = 1125.45049 
+            text = "抽取几个幸运同学
+" 
+        intervals [87]:
+            xmin = 1125.45049 
+            xmax = 1135.0636851661716 
+            text = "" 
+        intervals [88]:
+            xmin = 1135.0636851661716 
+            xmax = 1136.4405 
+            text = "嗯可以" 
+        intervals [89]:
+            xmin = 1136.4405 
+            xmax = 1303.07802 
+            text = "" 
+        intervals [90]:
+            xmin = 1303.07802 
+            xmax = 1309.0163125000001 
+            text = "嗯这这可以请但是你要给一定的演出费，这个赞助这边儿还是再拉一些赞助的
+" 
+        intervals [91]:
+            xmin = 1309.0163125000001 
+            xmax = 1374.4317418196292 
+            text = "" 
+        intervals [92]:
+            xmin = 1374.4317418196292 
+            xmax = 1379.85814056022 
+            text = "结合呀物质加学分儿都可以你可以让他们选选物质或者选学分儿
+" 
+        intervals [93]:
+            xmin = 1379.85814056022 
+            xmax = 1502.3252122125268 
+            text = "" 
+        intervals [94]:
+            xmin = 1502.3252122125268 
+            xmax = 1508.93304 
+            text = "A同学这边儿我觉得可以给给他们送一些体育器材，或者咱们毕竟是从外头拉赞助嘛
+" 
+        intervals [95]:
+            xmin = 1508.93304 
+            xmax = 1509.1814509023175 
+            text = "" 
+        intervals [96]:
+            xmin = 1509.1814509023175 
+            xmax = 1517.540563525363 
+            text = "那这个是啊比如像什么一些体育场地，咱们可以去搞一些年卡月卡呀之类的推送给他们" 
+        intervals [97]:
+            xmin = 1517.540563525363 
+            xmax = 1518.26304 
+            text = "" 
+        intervals [98]:
+            xmin = 1518.26304 
+            xmax = 1518.9142290199768 
+            text = "嗯" 
+        intervals [99]:
+            xmin = 1518.9142290199768 
+            xmax = 1860.3980359296834 
+            text = "" 
+        intervals [100]:
+            xmin = 1860.3980359296834 
+            xmax = 1862.1084964488143 
+            text = "嗯比较好
+" 
+        intervals [101]:
+            xmin = 1862.1084964488143 
+            xmax = 1940.7756 
+            text = "" 
+        intervals [102]:
+            xmin = 1940.7756 
+            xmax = 1941.6006 
+            text = "嗯" 
+        intervals [103]:
+            xmin = 1941.6006 
+            xmax = 2011.088 
+            text = "" 
+    item [5]:
+        class = "IntervalTier" 
+        name = "005-F" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 75 
+        intervals [1]:
+            xmin = 0 
+            xmax = 41.37536 
+            text = "" 
+        intervals [2]:
+            xmin = 41.37536 
+            xmax = 43.12536 
+            text = "零二三我是部员儿B" 
+        intervals [3]:
+            xmin = 43.12536 
+            xmax = 312.19789 
+            text = "" 
+        intervals [4]:
+            xmin = 312.19789 
+            xmax = 323.06789 
+            text = "呃关于这个元旦晚会，呃首先刚才部长说有二十四个节目，我觉得最开始三场节目应该是" 
+        intervals [5]:
+            xmin = 323.06789 
+            xmax = 323.12039 
+            text = "" 
+        intervals [6]:
+            xmin = 323.12039 
+            xmax = 334.92539 
+            text = "比较带动气氛的唱歌跳舞，然后期间一共呃进行时长大概两个多小时吧，然后中间应该还有跳舞、唱歌儿、相声、小品" 
+        intervals [7]:
+            xmin = 334.92539 
+            xmax = 334.96039 
+            text = "" 
+        intervals [8]:
+            xmin = 334.96039 
+            xmax = 346.1854 
+            text = "然后各种然后等到最后的时候可能会再给导员儿或者年级主任什么专业的那些老师们一个" 
+        intervals [9]:
+            xmin = 346.1854 
+            xmax = 347.5179 
+            text = "" 
+        intervals [10]:
+            xmin = 347.5179 
+            xmax = 353.2579 
+            text = "呃<sil>一个惊喜吧呃对合影惊喜自己当作是留念然后" 
+        intervals [11]:
+            xmin = 353.2579 
+            xmax = 353.5054 
+            text = "" 
+        intervals [12]:
+            xmin = 353.5054 
+            xmax = 364.7604 
+            text = "期间然后嗯也可以进行一番互动，然后让场上气氛增加，更加活跃吧更加融洽，然后大家都比较开心" 
+        intervals [13]:
+            xmin = 364.7604 
+            xmax = 451.70041 
+            text = "" 
+        intervals [14]:
+            xmin = 451.70041 
+            xmax = 452.55541 
+            text = "嗯" 
+        intervals [15]:
+            xmin = 452.55541 
+            xmax = 596.1029808608998 
+            text = "" 
+        intervals [16]:
+            xmin = 596.1029808608998 
+            xmax = 600.38543 
+            text = "对，我是觉得还是室内比较好一下，因为天气元旦说" 
+        intervals [17]:
+            xmin = 600.38543 
+            xmax = 600.46543 
+            text = "" 
+        intervals [18]:
+            xmin = 600.46543 
+            xmax = 601.1007943684934 
+            text = "天气" 
+        intervals [19]:
+            xmin = 601.1007943684934 
+            xmax = 602.584392875663 
+            text = "" 
+        intervals [20]:
+            xmin = 602.584392875663 
+            xmax = 604.5666741191373 
+            text = "晚上晚上" 
+        intervals [21]:
+            xmin = 604.5666741191373 
+            xmax = 675.63044 
+            text = "" 
+        intervals [22]:
+            xmin = 675.63044 
+            xmax = 684.14544 
+            text = "对学校里的礼堂或者体育馆我觉得应该可以节省更多的成本，然后布置，然后花更多的精力在服装
+" 
+        intervals [23]:
+            xmin = 684.14544 
+            xmax = 684.21044 
+            text = "" 
+        intervals [24]:
+            xmin = 684.21044 
+            xmax = 685.7478888225495 
+            text = "装饰，然后宣传上面" 
+        intervals [25]:
+            xmin = 685.7478888225495 
+            xmax = 709.58044 
+            text = "" 
+        intervals [26]:
+            xmin = 709.58044 
+            xmax = 710.48044 
+            text = "嗯" 
+        intervals [27]:
+            xmin = 710.48044 
+            xmax = 762.27795 
+            text = "" 
+        intervals [28]:
+            xmin = 762.27795 
+            xmax = 774.41795 
+            text = "然后装饰上面为了活跃气氛，然后可以买一些气球，然后我们这种部员就是B跟C可以在下面，把这些就是然后再带动别的同学一起帮忙做一下
+" 
+        intervals [29]:
+            xmin = 774.41795 
+            xmax = 774.50795 
+            text = "" 
+        intervals [30]:
+            xmin = 774.50795 
+            xmax = 775.1750305332846 
+            text = "然后" 
+        intervals [31]:
+            xmin = 775.1750305332846 
+            xmax = 776.4218729623524 
+            text = "" 
+        intervals [32]:
+            xmin = 776.4218729623524 
+            xmax = 783.18295 
+            text = "对对然后把那个装饰的稍微好看一点儿，就是彩带、气球、条幅各种" 
+        intervals [33]:
+            xmin = 783.18295 
+            xmax = 985.3303897884971 
+            text = "" 
+        intervals [34]:
+            xmin = 985.3303897884971 
+            xmax = 987.3074657622444 
+            text = "对要提前就是" 
+        intervals [35]:
+            xmin = 987.3074657622444 
+            xmax = 987.47798 
+            text = "" 
+        intervals [36]:
+            xmin = 987.47798 
+            xmax = 996.0141302967573 
+            text = "毕竟活动挺大，我觉得主持人这个也是应该在提前对一两周之前先竞选一下，选出来四个比较合格的
+" 
+        intervals [37]:
+            xmin = 996.0141302967573 
+            xmax = 998.7449975355582 
+            text = "" 
+        intervals [38]:
+            xmin = 998.7449975355582 
+            xmax = 1002.230875 
+            text = "对也要也要有替补备选" 
+        intervals [39]:
+            xmin = 1002.230875 
+            xmax = 1013.08048 
+            text = "" 
+        intervals [40]:
+            xmin = 1013.08048 
+            xmax = 1013.9248417906776 
+            text = "播音" 
+        intervals [41]:
+            xmin = 1013.9248417906776 
+            xmax = 1201.058 
+            text = "" 
+        intervals [42]:
+            xmin = 1201.058 
+            xmax = 1210.71801 
+            text = "然后咱咱们这一共有二十多个节目，我觉得要提前两个月，咱们就要先在学校发布一些公告因为他们排练时间排练
+" 
+        intervals [43]:
+            xmin = 1210.71801 
+            xmax = 1210.76551 
+            text = "" 
+        intervals [44]:
+            xmin = 1210.76551 
+            xmax = 1219.33051 
+            text = "然后歌舞排练还有彩排都是需要一定时间，然后再调整顺序，所以咱们一定要就提前
+" 
+        intervals [45]:
+            xmin = 1219.33051 
+            xmax = 1219.39301 
+            text = "" 
+        intervals [46]:
+            xmin = 1219.39301 
+            xmax = 1223.42301 
+            text = "提前就是让他们有时间来准备，对吧" 
+        intervals [47]:
+            xmin = 1223.42301 
+            xmax = 1265.65301 
+            text = "" 
+        intervals [48]:
+            xmin = 1265.65301 
+            xmax = 1266.27801 
+            text = "好" 
+        intervals [49]:
+            xmin = 1266.27801 
+            xmax = 1521.41804 
+            text = "" 
+        intervals [50]:
+            xmin = 1521.41804 
+            xmax = 1530.006873779676 
+            text = "三等奖我觉得我现在考虑可能大部分是女生，因为冬天，然后对然后可以就是买一些暖手宝就是" 
+        intervals [51]:
+            xmin = 1530.006873779676 
+            xmax = 1530.60555 
+            text = "" 
+        intervals [52]:
+            xmin = 1530.60555 
+            xmax = 1536.26555 
+            text = "对，其实那些也算一个小电器了吧，然后加起来也会相对提高" 
+        intervals [53]:
+            xmin = 1536.26555 
+            xmax = 1739.41057 
+            text = "" 
+        intervals [54]:
+            xmin = 1739.41057 
+            xmax = 1748.3330658381585 
+            text = "嗯我觉得在参与奖这边儿，就是就最简单的生活用品就行就手套儿，就是别的什么电子产品不需要" 
+        intervals [55]:
+            xmin = 1748.3330658381585 
+            xmax = 1749.85307 
+            text = "" 
+        intervals [56]:
+            xmin = 1749.85307 
+            xmax = 1756.00807 
+            text = "一二一二等奖我觉得我的意思就是说把刚才参与这些奖项往上移一下儿这奖品" 
+        intervals [57]:
+            xmin = 1756.00807 
+            xmax = 1756.05057 
+            text = "" 
+        intervals [58]:
+            xmin = 1756.05057 
+            xmax = 1765.61558 
+            text = "什么蓝牙什么都不应该出现在三等奖，我觉得应该二等奖，然后一等奖，然后才是折叠自行车什么对吧我觉得" 
+        intervals [59]:
+            xmin = 1765.61558 
+            xmax = 1765.65808 
+            text = "" 
+        intervals [60]:
+            xmin = 1765.65808 
+            xmax = 1766.36308 
+            text = "嗯" 
+        intervals [61]:
+            xmin = 1766.36308 
+            xmax = 1766.9788408931672 
+            text = "" 
+        intervals [62]:
+            xmin = 1766.9788408931672 
+            xmax = 1771.088152560799 
+            text = "人多的话，毕竟不能一人一辆自行车一人一台" 
+        intervals [63]:
+            xmin = 1771.088152560799 
+            xmax = 1782.85558 
+            text = "" 
+        intervals [64]:
+            xmin = 1782.85558 
+            xmax = 1784.1214096540243 
+            text = "暖手宝啊" 
+        intervals [65]:
+            xmin = 1784.1214096540243 
+            xmax = 1789.2523730298208 
+            text = "" 
+        intervals [66]:
+            xmin = 1789.2523730298208 
+            xmax = 1798.6651553112335 
+            text = "对这样可以，这样奖项就设计差不多了，然后一共节目到时候肯定要选，并不是所有人想表演节目就可以上去去表演
+" 
+        intervals [67]:
+            xmin = 1798.6651553112335 
+            xmax = 1801.931050288072 
+            text = "" 
+        intervals [68]:
+            xmin = 1801.931050288072 
+            xmax = 1808.4989244918934 
+            text = "对，但是他没有选上的那些人，咱们也要给人家一定的奖品对让人家去心里会舒服一些" 
+        intervals [69]:
+            xmin = 1808.4989244918934 
+            xmax = 1809.6930834380428 
+            text = "" 
+        intervals [70]:
+            xmin = 1809.6930834380428 
+            xmax = 1810.193375 
+            text = "对" 
+        intervals [71]:
+            xmin = 1810.193375 
+            xmax = 1810.9574870280833 
+            text = "" 
+        intervals [72]:
+            xmin = 1810.9574870280833 
+            xmax = 1811.581625 
+            text = "对" 
+        intervals [73]:
+            xmin = 1811.581625 
+            xmax = 1822.8200029516504 
+            text = "" 
+        intervals [74]:
+            xmin = 1822.8200029516504 
+            xmax = 1824.56808 
+            text = "对在报名的时候" 
+        intervals [75]:
+            xmin = 1824.56808 
+            xmax = 2011.088 
+            text = "" 
+    item [6]:
+        class = "IntervalTier" 
+        name = "006-F" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 67 
+        intervals [1]:
+            xmin = 0 
+            xmax = 43.52036 
+            text = "" 
+        intervals [2]:
+            xmin = 43.52036 
+            xmax = 45.87036 
+            text = "零二四我是部员儿C" 
+        intervals [3]:
+            xmin = 45.87036 
+            xmax = 453.96541 
+            text = "" 
+        intervals [4]:
+            xmin = 453.96541 
+            xmax = 462.03541 
+            text = "我觉得我觉得我们的晚会可以在学校操场然后进行那个比较" 
+        intervals [5]:
+            xmin = 462.03541 
+            xmax = 462.14041 
+            text = "" 
+        intervals [6]:
+            xmin = 462.14041 
+            xmax = 476.58541 
+            text = "比较布置的比较精细一点，然后灯光什么打的都比较到位一点儿，然后做的比较专业一点儿，用摄像机什么的做好我们的学校宣传吧，也因为我们的活动，我觉得" 
+        intervals [7]:
+            xmin = 476.58541 
+            xmax = 476.63291 
+            text = "" 
+        intervals [8]:
+            xmin = 476.63291 
+            xmax = 483.28291 
+            text = "不只是一年一次的活动，这个意义比较大，然后我们也拉了很多赞助嘛，就是" 
+        intervals [9]:
+            xmin = 483.28291 
+            xmax = 483.45291 
+            text = "" 
+        intervals [10]:
+            xmin = 483.45291 
+            xmax = 497.46791 
+            text = "不仅宣传我们学校，就是要促进一下儿师生关系，还要外向外宣传一下儿我们学校的校园文化，所以我们要做好这个方面什么灯光怎么安排，然后怎么布置现场" 
+        intervals [11]:
+            xmin = 497.46791 
+            xmax = 497.52541 
+            text = "" 
+        intervals [12]:
+            xmin = 497.52541 
+            xmax = 506.01042 
+            text = "可以嗯摆一个在操场摆一个比较大一点儿的台子，我觉得，然后然后下面摆两台摄像机" 
+        intervals [13]:
+            xmin = 506.01042 
+            xmax = 506.07042 
+            text = "" 
+        intervals [14]:
+            xmin = 506.07042 
+            xmax = 519.32042 
+            text = "然后嗯可以呃那个舞蹈啊什么那些服装，然后都要求的稍微严格一点儿，然后呃之后可以做成宣传画儿，然后在学校啊或者哪里可以贴出来" 
+        intervals [15]:
+            xmin = 519.32042 
+            xmax = 519.38792 
+            text = "" 
+        intervals [16]:
+            xmin = 519.38792 
+            xmax = 528.01292 
+            text = "然后呃让更多吸引更多的人，然后也可以为我们以后的学校拉赞助，就有很多提供很多方便" 
+        intervals [17]:
+            xmin = 528.01292 
+            xmax = 667.89044 
+            text = "" 
+        intervals [18]:
+            xmin = 667.89044 
+            xmax = 668.48044 
+            text = "对" 
+        intervals [19]:
+            xmin = 668.48044 
+            xmax = 892.5008539273305 
+            text = "" 
+        intervals [20]:
+            xmin = 892.5008539273305 
+            xmax = 897.34297 
+            text = "我们可以加那个故事表演那些" 
+        intervals [21]:
+            xmin = 897.34297 
+            xmax = 897.9448138288939 
+            text = "" 
+        intervals [22]:
+            xmin = 897.9448138288939 
+            xmax = 903.6697523060219 
+            text = "就是对情景剧情景剧然后可以可以让学生们在下面" 
+        intervals [23]:
+            xmin = 903.6697523060219 
+            xmax = 906.63797 
+            text = "" 
+        intervals [24]:
+            xmin = 906.63797 
+            xmax = 910.88297 
+            text = "大合唱师生大合唱，我觉得也可以这样加进去" 
+        intervals [25]:
+            xmin = 910.88297 
+            xmax = 1077.01799 
+            text = "" 
+        intervals [26]:
+            xmin = 1077.01799 
+            xmax = 1083.11299 
+            text = "啊我觉得我们可以在现场呃找一束花儿吧，然后" 
+        intervals [27]:
+            xmin = 1083.11299 
+            xmax = 1083.18549 
+            text = "" 
+        intervals [28]:
+            xmin = 1083.18549 
+            xmax = 1091.56049 
+            text = "就就那个根据啊呃不不不<$>我的意思是在对互动呃因为我们的" 
+        intervals [29]:
+            xmin = 1091.56049 
+            xmax = 1091.59549 
+            text = "" 
+        intervals [30]:
+            xmin = 1091.59549 
+            xmax = 1096.68549 
+            text = "这个节目表演时间比较长嘛，所以可以和下面的那些同学们" 
+        intervals [31]:
+            xmin = 1096.68549 
+            xmax = 1096.80799 
+            text = "" 
+        intervals [32]:
+            xmin = 1096.80799 
+            xmax = 1104.49299 
+            text = "呃现场中间可以互动一下，然后可以根据那个音乐的时间呃节点，然后" 
+        intervals [33]:
+            xmin = 1104.49299 
+            xmax = 1104.80549 
+            text = "" 
+        intervals [34]:
+            xmin = 1104.80549 
+            xmax = 1111.73549 
+            text = "就抽一部分那个同学上上那个台子上面可以表演一下儿" 
+        intervals [35]:
+            xmin = 1111.73549 
+            xmax = 1111.80549 
+            text = "" 
+        intervals [36]:
+            xmin = 1111.80549 
+            xmax = 1113.89549 
+            text = "可以发挥一下儿自己的特长" 
+        intervals [37]:
+            xmin = 1113.89549 
+            xmax = 1277.42301 
+            text = "" 
+        intervals [38]:
+            xmin = 1277.42301 
+            xmax = 1284.04301 
+            text = "然后剩下的我觉得我们重要的是节目这一方面可以按照那个部门" 
+        intervals [39]:
+            xmin = 1284.04301 
+            xmax = 1284.08051 
+            text = "" 
+        intervals [40]:
+            xmin = 1284.08051 
+            xmax = 1291.49052 
+            text = "给给每个学生部，然后分发一下儿他们想要表演多少个节目，然后安排一下儿" 
+        intervals [41]:
+            xmin = 1291.49052 
+            xmax = 1341.872129546902 
+            text = "" 
+        intervals [42]:
+            xmin = 1341.872129546902 
+            xmax = 1345.5950956731326 
+            text = "对就比如对就比如说到时候
+" 
+        intervals [43]:
+            xmin = 1345.5950956731326 
+            xmax = 1450.2058344050374 
+            text = "" 
+        intervals [44]:
+            xmin = 1450.2058344050374 
+            xmax = 1450.9883750000001 
+            text = "我觉得" 
+        intervals [45]:
+            xmin = 1450.9883750000001 
+            xmax = 1458.7654140523512 
+            text = "" 
+        intervals [46]:
+            xmin = 1458.7654140523512 
+            xmax = 1460.3310000000001 
+            text = "围脖手套儿" 
+        intervals [47]:
+            xmin = 1460.3310000000001 
+            xmax = 1539.71305 
+            text = "" 
+        intervals [48]:
+            xmin = 1539.71305 
+            xmax = 1546.09805 
+            text = "呃我觉得可以送一些呃耳蓝牙耳机啊什么这些。对" 
+        intervals [49]:
+            xmin = 1546.09805 
+            xmax = 1546.18305 
+            text = "" 
+        intervals [50]:
+            xmin = 1546.18305 
+            xmax = 1547.85305 
+            text = "一些电子产品" 
+        intervals [51]:
+            xmin = 1547.85305 
+            xmax = 1548.65055 
+            text = "" 
+        intervals [52]:
+            xmin = 1548.65055 
+            xmax = 1551.03555 
+            text = "作为比较大一点儿的奖项" 
+        intervals [53]:
+            xmin = 1551.03555 
+            xmax = 1558.05555 
+            text = "" 
+        intervals [54]:
+            xmin = 1558.05555 
+            xmax = 1561.40055 
+            text = "然后呃做一些大一点儿的奖项" 
+        intervals [55]:
+            xmin = 1561.40055 
+            xmax = 1561.45555 
+            text = "" 
+        intervals [56]:
+            xmin = 1561.45555 
+            xmax = 1567.85055 
+            text = "呃就是可以让他们就更踊跃的参加嘛，因为他们都很需要这些东西" 
+        intervals [57]:
+            xmin = 1567.85055 
+            xmax = 1569.88555 
+            text = "" 
+        intervals [58]:
+            xmin = 1569.88555 
+            xmax = 1571.590408678344 
+            text = "充电宝、蓝牙耳机" 
+        intervals [59]:
+            xmin = 1571.590408678344 
+            xmax = 1703.93307 
+            text = "" 
+        intervals [60]:
+            xmin = 1703.93307 
+            xmax = 1712.57807 
+            text = "我觉得咱们那个节目都是根据某一个团体不是一块儿表演的吗？就某一个部门或者某一个社团" 
+        intervals [61]:
+            xmin = 1712.57807 
+            xmax = 1712.61807 
+            text = "" 
+        intervals [62]:
+            xmin = 1712.61807 
+            xmax = 1718.32807 
+            text = "然后或者某一个班级，我们可以如果他们获奖的话就给他们那个" 
+        intervals [63]:
+            xmin = 1718.32807 
+            xmax = 1718.42307 
+            text = "" 
+        intervals [64]:
+            xmin = 1718.42307 
+            xmax = 1726.21307 
+            text = "他们这个班级需要什么东西，或者这个社团或者需要一个单反摄像机呀或者什么，可以这样儿固定的" 
+        intervals [65]:
+            xmin = 1726.21307 
+            xmax = 1726.37307 
+            text = "" 
+        intervals [66]:
+            xmin = 1726.37307 
+            xmax = 1736.16807 
+            text = "送他们一个这个礼品，我觉得这样也是比较合适，也是啊一个团体，就一个奖项，也呃经费就会比较节省下来
+" 
+        intervals [67]:
+            xmin = 1736.16807 
+            xmax = 2011.088 
+            text = "" 
+    item [7]:
+        class = "IntervalTier" 
+        name = "007-M" 
+        xmin = 0 
+        xmax = 2011.088
+        intervals: size = 53 
+        intervals [1]:
+            xmin = 0 
+            xmax = 46.07036 
+            text = "" 
+        intervals [2]:
+            xmin = 46.07036 
+            xmax = 47.73536 
+            text = "零幺五我是部员D" 
+        intervals [3]:
+            xmin = 47.73536 
+            xmax = 627.02043 
+            text = "" 
+        intervals [4]:
+            xmin = 627.02043 
+            xmax = 641.69043 
+            text = "要要要是如果说就是操场不可以的话，就是如果嫌体育馆太小，我们可以向外去租赁一个体育馆，因为毕竟我们是拉赞助的，我们拉那么多钱，然后我们肯定是要找校外人员
+" 
+        intervals [5]:
+            xmin = 641.69043 
+            xmax = 641.73543 
+            text = "" 
+        intervals [6]:
+            xmin = 641.73543 
+            xmax = 650.85543 
+            text = "进行合作的，呃所以说我们要在宣传我们这个晚会方面的话，也是要上下大力的呃<sil>" 
+        intervals [7]:
+            xmin = 650.85543 
+            xmax = 650.86543 
+            text = "" 
+        intervals [8]:
+            xmin = 650.86543 
+            xmax = 659.77544 
+            text = "因为要邀请到很多人，如果说体育馆不够，操场因为又用不到，所以说需要向外走，向外走的话" 
+        intervals [9]:
+            xmin = 659.77544 
+            xmax = 659.86544 
+            text = "" 
+        intervals [10]:
+            xmin = 659.86544 
+            xmax = 664.06044 
+            text = "呃那么如何提前布置那就是一个很大的问题。" 
+        intervals [11]:
+            xmin = 664.06044 
+            xmax = 671.8008031658945 
+            text = "" 
+        intervals [12]:
+            xmin = 671.8008031658945 
+            xmax = 675.57544 
+            text = "我觉得我觉得咱们学校的体育馆面积就足够大" 
+        intervals [13]:
+            xmin = 675.57544 
+            xmax = 941.97547 
+            text = "" 
+        intervals [14]:
+            xmin = 941.97547 
+            xmax = 943.2588608149971 
+            text = "对对对" 
+        intervals [15]:
+            xmin = 943.2588608149971 
+            xmax = 1125.52549 
+            text = "" 
+        intervals [16]:
+            xmin = 1125.52549 
+            xmax = 1134.8005 
+            text = "其实你想啊如果坐在第一排的话，就是上面在表演音乐节目的时候，就可以直接点出来让他跟着一起唱，那么这也是相当于一种互动嘛" 
+        intervals [17]:
+            xmin = 1134.8005 
+            xmax = 1292.22552 
+            text = "" 
+        intervals [18]:
+            xmin = 1292.22552 
+            xmax = 1296.50052 
+            text = "这个时候如果说和外校合作一下儿，是不是更好呢" 
+        intervals [19]:
+            xmin = 1296.50052 
+            xmax = 1296.78802 
+            text = "" 
+        intervals [20]:
+            xmin = 1296.78802 
+            xmax = 1303.02302 
+            text = "比如说去旁边的音乐学院，然后让人家来表演一下儿音乐" 
+        intervals [21]:
+            xmin = 1303.02302 
+            xmax = 1387.7290240205543 
+            text = "" 
+        intervals [22]:
+            xmin = 1387.7290240205543 
+            xmax = 1388.97553 
+            text = "参与有奖吗
+" 
+        intervals [23]:
+            xmin = 1388.97553 
+            xmax = 1393.47553 
+            text = "" 
+        intervals [24]:
+            xmin = 1393.47553 
+            xmax = 1394.41553 
+            text = "对" 
+        intervals [25]:
+            xmin = 1394.41553 
+            xmax = 1463.4724705515343 
+            text = "" 
+        intervals [26]:
+            xmin = 1463.4724705515343 
+            xmax = 1464.3600625000001 
+            text = "水杯" 
+        intervals [27]:
+            xmin = 1464.3600625000001 
+            xmax = 1578.5391166980312 
+            text = "" 
+        intervals [28]:
+            xmin = 1578.5391166980312 
+            xmax = 1584.82305 
+            text = "呃三等奖的话基本上都差不多就这些吧对，因为这样档次的话就" 
+        intervals [29]:
+            xmin = 1584.82305 
+            xmax = 1584.93555 
+            text = "" 
+        intervals [30]:
+            xmin = 1584.93555 
+            xmax = 1591.43555 
+            text = "稍微对也不是那么高，也不是那么低嘛大部分人大家都应该需要" 
+        intervals [31]:
+            xmin = 1591.43555 
+            xmax = 1681.61057 
+            text = "" 
+        intervals [32]:
+            xmin = 1681.61057 
+            xmax = 1687.78557 
+            text = "然后我感觉二等奖还可以送那种蓝牙音箱稍微好点儿的就是" 
+        intervals [33]:
+            xmin = 1687.78557 
+            xmax = 1687.86807 
+            text = "" 
+        intervals [34]:
+            xmin = 1687.86807 
+            xmax = 1689.16307 
+            text = "呃<sil>" 
+        intervals [35]:
+            xmin = 1689.16307 
+            xmax = 1689.75807 
+            text = "" 
+        intervals [36]:
+            xmin = 1689.75807 
+            xmax = 1693.71807 
+            text = "他们你像音乐系舞蹈系都有可能用到" 
+        intervals [37]:
+            xmin = 1693.71807 
+            xmax = 1693.75557 
+            text = "" 
+        intervals [38]:
+            xmin = 1693.75557 
+            xmax = 1698.65057 
+            text = "然后也可以带动他们积极性" 
+        intervals [39]:
+            xmin = 1698.65057 
+            xmax = 1882.58309 
+            text = "" 
+        intervals [40]:
+            xmin = 1882.58309 
+            xmax = 1889.96309 
+            text = "呃你看如果说那个学生是要参加这个晚会的吧所以说" 
+        intervals [41]:
+            xmin = 1889.96309 
+            xmax = 1890.04309 
+            text = "" 
+        intervals [42]:
+            xmin = 1890.04309 
+            xmax = 1897.57309 
+            text = "我们不能光带动说那个宣传到呃一一些人来参加这个节目" 
+        intervals [43]:
+            xmin = 1897.57309 
+            xmax = 1897.61809 
+            text = "" 
+        intervals [44]:
+            xmin = 1897.61809 
+            xmax = 1906.64309 
+            text = "而是也要提高大家那个参参与到这个晚会的积极性，就相当于是其实还可以设一个奖项，就是幸运奖" 
+        intervals [45]:
+            xmin = 1906.64309 
+            xmax = 1906.71059 
+            text = "" 
+        intervals [46]:
+            xmin = 1906.71059 
+            xmax = 1915.59559 
+            text = "在在场的观众进行呃选择，然后你说评委单纯靠评委进行评分，他也是比较片面的，我们可以通过引资对平台引资，你你还可以去找那一些
+" 
+        intervals [47]:
+            xmin = 1915.59559 
+            xmax = 1921.6481 
+            text = "" 
+        intervals [48]:
+            xmin = 1921.6481 
+            xmax = 1927.8331 
+            text = "比如说就是可以进行投靠的一些A P P进行拉赞助这样的话" 
+        intervals [49]:
+            xmin = 1927.8331 
+            xmax = 1927.8831 
+            text = "" 
+        intervals [50]:
+            xmin = 1927.8831 
+            xmax = 1936.5631 
+            text = "咱们赞助又有，然后到时候就是学生也可以参与到投票上来不管是比较好的然后也可以" 
+        intervals [51]:
+            xmin = 1936.5631 
+            xmax = 1936.6356 
+            text = "" 
+        intervals [52]:
+            xmin = 1936.6356 
+            xmax = 1940.7256 
+            text = "呃一些幸运奖什么的这些问题都解决了嘛
+" 
+        intervals [53]:
+            xmin = 1940.7256 
+            xmax = 2011.088 
+            text = "" 

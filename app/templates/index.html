@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block title %}MeetOminute · 本地会议工作台{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <div class="hero-kicker"><span></span>LOCAL-FIRST MEETING WORKFLOW</div>
+    <h1>让每一句讨论，<br><em>都有据可循。</em></h1>
+    <p class="lede">从录音到逐字稿，再到带时间证据的行动纪要。转写、校对与生成都在这台电脑上完成，关掉浏览器也不会中断任务。</p>
+    <div class="hero-promises" aria-label="产品特点">
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+        说话人区分
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        原文时间追溯
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l3 3v15H5zM15 3v5h4M8 13h8M8 17h6"/></svg>
+        四种格式导出
+      </span>
+    </div>
+  </div>
+
+  <aside class="runtime-card" aria-label="本地处理栈">
+    <div class="runtime-head">
+      <div>
+        <span class="live-dot" aria-hidden="true"></span>
+        <strong>本地处理栈已就绪</strong>
+      </div>
+      <span>LOCAL</span>
+    </div>
+    <div class="runtime-flow">
+      <div class="runtime-step">
+        <span class="runtime-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>
+        </span>
+        <div><small>语音转写</small><strong>{{ local_transcriber|upper }}</strong></div>
+        <i>01</i>
+      </div>
+      <div class="runtime-connector"><span></span></div>
+      <div class="runtime-step">
+        <span class="runtime-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7h8M7 11h10M9 15h6"/><path d="M4 4h16v15H8l-4 3z"/></svg>
+        </span>
+        <div><small>结构化纪要</small><strong>{{ ollama_model or local_llm }}</strong></div>
+        <i>02</i>
+      </div>
+      <div class="runtime-connector"><span></span></div>
+      <div class="runtime-step">
+        <span class="runtime-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V7z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>
+        </span>
+        <div><small>任务结束</small><strong>自动释放显存</strong></div>
+        <i>03</i>
+      </div>
+    </div>
+    <div class="runtime-foot">
+      <span><i></i>私密模式</span>
+      <small>音频与逐字稿默认不发送到第三方</small>
+    </div>
+  </aside>
+</section>
+
+<section class="workspace-intro">
+  <div>
+    <p class="eyebrow">MEETING DESK</p>
+    <h2>开始一次新的会议整理</h2>
+  </div>
+  <div class="workflow-mini" aria-label="处理步骤">
+    <span class="active"><b>1</b>上传</span><i></i>
+    <span><b>2</b>转写</span><i></i>
+    <span><b>3</b>校对</span><i></i>
+    <span><b>4</b>纪要</span>
+  </div>
+</section>
+
+<div class="dashboard-grid">
+  <section class="panel upload-panel">
+    <div class="section-heading">
+      <div class="heading-with-icon">
+        <span class="section-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 14v5h14v-5"/></svg>
+        </span>
+        <div>
+          <p class="eyebrow">NEW MEETING</p>
+          <h2>创建处理任务</h2>
+        </div>
+      </div>
+      <span class="step-number">01</span>
+    </div>
+
+    <form action="{{ url_for('create_meeting') }}" method="post" enctype="multipart/form-data" data-upload-form>
+      <label class="field">
+        <span>会议名称 <b>必填</b></span>
+        <input name="title" required maxlength="200" placeholder="例如：课题组周会">
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span>会议日期</span>
+          <input type="date" name="meeting_date" value="{{ today }}" required>
+        </label>
+        <label class="field">
+          <span>预计发言人数</span>
+          <span class="input-with-suffix">
+            <input type="number" name="expected_speakers" value="4" min="1" max="50" required>
+            <small>人</small>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <span>处理模式</span>
+        <select name="processing_mode" data-mode-select data-external-ready="{{ 'true' if external_llm.ready else 'false' }}">
+          <option value="local">全本地 · 推荐</option>
+          <option value="mixed">混合模式 · 本地转写 + 云端纪要</option>
+          <option value="cloud">全云端模式</option>
+        </select>
+        <small class="field-help" data-mode-note>录音和逐字稿都保留在本机，适合私密会议。</small>
+        <a class="external-config-line {% if external_llm.ready %}configured{% endif %}" href="{{ url_for('external_llm_settings') }}">
+          <span><i></i>外部 LLM</span>
+          {% if external_llm.ready %}
+            <strong>{{ external_llm.provider_name }} · {{ external_llm.model }}</strong>
+          {% else %}
+            <strong>尚未配置，点击设置</strong>
+          {% endif %}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </a>
+      </div>
+
+      <label class="field">
+        <span>专业词表 <small>可选</small></span>
+        <textarea name="glossary" rows="3" placeholder="人名、项目名、英文缩写；每行一个或用逗号分隔"></textarea>
+      </label>
+
+      <label class="file-drop" data-file-drop>
+        <input type="file" name="recording" accept=".mp3,.m4a,.wav,.mp4,.aac,.flac,.ogg" required data-file-input>
+        <span class="drop-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M16 21V7M10.5 12.5 16 7l5.5 5.5"/><path d="M6 20v6h20v-6"/></svg>
+        </span>
+        <span class="file-drop-title" data-file-label>拖入录音，或点击选择文件</span>
+        <small data-file-meta>MP3 / M4A / WAV / MP4 / AAC / FLAC / OGG · 最大 {{ max_upload_mb }} MB</small>
+        <span class="choose-file">选择文件</span>
+      </label>
+
+      <div class="privacy-line">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10M6 10h12v10H6z"/></svg>
+        <span>本地模式下，录音不会离开这台电脑。</span>
+      </div>
+
+      <button class="button primary full" type="submit" data-submit-button>
+        <span data-button-label>开始处理录音</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <section class="panel history-panel" id="meeting-history">
+    <div class="section-heading history-heading">
+      <div class="heading-with-icon">
+        <span class="section-icon neutral">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v15H5zM8 3v4M16 3v4M5 10h14"/></svg>
+        </span>
+        <div>
+          <p class="eyebrow">RECENT MEETINGS</p>
+          <h2>最近会议</h2>
+        </div>
+      </div>
+      <span class="count">{{ meetings|length }} 场</span>
+    </div>
+
+    {% if meetings %}
+      <div class="history-tools">
+        <label class="search-field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+          <input type="search" placeholder="搜索会议名称" aria-label="搜索会议名称" data-history-search>
+        </label>
+        <label class="filter-field">
+          <span class="sr-only">筛选状态</span>
+          <select data-history-filter>
+            <option value="">全部状态</option>
+            <option value="completed">已完成</option>
+            <option value="processing">处理中</option>
+            <option value="queued">等待处理</option>
+            <option value="transcribed">待生成纪要</option>
+            <option value="failed">失败</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="meeting-list">
+        {% for meeting in meetings %}
+          <a
+            class="meeting-row"
+            href="{{ url_for('meeting_detail', meeting_id=meeting.id) }}"
+            data-meeting-row
+            data-title="{{ meeting.title|lower }}"
+            data-status="{{ meeting.status }}"
+          >
+            <span class="date-block">
+              <strong>{{ meeting.meeting_date[8:10] }}</strong>
+              <small>{{ meeting.meeting_date[:7] }}</small>
+            </span>
+            <span class="meeting-main">
+              <span class="meeting-title-line">
+                <strong>{{ meeting.title }}</strong>
+                <span class="status status-{{ meeting.status }}"><i></i>{{ status_labels[meeting.status] }}</span>
+              </span>
+              <small>{{ meeting.current_step }}</small>
+              <span class="row-progress" aria-hidden="true"><i style="width: {{ meeting.progress }}%"></i></span>
+            </span>
+            <span class="meeting-meta">
+              <small>
+                {% if meeting.processing_mode == "local" %}本地处理{% elif meeting.processing_mode == "mixed" %}混合处理{% else %}云端处理{% endif %}
+              </small>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+      <div class="empty-filter" data-history-empty hidden>
+        <span>没有匹配的会议</span>
+        <small>试试更短的关键词或切换状态</small>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-illustration" aria-hidden="true">
+          <svg viewBox="0 0 72 72"><path d="M17 15h38v43H17z"/><path d="M25 26h22M25 35h22M25 44h13"/><circle cx="53" cy="53" r="11"/><path d="m49 53 3 3 6-7"/></svg>
+        </span>
+        <h3>第一场会议，从这里开始</h3>
+        <p>上传一段短录音，先体验完整的本地处理流程。</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

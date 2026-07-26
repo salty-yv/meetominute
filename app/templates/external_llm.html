@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}外部 LLM 设置 · MeetOminute{% endblock %}
+{% block content %}
+<section class="settings-hero">
+  <div>
+    <a class="back-link" href="{{ url_for('index') }}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M10 7l-5 5 5 5"/></svg>
+      返回工作台
+    </a>
+    <p class="eyebrow">EXTERNAL MODEL GATEWAY</p>
+    <h1>连接外部 LLM</h1>
+    <p>接入任何兼容 OpenAI Chat Completions 协议的服务。混合模式只向外部服务发送校正后的逐字稿，原始录音仍在本机处理。</p>
+  </div>
+  <div class="gateway-state {% if external_llm.ready %}ready{% endif %}">
+    <span class="gateway-state-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12h8M12 8v8"/><circle cx="12" cy="12" r="9"/></svg>
+    </span>
+    <div>
+      <small>当前状态</small>
+      {% if external_llm.ready %}
+      <strong>外部接口已就绪</strong>
+      <span>{{ external_llm.provider_name }} · {{ external_llm.model }}</span>
+      {% else %}
+      <strong>等待配置</strong>
+      <span>填写 API 地址和模型名称后启用</span>
+      {% endif %}
+    </div>
+    <i></i>
+  </div>
+</section>
+
+<div class="settings-grid">
+  <section class="panel settings-panel">
+    <div class="section-heading">
+      <div class="heading-with-icon">
+        <span class="section-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M17 9h4M3 15h4M17 15h4"/></svg>
+        </span>
+        <div>
+          <p class="eyebrow">CONNECTION</p>
+          <h2>接口配置</h2>
+        </div>
+      </div>
+      <span class="config-source">
+        {% if external_llm.source == "file" %}界面配置{% else %}环境变量{% endif %}
+      </span>
+    </div>
+
+    {% if saved %}
+    <div class="form-alert success">
+      <span>✓</span>
+      <div><strong>配置已保存</strong><p>新任务会立即使用这组外部 LLM 设置，无需重启应用。</p></div>
+    </div>
+    {% endif %}
+    {% if form_error %}
+    <div class="form-alert error">
+      <span>!</span>
+      <div><strong>无法保存配置</strong><p>{{ form_error }}</p></div>
+    </div>
+    {% endif %}
+
+    <form
+      class="provider-form"
+      action="{{ url_for('save_external_llm_settings') }}"
+      method="post"
+      data-external-llm-form
+    >
+      <label class="enable-provider">
+        <span class="switch">
+          <input type="checkbox" name="enabled" {% if external_llm.enabled %}checked{% endif %}>
+          <i></i>
+        </span>
+        <span>
+          <strong>启用外部 LLM</strong>
+          <small>启用后，“混合模式”和“云端模式”的纪要生成会使用此接口。</small>
+        </span>
+      </label>
+
+      <div class="provider-fields">
+        <label class="field">
+          <span>服务名称</span>
+          <input name="provider_name" maxlength="100" value="{{ external_llm.provider_name }}" placeholder="例如：团队模型网关">
+          <small class="field-help">只用于界面识别，不会发送给服务商。</small>
+        </label>
+
+        <label class="field">
+          <span>API Base URL <b>必填</b></span>
+          <input
+            type="url"
+            name="base_url"
+            required
+            value="{{ external_llm.base_url }}"
+            placeholder="https://provider.example/v1"
+            spellcheck="false"
+          >
+          <small class="field-help">填写到版本根路径；如果粘贴了完整的 /chat/completions 地址，保存时会自动整理。</small>
+        </label>
+
+        <label class="field">
+          <span>模型名称 <b>必填</b></span>
+          <input name="model" required maxlength="200" value="{{ external_llm.model }}" placeholder="服务商提供的 model ID" spellcheck="false">
+        </label>
+
+        <label class="field">
+          <span>API Key {% if external_llm.api_key_configured %}<small>已加密保存</small>{% endif %}</span>
+          <span class="secret-input">
+            <input
+              type="password"
+              name="api_key"
+              autocomplete="new-password"
+              placeholder="{% if external_llm.api_key_configured %}已保存；留空则保持不变{% else %}sk-...{% endif %}"
+              data-secret-input
+            >
+            <button type="button" data-toggle-secret aria-label="显示或隐藏 API Key">
+              <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 4 16 16M10.6 6.2A8.9 8.9 0 0 1 12 6c5.5 0 9 6 9 6a15 15 0 0 1-2.2 3M8.3 8.3C5.1 10 3 12 3 12s3.5 6 9 6a8.7 8.7 0 0 0 3-.5"/></svg>
+            </button>
+          </span>
+          <small class="field-help">Windows 下使用当前用户的 DPAPI 加密，页面和查询接口不会回显密钥。</small>
+        </label>
+
+        {% if external_llm.api_key_configured %}
+        <label class="clear-secret">
+          <input type="checkbox" name="clear_api_key">
+          <span>清除当前已保存的 API Key</span>
+        </label>
+        {% endif %}
+
+        <label class="field">
+          <span>推理强度 <small>可选</small></span>
+          <select name="reasoning_effort">
+            <option value="" {% if not external_llm.reasoning_effort %}selected{% endif %}>不发送该参数 · 兼容性最佳</option>
+            <option value="none" {% if external_llm.reasoning_effort == "none" %}selected{% endif %}>none</option>
+            <option value="low" {% if external_llm.reasoning_effort == "low" %}selected{% endif %}>low</option>
+            <option value="medium" {% if external_llm.reasoning_effort == "medium" %}selected{% endif %}>medium</option>
+            <option value="high" {% if external_llm.reasoning_effort == "high" %}selected{% endif %}>high</option>
+          </select>
+          <small class="field-help">如果服务不支持 reasoning_effort，请保持第一项。</small>
+        </label>
+      </div>
+
+      <div class="connection-result" data-connection-result hidden role="status" aria-live="polite">
+        <span data-result-icon></span>
+        <div><strong data-result-title></strong><p data-result-message></p></div>
+        <small data-result-latency></small>
+      </div>
+
+      <div class="settings-actions">
+        <button class="button secondary" type="button" data-test-external-llm>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12h8M12 8v8"/><circle cx="12" cy="12" r="9"/></svg>
+          <span>测试连接</span>
+        </button>
+        <button class="button primary" type="submit">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
+          保存配置
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <aside class="settings-aside">
+    <section class="gateway-flow-card">
+      <p class="eyebrow">DATA BOUNDARY</p>
+      <h2>混合模式的数据边界</h2>
+      <div class="gateway-flow">
+        <div>
+          <span class="flow-node local">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0"/></svg>
+          </span>
+          <strong>原始录音</strong><small>FunASR 本机转写</small>
+        </div>
+        <i><span>只发送文字</span></i>
+        <div>
+          <span class="flow-node external">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7h8M7 11h10M9 15h6"/><path d="M4 4h16v15H8l-4 3z"/></svg>
+          </span>
+          <strong>外部 LLM</strong><small>生成结构化纪要</small>
+        </div>
+      </div>
+      <p class="boundary-note"><i></i>选择“全本地”时不会调用这里配置的外部服务。</p>
+    </section>
+
+    <section class="compatibility-card">
+      <p class="eyebrow">COMPATIBILITY</p>
+      <h3>接口需要支持</h3>
+      <ul>
+        <li><span>POST</span><code>/chat/completions</code></li>
+        <li><span>JSON</span><code>response_format: json_object</code></li>
+        <li><span>AUTH</span><code>Bearer API Key</code></li>
+      </ul>
+      <p>连接测试会优先请求 <code>/models</code>；若服务不提供模型列表，则发送一个最小聊天请求验证。</p>
+    </section>
+
+    <section class="api-info-card">
+      <div>
+        <span>API</span>
+        <strong>配置状态查询</strong>
+      </div>
+      <code>GET /api/settings/external-llm</code>
+      <p>返回服务名、模型和连接状态，不包含 API Key。</p>
+    </section>
+  </aside>
+</div>
+{% endblock %}

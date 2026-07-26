@@ -1,0 +1,78 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+from docx import Document
+
+from app.rendering import (
+    render_minutes_docx,
+    render_minutes_markdown,
+    render_transcript_markdown,
+)
+
+
+def sample_minutes() -> dict:
+    return {
+        "meeting": {"title": "测试组会", "date": "2026-07-26"},
+        "summary": "讨论了实验进展。",
+        "member_progress": [
+            {"content": "完成数据清洗", "evidence_time": "00:01:00"}
+        ],
+        "experimental_results": [],
+        "suggestions": [],
+        "decisions": [
+            {"decision": "采用方案 A", "evidence_time": "00:03:00"}
+        ],
+        "action_items": [
+            {
+                "owner": "张三",
+                "task": "补充实验",
+                "due": "未明确",
+                "evidence_time": "00:04:00",
+                "status": "待处理",
+            }
+        ],
+        "open_questions": [],
+        "next_followups": [],
+    }
+
+
+def test_minutes_markdown_has_traceable_action() -> None:
+    rendered = render_minutes_markdown(sample_minutes())
+    assert "# 测试组会" in rendered
+    assert "张三" in rendered
+    assert "00:04:00" in rendered
+    assert "未明确" in rendered
+
+
+def test_docx_is_readable(tmp_path: Path) -> None:
+    destination = tmp_path / "minutes.docx"
+    render_minutes_docx(sample_minutes(), destination)
+    document = Document(destination)
+    all_text = "\n".join(paragraph.text for paragraph in document.paragraphs)
+    assert "测试组会" in all_text
+    assert destination.stat().st_size > 1000
+
+
+def test_transcript_resolves_speaker_name() -> None:
+    meeting = {
+        "title": "测试组会",
+        "meeting_date": "2026-07-26",
+        "expected_speakers": 2,
+    }
+    segments = [
+        {
+            "id": "seg_0001",
+            "start": 2.5,
+            "end": 4,
+            "timestamp": "00:00:02",
+            "speaker": "SPEAKER_01",
+            "text": "你好。",
+        }
+    ]
+    rendered = render_transcript_markdown(
+        meeting, segments, {"SPEAKER_01": "李老师"}
+    )
+    assert "[00:00:02] 李老师" in rendered
+    assert "你好。" in rendered
+

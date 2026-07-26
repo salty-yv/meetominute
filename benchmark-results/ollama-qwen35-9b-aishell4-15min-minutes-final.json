@@ -1,0 +1,171 @@
+{
+  "metrics": {
+    "backend": "ollama",
+    "model": "meetominute-qwen35-9b",
+    "transcript": "E:\\meetominute\\benchmark-results\\funasr-aishell4-15min-final.json",
+    "segment_count": 302,
+    "speaker_count": 7,
+    "transcript_character_count": 3296,
+    "processing_seconds": 200.625,
+    "llm_call_count": 3,
+    "llm_calls": [
+      {
+        "elapsed_seconds": 72.163,
+        "prompt_tokens": 4371,
+        "completion_tokens": 889,
+        "total_tokens": 5260
+      },
+      {
+        "elapsed_seconds": 29.291,
+        "prompt_tokens": 3414,
+        "completion_tokens": 344,
+        "total_tokens": 3758
+      },
+      {
+        "elapsed_seconds": 99.164,
+        "prompt_tokens": 1145,
+        "completion_tokens": 1388,
+        "total_tokens": 2533
+      }
+    ],
+    "completion_tokens": 2621,
+    "effective_completion_tokens_per_second": 13.06,
+    "summary_character_count": 207,
+    "section_counts": {
+      "member_progress": 2,
+      "experimental_results": 0,
+      "suggestions": 8,
+      "decisions": 0,
+      "action_items": 6,
+      "open_questions": 2,
+      "next_followups": 2
+    },
+    "evidence_field_count": 20,
+    "valid_timestamp_evidence_count": 20,
+    "all_required_outputs_present": true,
+    "ollama_runtime": {
+      "size_bytes": 6152991536,
+      "size_vram_bytes": 4150536437,
+      "context_length": 8192
+    }
+  },
+  "minutes": {
+    "meeting": {
+      "title": "AISHELL-4 中文会议测试",
+      "date": "2026-07-26",
+      "expected_speakers": 7
+    },
+    "summary": "1. 会议讨论了 AISHELL-4 活动的筹备工作，包括开场节目、赞助拉取、设备采购与租赁方案、场地选择（操场 vs 体育馆）、宣传策略及人员分工。\n2. 已确定医保提供十万赞助用于购买设备，但活动设备计划租用而非自行购买。需邀请本部老师帮助寻找评委。\n3. 讨论了利用学校体育馆节省成本的建议，以及聘请专业灯光公司的建议。同时确定了司仪/主持人的选拔计划（提前一两周开始，选拔 4-6 名合格及 2 名备用）。",
+    "member_progress": [
+      {
+        "content": "开场节目由老师和学生组织跳舞、唱歌大合唱。",
+        "evidence_time": "[00:00:25]"
+      },
+      {
+        "content": "后续需与每个节目的负责人联系，确认道具需求、场地布置等。",
+        "evidence_time": "[00:01:12]"
+      }
+    ],
+    "experimental_results": [],
+    "suggestions": [
+      {
+        "content": "建议开场节目选择唱歌以带动气氛。",
+        "evidence_time": "[00:03:15]"
+      },
+      {
+        "content": "建议在校园门口发海报、食堂贴传单进行宣传，并设置奖品（如学分、食品）。",
+        "evidence_time": "[00:04:27]"
+      },
+      {
+        "content": "建议在学校操场举行晚会，以便进行更精细的布置和专业的灯光效果。",
+        "evidence_time": "[00:05:03]"
+      },
+      {
+        "content": "建议使用摄像机拍摄活动，制作宣传画以推广校园文化。",
+        "evidence_time": "[00:05:17]"
+      },
+      {
+        "content": "建议部门成员根据特长表演节目（如架子鼓、相声、舞蹈）。",
+        "evidence_time": "[00:06:23]"
+      },
+      {
+        "content": "男生负责推动篮球架，女生负责会场布置（粘气球等）。",
+        "evidence_time": "[00:02:47]"
+      },
+      {
+        "content": "利用学校体育馆面积足够大的优势，节省场地租赁成本（约两千），将精力和资金用于服装、装饰及宣传布置。",
+        "evidence_time": "[00:08:14]"
+      },
+      {
+        "content": "建议聘请专业灯光公司进行设备搭建，根据节目单具体安排灯光效果。",
+        "evidence_time": "[00:10:06]"
+      }
+    ],
+    "decisions": [],
+    "action_items": [
+      {
+        "owner": "未明确",
+        "task": "准备邀请班导、专业老师及校领导参加开场合唱。",
+        "due": "待确认",
+        "evidence_time": "[00:00:45]",
+        "status": "待处理"
+      },
+      {
+        "owner": "未明确",
+        "task": "继续寻找食品或饮料品牌进行赞助拉取。",
+        "due": "待确认",
+        "evidence_time": "[00:01:28]",
+        "status": "待处理"
+      },
+      {
+        "owner": "未明确",
+        "task": "寻找本部老师担任评委。",
+        "due": "待确认",
+        "evidence_time": "[00:03:45]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_02（及部长）",
+        "task": "发布通知，征集播音、主持及相关专业学生参与竞选司仪/主持人。",
+        "due": "待确认",
+        "evidence_time": "[00:13:08]",
+        "status": "待处理"
+      },
+      {
+        "owner": "未明确",
+        "task": "从报名人员中挑选出 4-6 名合格者及 2 名备用者。",
+        "due": "待确认",
+        "evidence_time": "[00:12:52]",
+        "status": "待处理"
+      },
+      {
+        "owner": "未明确",
+        "task": "女生需向舞蹈社学习两天舞蹈并准备服装。",
+        "due": "待确认",
+        "evidence_time": "[00:06:45]",
+        "status": "待处理"
+      }
+    ],
+    "open_questions": [
+      {
+        "content": "体育馆搬到操场的具体事宜及天气影响。",
+        "evidence_time": "[00:07:14]"
+      },
+      {
+        "content": "设备是自己购买还是租用？（已回答：租用）",
+        "evidence_time": "[00:02:09]"
+      }
+    ],
+    "next_followups": [
+      {
+        "content": "后续需与每个节目的负责人联系，确认道具需求、场地布置等。",
+        "evidence_time": "[00:01:12]"
+      },
+      {
+        "content": "女生需向舞蹈社学习两天舞蹈并准备服装。",
+        "evidence_time": "[00:06:45]"
+      }
+    ],
+    "generator": "ollama"
+  }
+}

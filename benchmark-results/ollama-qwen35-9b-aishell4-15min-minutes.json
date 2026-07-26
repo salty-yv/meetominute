@@ -1,0 +1,230 @@
+{
+  "metrics": {
+    "backend": "ollama",
+    "model": "meetominute-qwen35-9b",
+    "transcript": "E:\\meetominute\\benchmark-results\\funasr-aishell4-15min-final.json",
+    "segment_count": 302,
+    "speaker_count": 7,
+    "transcript_character_count": 3296,
+    "processing_seconds": 390.669,
+    "llm_call_count": 4,
+    "llm_calls": [
+      {
+        "elapsed_seconds": 101.981,
+        "prompt_tokens": 3277,
+        "completion_tokens": 1344,
+        "total_tokens": 4621
+      },
+      {
+        "elapsed_seconds": 107.957,
+        "prompt_tokens": 3309,
+        "completion_tokens": 1432,
+        "total_tokens": 4741
+      },
+      {
+        "elapsed_seconds": 8.324,
+        "prompt_tokens": 1246,
+        "completion_tokens": 60,
+        "total_tokens": 1306
+      },
+      {
+        "elapsed_seconds": 172.397,
+        "prompt_tokens": 2446,
+        "completion_tokens": 2336,
+        "total_tokens": 4782
+      }
+    ],
+    "completion_tokens": 5172,
+    "effective_completion_tokens_per_second": 13.24,
+    "summary_character_count": 647,
+    "section_counts": {
+      "member_progress": 7,
+      "experimental_results": 0,
+      "suggestions": 6,
+      "decisions": 0,
+      "action_items": 8,
+      "open_questions": 2,
+      "next_followups": 4
+    },
+    "evidence_field_count": 8,
+    "valid_timestamp_evidence_count": 0,
+    "all_required_outputs_present": true,
+    "ollama_runtime": {
+      "size_bytes": 6152991536,
+      "size_vram_bytes": 4150536437,
+      "context_length": 8192
+    }
+  },
+  "minutes": {
+    "meeting": {
+      "title": "AISHELL-4 中文会议测试",
+      "date": "2026-07-26",
+      "expected_speakers": 7
+    },
+    "summary": "['会议开场由大学策划组介绍活动流程：开场节目为老师和学生组织的跳舞及大合唱，随后邀请同学汇报各自的活动策划。', 'SPEAKER_03 补充开场细节：老师与学生大合唱伴舞，需准备老师服装并确认时间；邀请对象包括班导、专业老师及校领导。后续将安排节目顺序，并与各节目负责人联系道具及场地布置需求。', 'SPEAKER_03 提及拉赞助计划：因是元家晚，需寻找食品或饮料品牌（如医保、康师傅）支持。目前确定的赞助商为“医保”，提供十万赞助用于购买设备；后续可能继续拉取其他赞助。', 'SPEAKER_03 与 SPEAKER_05 确认设备来源：因活动为学年一次，设备选择租用而非自购。场地布置方面，男生负责推动篮球架等重物，女生负责粘气球、布置会场及印刷学校宣传报和横幅。', 'SPEAKER_01 与 SPEAKER_06 讨论节目安排及互动：计划共进行约二十四个节目，时长两小时以上（后续讨论提及可能为三小时）。开场需带动气氛（如唱歌），中间穿插跳舞、相声小品等，最后安排合影惊喜。活动将邀请评委，并设置奖品（第一名价值学分或实物，第二、三名也有奖励），奖品数量按通知要求准备六份。', 'SPEAKER_02 与 SPEAKER_05 讨论场地与灯光：建议在操场举行，以便进行更精细的布置和专业的灯光效果。后续讨论中提出因天气寒冷及成本问题，建议改为室内（体育馆或礼堂）举办。', '活动意义在于促进师生关系及向外宣传校园文化，计划安排灯光、摄像机拍摄舞蹈等节目，制作宣传画。']",
+    "member_progress": [
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:00:19]-[00:02:38]",
+        "content": "负责汇报活动整体策划，包括开场节目细节、邀请老师名单、节目顺序安排及与负责人对接道具场地。"
+      },
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:01:28]-[00:02:06]",
+        "content": "负责拉赞助工作，目前已联系“医保”获得十万赞助，计划后续继续拓展。"
+      },
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:02:17]-[00:02:38]",
+        "content": "负责设备租赁决策及场地布置分工（男生推重物，女生做装饰和印刷）。"
+      },
+      {
+        "speaker_id": "SPEAKER_01",
+        "time": "[00:04:19]-[00:05:01]",
+        "content": "负责海报制作与发放（校门口、食堂），以及奖品采购计划。"
+      },
+      {
+        "speaker_id": "SPEAKER_07",
+        "time": "[00:05:34]-[00:06:18]",
+        "content": "提出活动意义在于促进师生关系及向外宣传校园文化，计划安排灯光、摄像机拍摄舞蹈等节目，制作宣传画。"
+      },
+      {
+        "speaker_id": "SPEAKER_07",
+        "time": "[00:06:18]",
+        "content": "询问部门会员特长，提议 A 和 D 表演架子鼓或相声，女生跳舞并与舞蹈社合作。"
+      },
+      {
+        "speaker_id": "SPEAKER_05",
+        "time": "[00:06:55]",
+        "content": "建议费用需再拉赞助，提及音箱和灯光成本。"
+      }
+    ],
+    "experimental_results": [],
+    "suggestions": [
+      {
+        "speaker_id": "SPEAKER_01",
+        "time": "[00:02:47]-[00:03:01]",
+        "content": "建议女生负责粘气球、布置会场及印刷宣传物料。"
+      },
+      {
+        "speaker_id": "SPEAKER_02",
+        "time": "[00:05:01]-[00:05:17]",
+        "content": "建议在学校操场举行晚会，以便进行更精细的布置和专业的灯光效果。"
+      },
+      {
+        "speaker_id": "SPEAKER_07",
+        "time": "[00:05:47]",
+        "content": "建议做好灯光安排，在操场摆放较大场地，配置两台摄像机拍摄舞蹈等节目。"
+      },
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:07:09]",
+        "content": "建议服装由社团内部准备以降低成本；场地最好租用或借用体育馆而非操场。"
+      },
+      {
+        "speaker_id": "SPEAKER_01",
+        "time": "[00:07:24]",
+        "content": "因元旦期间天气寒冷，建议改为室内举办晚会。"
+      },
+      {
+        "speaker_id": "SPEAKER_06",
+        "time": "[00:10:42]",
+        "content": "建议海报暂时标注为“户内进行策划”，待具体确定后再调整。"
+      }
+    ],
+    "decisions": [],
+    "action_items": [
+      {
+        "owner": "SPEAKER_03",
+        "task": "给老师们准备好服装并说好时间",
+        "due": "未明确",
+        "evidence_time": "[00:00:30]-[00:00:32]",
+        "status": "待处理"
+      },
+      {
+        "owner": "各节目负责人",
+        "task": "及时报备道具及场地布置需求，以便提前准备",
+        "due": "未明确",
+        "evidence_time": "[00:01:17]-[00:01:25]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_01",
+        "task": "制作海报并在学校校门口、食堂进行发放和张贴（暂定标注为室内策划）",
+        "due": "未明确",
+        "evidence_time": "[00:04:23]-[00:05:01]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_01",
+        "task": "从供应商（推测为“八十三”）购买奖品，需准备六份",
+        "due": "未明确",
+        "evidence_time": "[00:04:47]-[00:05:01]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_07",
+        "task": "确认部门会员特长，安排 A 和 D 表演架子鼓或相声，女生准备舞蹈并与舞蹈社合作",
+        "due": "未明确",
+        "evidence_time": "[00:06:23]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_01",
+        "task": "找校外人员进行合作（针对音响等设备）",
+        "due": "未明确",
+        "evidence_time": "[00:07:46]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_02",
+        "task": "找专门公司搞一套专业灯光设备，根据具体节目安排使用",
+        "due": "未明确",
+        "evidence_time": "[00:10:06]",
+        "status": "待处理"
+      },
+      {
+        "owner": "SPEAKER_06",
+        "task": "开始制作海报（目前仅能标注室内策划）",
+        "due": "未明确",
+        "evidence_time": "[00:10:42]",
+        "status": "待处理"
+      }
+    ],
+    "open_questions": [
+      {
+        "speaker_id": "SPEAKER_07",
+        "time": "[00:06:15]",
+        "content": "部门会员有哪些特长？"
+      },
+      {
+        "speaker_id": "SPEAKER_02",
+        "time": "[00:10:38]",
+        "content": "四个节目想好分哪几类（歌舞、情景剧等）？"
+      }
+    ],
+    "next_followups": [
+      {
+        "speaker_id": "SPEAKER_02",
+        "time": "[00:10:38]",
+        "content": "需确定节目分类及具体安排。"
+      },
+      {
+        "speaker_id": "SPEAKER_06",
+        "time": "[00:10:42]",
+        "content": "需推进海报制作工作。"
+      },
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:02:03]-[00:02:06]",
+        "content": "后续可能需要再去拉取其他赞助。"
+      },
+      {
+        "speaker_id": "SPEAKER_03",
+        "time": "[00:01:05]-[00:01:11]",
+        "content": "具体安排节目顺序后，需与每个节目的负责人联系。"
+      }
+    ],
+    "generator": "ollama"
+  }
+}
