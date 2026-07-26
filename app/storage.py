@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from datetime import date
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from fastapi import UploadFile
 
@@ -32,7 +34,19 @@ class MeetingStorage:
         self.settings = settings
 
     def meeting_dir(self, meeting: dict[str, Any]) -> Path:
-        return self.settings.meetings_dir / meeting["slug"]
+        slug = str(meeting["slug"])
+        if (
+            not slug
+            or Path(slug).name != slug
+            or "/" in slug
+            or "\\" in slug
+        ):
+            raise ValueError("会议目录名称无效")
+        root = self.settings.meetings_dir.resolve()
+        directory = (root / slug).resolve()
+        if directory.parent != root:
+            raise ValueError("会议目录超出数据目录")
+        return directory
 
     def path(self, meeting: dict[str, Any], name: str) -> Path:
         return self.meeting_dir(meeting) / name
@@ -102,6 +116,7 @@ class MeetingStorage:
             "transcript_raw.json",
             "transcript_edited.json",
             "transcript.md",
+            "transcript.txt",
             "speakers.json",
             "minutes.json",
             "minutes.md",
@@ -118,3 +133,53 @@ class MeetingStorage:
             "minutes.docx",
         ):
             self.path(meeting, name).unlink(missing_ok=True)
+
+    def stage_permanent_delete(
+        self, meeting: dict[str, Any]
+    ) -> Path | None:
+        source = self.meeting_dir(meeting)
+        if not source.exists():
+            return None
+        staging_root = (
+            self.settings.data_dir / ".pending-deletions"
+        ).resolve()
+        staging_root.mkdir(parents=True, exist_ok=True)
+        destination = (
+            staging_root / f"{meeting['slug']}-{uuid4().hex}"
+        ).resolve()
+        if destination.parent != staging_root:
+            raise ValueError("永久删除暂存路径无效")
+        source.replace(destination)
+        return destination
+
+    def restore_staged_delete(
+        self,
+        meeting: dict[str, Any],
+        staged: Path | None,
+    ) -> None:
+        if staged is None or not staged.exists():
+            return
+        self._validate_staged_path(staged)
+        destination = self.meeting_dir(meeting)
+        if destination.exists():
+            raise RuntimeError("无法恢复删除暂存目录：目标已存在")
+        staged.replace(destination)
+
+    def purge_staged_delete(self, staged: Path | None) -> None:
+        if staged is None or not staged.exists():
+            return
+        staging_root = self._validate_staged_path(staged)
+        shutil.rmtree(staged)
+        try:
+            staging_root.rmdir()
+        except OSError:
+            pass
+
+    def _validate_staged_path(self, staged: Path) -> Path:
+        staging_root = (
+            self.settings.data_dir / ".pending-deletions"
+        ).resolve()
+        resolved = staged.resolve()
+        if resolved.parent != staging_root:
+            raise ValueError("永久删除暂存路径超出允许目录")
+        return staging_root

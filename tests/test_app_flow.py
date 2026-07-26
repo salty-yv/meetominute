@@ -62,17 +62,24 @@ def test_upload_process_edit_and_export(
             application.state.database, meeting["id"], "completed"
         )
         assert completed["progress"] == 100
+        completed_job = application.state.database.get_latest_job(
+            meeting["id"]
+        )
+        assert completed_job["status"] == "completed"
+        assert completed_job["checkpoint"] == "completed"
 
         directory = (
             settings.meetings_dir / completed["slug"]
         )
         assert (directory / "transcript_raw.json").exists()
         assert (directory / "transcript_edited.json").exists()
+        assert (directory / "transcript.txt").exists()
         assert (directory / "minutes.docx").exists()
 
         page = client.get(f"/meetings/{meeting['id']}")
         assert page.status_code == 200
         assert "开发模式占位文本" in page.text
+        assert "导出转写" in page.text
 
         download = client.get(
             f"/meetings/{meeting['id']}/download/json"
@@ -93,3 +100,15 @@ def test_upload_process_edit_and_export(
         assert changed["status"] == "transcribed"
         assert not (directory / "minutes.json").exists()
 
+        transcript_download = client.get(
+            f"/meetings/{meeting['id']}/transcript/download"
+        )
+        assert transcript_download.status_code == 200
+        assert transcript_download.headers["content-type"].startswith(
+            "text/plain"
+        )
+        assert "attachment" in transcript_download.headers[
+            "content-disposition"
+        ]
+        assert "李老师" in transcript_download.text
+        assert "开发模式占位文本" in transcript_download.text

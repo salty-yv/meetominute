@@ -3,9 +3,9 @@
 {% block content %}
 <header class="meeting-hero">
   <div class="meeting-hero-main">
-    <a class="back-link" href="{{ url_for('index') }}">
+    <a class="back-link" href="{{ url_for('archive_page') if meeting.lifecycle_state == 'archived' else url_for('index') }}">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M10 7l-5 5 5 5"/></svg>
-      返回工作台
+      {% if meeting.lifecycle_state == "archived" %}返回归档{% else %}返回工作台{% endif %}
     </a>
     <div class="meeting-overline">
       <span>{{ meeting.meeting_date }}</span>
@@ -39,19 +39,46 @@
     </div>
   </div>
   <div class="meeting-hero-actions">
+    {% if meeting.lifecycle_state == "archived" %}
+    <span class="lifecycle-badge">已归档</span>
+    {% endif %}
     <span class="status status-{{ meeting.status }}"><i></i>{{ status_labels[meeting.status] }}</span>
-    {% if meeting.status == "failed" %}
-    <form action="{{ url_for('retry_meeting', meeting_id=meeting.id) }}" method="post">
-      <button class="button secondary" type="submit">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>
-        重新处理
-      </button>
-    </form>
+    {% if meeting.status not in active_statuses %}
+    <div class="lifecycle-actions">
+      {% if meeting.lifecycle_state == "archived" %}
+      <form action="{{ url_for('unarchive_meeting', meeting_id=meeting.id) }}" method="post">
+        <button class="button compact secondary" type="submit">取消归档</button>
+      </form>
+      {% else %}
+      <form action="{{ url_for('archive_meeting', meeting_id=meeting.id) }}" method="post">
+        <button class="button compact secondary" type="submit">归档</button>
+      </form>
+      {% endif %}
+      <form
+        action="{{ url_for('trash_meeting', meeting_id=meeting.id) }}"
+        method="post"
+        data-confirm-message="移入回收站后将从工作台隐藏，但仍可恢复。确定继续吗？"
+      >
+        <button class="button compact danger-outline" type="submit">移入回收站</button>
+      </form>
+    </div>
     {% endif %}
   </div>
 </header>
 
 {% include "_status.html" %}
+
+{% if meeting.lifecycle_state == "archived" %}
+<div class="archived-notice">
+  <div>
+    <strong>这场会议已归档，当前为只读模式。</strong>
+    <span>可以试听和导出；若要修改逐字稿或重新生成纪要，请先取消归档。</span>
+  </div>
+  <form action="{{ url_for('unarchive_meeting', meeting_id=meeting.id) }}" method="post">
+    <button class="button compact primary" type="submit">取消归档并编辑</button>
+  </form>
+</div>
+{% endif %}
 
 <div class="workspace-layout">
   <aside class="workspace-sidebar">
@@ -127,7 +154,7 @@
               <span class="subheading-index">A</span>
               <div><h3>说话人姓名映射</h3><p>把匿名标签改成真实姓名，全文会统一更新，原始标签仍会保留。</p></div>
             </div>
-            <button class="button compact secondary" type="submit">
+            <button class="button compact secondary" type="submit" {% if meeting.lifecycle_state == 'archived' %}disabled{% endif %}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
               保存姓名
             </button>
@@ -136,7 +163,7 @@
           {% for speaker, name in speakers.items() %}
             <label class="{{ loop.cycle('speaker-tone-1','speaker-tone-2','speaker-tone-3','speaker-tone-4','speaker-tone-5','speaker-tone-6') }}">
               <span><i></i>{{ speaker }}</span>
-              <input name="name_{{ speaker }}" value="{{ name }}" placeholder="填写真实姓名">
+              <input name="name_{{ speaker }}" value="{{ name }}" placeholder="填写真实姓名" {% if meeting.lifecycle_state == 'archived' %}disabled{% endif %}>
             </label>
           {% endfor %}
           </div>
@@ -162,7 +189,15 @@
                   {% endfor %}
                 </select>
               </label>
-              <button class="button compact primary" type="submit">
+              <a
+                class="button compact secondary"
+                href="{{ url_for('download_transcript', meeting_id=meeting.id) }}"
+                title="导出最新保存的逐字稿为 TXT"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>
+                导出转写
+              </a>
+              <button class="button compact primary" type="submit" {% if meeting.lifecycle_state == 'archived' %}disabled{% endif %}>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
                 保存逐字稿
               </button>
@@ -188,7 +223,7 @@
                 <div class="segment-meta">
                   <div class="segment-person">
                     <span class="speaker-avatar" aria-hidden="true">{{ (speakers.get(segment.speaker) or segment.speaker)[0] }}</span>
-                    <select name="speaker_{{ segment.id }}" aria-label="{{ segment.timestamp }} 的说话人" data-segment-speaker>
+                    <select name="speaker_{{ segment.id }}" aria-label="{{ segment.timestamp }} 的说话人" data-segment-speaker {% if meeting.lifecycle_state == 'archived' %}disabled{% endif %}>
                       {% for speaker, name in speakers.items() %}
                       <option value="{{ speaker }}" {% if speaker == segment.speaker %}selected{% endif %}>{{ name or speaker }}</option>
                       {% endfor %}
@@ -199,7 +234,7 @@
                     {{ segment.timestamp }}
                   </button>
                 </div>
-                <textarea name="text_{{ segment.id }}" rows="2" aria-label="{{ segment.timestamp }} 的转写文本" data-transcript-text>{{ segment.text }}</textarea>
+                <textarea name="text_{{ segment.id }}" rows="2" aria-label="{{ segment.timestamp }} 的转写文本" data-transcript-text {% if meeting.lifecycle_state == 'archived' %}disabled{% endif %}>{{ segment.text }}</textarea>
               </div>
             </article>
           {% endfor %}
@@ -231,7 +266,7 @@
         {% if minutes %}<span class="section-state review"><i></i>待人工审核</span>{% else %}<span class="section-state waiting"><i></i>等待生成</span>{% endif %}
       </div>
 
-      {% if segments and meeting.status not in active_statuses %}
+      {% if segments and meeting.status not in active_statuses and meeting.lifecycle_state != "archived" %}
       <form class="inline-action" action="{{ url_for('generate_minutes', meeting_id=meeting.id) }}" method="post">
         <span class="inline-action-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V7z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>

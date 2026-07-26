@@ -8,6 +8,7 @@ from app.rendering import (
     render_minutes_docx,
     render_minutes_markdown,
     render_transcript_markdown,
+    render_transcript_text,
 )
 
 
@@ -76,3 +77,9 @@ def test_transcript_resolves_speaker_name() -> None:
     assert "[00:00:02] 李老师" in rendered
     assert "你好。" in rendered
 
+    plain_text = render_transcript_text(
+        meeting, segments, {"SPEAKER_01": "李老师"}
+    )
+    assert plain_text.startswith("测试组会：录音转写\n")
+    assert "[00:00:02] 李老师\n你好。" in plain_text
+    assert "#" not in plain_text

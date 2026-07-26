@@ -104,6 +104,31 @@ async function inspectPage(page, name) {
       "text";
   }
 
+  await page.goto(`${baseUrl}/diagnostics`, {
+    waitUntil: "networkidle",
+  });
+  await page.screenshot({
+    path: `${outputDir}/ui-diagnostics-desktop.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(page, "diagnostics-desktop"));
+  interactions.diagnosticCardsRendered =
+    (await page.locator(".diagnostic-card").count()) === 7;
+
+  for (const [path, name] of [
+    ["/calendar", "calendar-desktop"],
+    ["/archive", "archive-desktop"],
+    ["/trash", "trash-desktop"],
+    ["/backups", "backups-desktop"],
+  ]) {
+    await page.goto(`${baseUrl}${path}`, { waitUntil: "networkidle" });
+    await page.screenshot({
+      path: `${outputDir}/ui-${name}.png`,
+      fullPage: true,
+    });
+    results.push(await inspectPage(page, name));
+  }
+
   const mobile = await browser.newContext({
     viewport: { width: 390, height: 844 },
     deviceScaleFactor: 1,
@@ -140,6 +165,33 @@ async function inspectPage(page, name) {
     fullPage: true,
   });
   results.push(await inspectPage(mobilePage, "external-llm-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/diagnostics`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-diagnostics-mobile.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(mobilePage, "diagnostics-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/backups`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-backups-mobile.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(mobilePage, "backups-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/calendar`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-calendar-mobile.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(mobilePage, "calendar-mobile"));
 
   await browser.close();
   process.stdout.write(

@@ -119,7 +119,8 @@ function initHistoryFilters() {
       const statusMatches =
         !wantedStatus ||
         rowStatus === wantedStatus ||
-        (wantedStatus === "processing" && rowStatus === "generating_minutes");
+        (wantedStatus === "processing" &&
+          ["generating_minutes", "canceling"].includes(rowStatus));
       const show = titleMatches && statusMatches;
       row.hidden = !show;
       if (show) visible += 1;
@@ -304,6 +305,43 @@ function initCopySummary() {
   });
 }
 
+function initDiagnostics() {
+  const button = document.querySelector("[data-copy-diagnostics]");
+  if (!button) return;
+
+  button.addEventListener("click", async () => {
+    const label = button.querySelector("span");
+    const previousLabel = label?.textContent || "复制诊断信息";
+    button.disabled = true;
+    if (label) label.textContent = "正在重新检查…";
+    try {
+      const response = await fetch(button.dataset.apiUrl || "/api/diagnostics", {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error(`诊断接口返回 ${response.status}`);
+      const payload = await response.json();
+      const text = `MeetOminute 运行诊断\n${JSON.stringify(payload, null, 2)}`;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const temporary = document.createElement("textarea");
+        temporary.value = text;
+        document.body.appendChild(temporary);
+        temporary.select();
+        document.execCommand("copy");
+        temporary.remove();
+      }
+      showToast("诊断信息已复制");
+    } catch (error) {
+      showToast(`复制失败：${String(error)}`);
+    } finally {
+      button.disabled = false;
+      if (label) label.textContent = previousLabel;
+    }
+  });
+}
+
 function initExternalLLMSettings() {
   const form = document.querySelector("[data-external-llm-form]");
   if (!form) return;
@@ -378,6 +416,15 @@ function initExternalLLMSettings() {
   });
 }
 
+function initConfirmActions() {
+  document.addEventListener("submit", (event) => {
+    const form = event.target.closest?.("[data-confirm-message]");
+    if (!form) return;
+    const message = form.dataset.confirmMessage || "确定继续吗？";
+    if (!window.confirm(message)) event.preventDefault();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const status = document.querySelector("#task-status[data-poll-url]");
   if (status) pollStatus(status);
@@ -389,5 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDirtyForms();
   initWorkspaceNavigation();
   initCopySummary();
+  initDiagnostics();
   initExternalLLMSettings();
+  initConfirmActions();
 });

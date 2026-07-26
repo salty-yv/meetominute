@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}备份与恢复 · MeetOminute{% endblock %}
+{% block content %}
+<header class="library-hero backup-hero">
+  <div>
+    <p class="eyebrow">DATA SAFETY</p>
+    <h1>备份与恢复</h1>
+    <p>把会议数据库、原始录音、逐字稿和纪要打包为一个 ZIP；恢复时只导入缺失会议，不覆盖当前数据。</p>
+  </div>
+  <span class="schema-badge">SQLite schema v{{ schema_version }}</span>
+</header>
+
+<nav class="library-tabs" aria-label="资料库分类">
+  <a href="{{ url_for('index') }}#meeting-history">
+    <span>工作台</span><b>{{ lifecycle_counts.active }}</b>
+  </a>
+  <a href="{{ url_for('calendar_page') }}"><span>日历</span></a>
+  <a href="{{ url_for('archive_page') }}">
+    <span>已归档</span><b>{{ lifecycle_counts.archived }}</b>
+  </a>
+  <a href="{{ url_for('trash_page') }}">
+    <span>回收站</span><b>{{ lifecycle_counts.trashed }}</b>
+  </a>
+  <a class="active" href="{{ url_for('backups_page') }}" aria-current="page"><span>备份</span></a>
+</nav>
+
+{% if created_backup %}
+<div class="operation-message success">
+  <strong>备份已创建</strong>
+  <span>{{ created_backup }}</span>
+</div>
+{% endif %}
+{% if restored_count != "" %}
+<div class="operation-message success">
+  <strong>恢复完成</strong>
+  <span>导入 {{ restored_count }} 场会议，跳过 {{ skipped_count or 0 }} 场已有或无效会议。</span>
+</div>
+{% endif %}
+{% if backup_error %}
+<div class="operation-message error">
+  <strong>无法创建备份</strong><span>{{ backup_error }}</span>
+</div>
+{% endif %}
+{% if restore_error %}
+<div class="operation-message error">
+  <strong>无法恢复备份</strong><span>{{ restore_error }}</span>
+</div>
+{% endif %}
+
+<div class="backup-grid">
+  <section class="panel backup-action-card">
+    <div class="section-heading">
+      <div class="heading-with-icon">
+        <span class="section-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
+        </span>
+        <div><p class="eyebrow">CREATE</p><h2>创建完整备份</h2></div>
+      </div>
+    </div>
+    <p>包含所有活跃、归档及回收站会议和任务记录，不包含外部 LLM API Key、模型文件或缓存。</p>
+    <ul class="backup-notes">
+      <li>备份前需要等待当前处理任务结束或先取消任务。</li>
+      <li>文件保存在本机 <code>data/backups/</code>，也可立即下载另存。</li>
+      <li>SQLite 使用一致性快照，不直接复制正在使用的数据库文件。</li>
+    </ul>
+    <form action="{{ url_for('create_backup') }}" method="post">
+      <button class="button primary full" type="submit">
+        <span>立即创建备份</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <section class="panel backup-action-card">
+    <div class="section-heading">
+      <div class="heading-with-icon">
+        <span class="section-icon blue">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V8M7 13l5-5 5 5M5 4h14"/></svg>
+        </span>
+        <div><p class="eyebrow">RESTORE</p><h2>从备份合并恢复</h2></div>
+      </div>
+    </div>
+    <p>选择 MeetOminute ZIP 备份包。相同会议 ID 或目录名会跳过，不覆盖现有录音和修改。</p>
+    <form
+      class="backup-upload"
+      action="{{ url_for('restore_backup') }}"
+      method="post"
+      enctype="multipart/form-data"
+      data-confirm-message="恢复会把备份中缺失的会议导入当前资料库。已有会议不会被覆盖，确定继续吗？"
+    >
+      <label>
+        <span>选择备份包</span>
+        <input type="file" name="backup_file" accept=".zip,application/zip" required>
+      </label>
+      <button class="button secondary full" type="submit">
+        <span>校验并恢复</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v6h6"/></svg>
+      </button>
+    </form>
+  </section>
+</div>
+
+<section class="panel backup-list-panel">
+  <div class="section-heading">
+    <div class="heading-with-icon">
+      <span class="section-icon neutral">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v13H4zM3 4h18v4H3zM9 12h6"/></svg>
+      </span>
+      <div><p class="eyebrow">LOCAL COPIES</p><h2>本机备份</h2></div>
+    </div>
+    <span class="count">{{ backups|length }} 份</span>
+  </div>
+
+  {% if backups %}
+  <div class="backup-list">
+    {% for backup in backups %}
+    <article class="backup-row {% if backup.error %}invalid{% endif %}">
+      <span class="backup-file-icon">ZIP</span>
+      <div>
+        <strong>{{ backup.name }}</strong>
+        {% if backup.error %}
+        <small>{{ backup.error }}</small>
+        {% else %}
+        <small>{{ backup.created_at[:19]|replace("T", " ") }} · {{ backup.meeting_count }} 场会议 · {{ backup.size_label }} · schema v{{ backup.schema_version }}</small>
+        {% endif %}
+      </div>
+      {% if not backup.error %}
+      <a class="button compact secondary" href="{{ url_for('download_backup', backup_name=backup.name) }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg>
+        下载
+      </a>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state library-empty">
+    <span class="empty-illustration small" aria-hidden="true">
+      <svg viewBox="0 0 72 72"><path d="M16 19h40v39H16zM22 13h28v12H22M27 38h18M27 47h12"/></svg>
+    </span>
+    <h3>还没有本机备份</h3>
+    <p>创建第一份备份后，会在这里显示下载入口。</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

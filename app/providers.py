@@ -8,7 +8,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Callable, Protocol
 from uuid import uuid4
 
 import httpx
@@ -16,6 +16,25 @@ import httpx
 from .config import Settings
 from .domain import Segment
 from .external_llm import ExternalLLMConfig
+
+
+CancelCheck = Callable[[], None]
+
+
+def _check_cancel(cancel_check: CancelCheck | None) -> None:
+    if cancel_check is not None:
+        cancel_check()
+
+
+def _terminate_subprocess(process: subprocess.Popen[str]) -> None:
+    if process.poll() is not None:
+        return
+    process.terminate()
+    try:
+        process.communicate(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.communicate()
 
 
 class Transcriber(Protocol):
@@ -27,6 +46,8 @@ class Transcriber(Protocol):
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]: ...
 
 
@@ -38,6 +59,8 @@ class MinutesGenerator(Protocol):
         meeting: dict[str, Any],
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]: ...
 
 
@@ -50,10 +73,13 @@ class MockTranscriber:
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]:
+        _check_cancel(cancel_check)
         speaker_count = max(1, min(expected_speakers, 2))
         segment_length = max(1.0, duration_seconds / speaker_count)
-        return [
+        segments = [
             Segment(
                 id=f"seg_{index + 1:04d}",
                 start=round(index * segment_length, 3),
@@ -68,6 +94,8 @@ class MockTranscriber:
             )
             for index in range(speaker_count)
         ]
+        _check_cancel(cancel_check)
+        return segments
 
 
 class FunASRTranscriber:
@@ -82,19 +110,24 @@ class FunASRTranscriber:
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]:
+        _check_cancel(cancel_check)
         if self.settings.funasr_isolate_process:
             return self._transcribe_in_subprocess(
                 audio_path,
                 expected_speakers,
                 glossary,
                 duration_seconds,
+                cancel_check=cancel_check,
             )
         return self._transcribe_in_process(
             audio_path,
             expected_speakers,
             glossary,
             duration_seconds,
+            cancel_check=cancel_check,
         )
 
     def _transcribe_in_process(
@@ -103,7 +136,10 @@ class FunASRTranscriber:
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]:
+        _check_cancel(cancel_check)
         os.environ.setdefault(
             "MODELSCOPE_CACHE", str(self.settings.models_dir)
         )
@@ -144,7 +180,9 @@ class FunASRTranscriber:
                 generate_kwargs["hotword"] = hotword
             if expected_speakers > 0:
                 generate_kwargs["preset_spk_num"] = expected_speakers
+            _check_cancel(cancel_check)
             result = model.generate(**generate_kwargs)
+            _check_cancel(cancel_check)
             return parse_funasr_result(result, duration_seconds)
         except RuntimeError as exc:
             if "out of memory" in str(exc).lower() and device.startswith(
@@ -168,7 +206,10 @@ class FunASRTranscriber:
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]:
+        _check_cancel(cancel_check)
         token = uuid4().hex
         request_path = audio_path.parent / f".funasr-{token}.request.json"
         output_path = audio_path.parent / f".funasr-{token}.result.json"
@@ -194,24 +235,51 @@ class FunASRTranscriber:
             subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
         )
         try:
-            result = subprocess.run(
+            command = [
+                sys.executable,
+                "-m",
+                "app.funasr_worker",
+                str(request_path),
+            ]
+            timeout = max(
+                1200, self.settings.request_timeout_seconds
+            )
+            process = subprocess.Popen(
+                command,
+                cwd=self.settings.base_dir,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                creationflags=creationflags,
+            )
+            started = time.monotonic()
+            try:
+                while True:
+                    try:
+                        stdout, stderr = process.communicate(timeout=0.25)
+                        break
+                    except subprocess.TimeoutExpired:
+                        _check_cancel(cancel_check)
+                        if time.monotonic() - started >= timeout:
+                            raise subprocess.TimeoutExpired(command, timeout)
+            except BaseException:
+                _terminate_subprocess(process)
+                raise
+            result = subprocess.CompletedProcess(
                 [
                     sys.executable,
                     "-m",
                     "app.funasr_worker",
                     str(request_path),
                 ],
-                cwd=self.settings.base_dir,
-                env=environment,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=max(
-                    1200, self.settings.request_timeout_seconds
-                ),
-                creationflags=creationflags,
+                process.returncode,
+                stdout,
+                stderr,
             )
+            _check_cancel(cancel_check)
             if result.returncode != 0:
                 detail = (result.stderr or result.stdout).strip()[-4000:]
                 raise RuntimeError(
@@ -220,7 +288,7 @@ class FunASRTranscriber:
             payload = json.loads(
                 output_path.read_text(encoding="utf-8")
             )
-            return [
+            segments = [
                 Segment(
                     id=str(item["id"]),
                     start=float(item["start"]),
@@ -230,6 +298,8 @@ class FunASRTranscriber:
                 )
                 for item in payload["segments"]
             ]
+            _check_cancel(cancel_check)
+            return segments
         except subprocess.TimeoutExpired as exc:
             raise RuntimeError("FunASR 隔离进程处理超时。") from exc
         except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
@@ -253,7 +323,10 @@ class OpenAICompatibleTranscriber:
         expected_speakers: int,
         glossary: str,
         duration_seconds: float,
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> list[Segment]:
+        _check_cancel(cancel_check)
         _ensure_remote_config(self.settings, self.settings.transcribe_model)
         headers = _auth_headers(self.settings)
         data: list[tuple[str, str]] = [
@@ -277,6 +350,7 @@ class OpenAICompatibleTranscriber:
                 files={"file": (audio_path.name, audio, "audio/wav")},
                 timeout=self.settings.request_timeout_seconds,
             )
+        _check_cancel(cancel_check)
         _raise_provider_error(response, "云端转写")
         payload = response.json()
         raw_segments = payload.get("segments") or []
@@ -306,6 +380,7 @@ class OpenAICompatibleTranscriber:
             )
         if not segments:
             raise RuntimeError("转写接口未返回任何文字片段。")
+        _check_cancel(cancel_check)
         return segments
 
 
@@ -317,14 +392,17 @@ class MockMinutesGenerator:
         meeting: dict[str, Any],
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]:
+        _check_cancel(cancel_check)
         has_placeholder = any("开发模式占位文本" in s["text"] for s in segments)
         summary = (
             "当前为开发模式，尚未配置真实纪要模型，不能生成可信会议结论。"
             if has_placeholder
             else "已保存逐字稿；当前为开发模式，请配置纪要模型后重新生成。"
         )
-        return {
+        result = {
             "meeting": {
                 "title": meeting["title"],
                 "date": meeting["meeting_date"],
@@ -345,6 +423,8 @@ class MockMinutesGenerator:
             "next_followups": [],
             "generator": "mock",
         }
+        _check_cancel(cancel_check)
+        return result
 
 
 class OpenAICompatibleMinutesGenerator:
@@ -387,7 +467,10 @@ class OpenAICompatibleMinutesGenerator:
         meeting: dict[str, Any],
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
+        *,
+        cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]:
+        _check_cancel(cancel_check)
         _ensure_provider_config(
             self.base_url, self.api_key, self.model
         )
@@ -398,6 +481,7 @@ class OpenAICompatibleMinutesGenerator:
         )
         extracted: list[dict[str, Any]] = []
         for index, chunk in enumerate(chunks):
+            _check_cancel(cancel_check)
             extracted.append(
                 self._chat_json(
                     system=(
@@ -421,8 +505,10 @@ class OpenAICompatibleMinutesGenerator:
                         "返回 JSON，不要 Markdown。\n\n"
                         f"{chunk}"
                     ),
+                    cancel_check=cancel_check,
                 )
             )
+        _check_cancel(cancel_check)
         final = self._chat_json(
             system=(
                 "你是严谨的组会纪要编辑。合并事实、去重并保留冲突；"
@@ -443,6 +529,7 @@ class OpenAICompatibleMinutesGenerator:
                 f"\n会议信息：{json.dumps({'title': meeting['title'], 'date': meeting['meeting_date']}, ensure_ascii=False)}"
                 f"\n抽取结果：{json.dumps(extracted, ensure_ascii=False)}"
             ),
+            cancel_check=cancel_check,
         )
         final["meeting"] = {
             "title": meeting["title"],
@@ -454,9 +541,17 @@ class OpenAICompatibleMinutesGenerator:
         if normalized["summary"] == "未明确":
             normalized["summary"] = _transcript_fallback_summary(segments)
             normalized["summary_fallback"] = True
+        _check_cancel(cancel_check)
         return normalized
 
-    def _chat_json(self, system: str, user: str) -> dict[str, Any]:
+    def _chat_json(
+        self,
+        system: str,
+        user: str,
+        *,
+        cancel_check: CancelCheck | None = None,
+    ) -> dict[str, Any]:
+        _check_cancel(cancel_check)
         payload: dict[str, Any] = {
             "model": self.model,
             "temperature": 0,
@@ -484,6 +579,7 @@ class OpenAICompatibleMinutesGenerator:
             raise RuntimeError(
                 f"无法连接纪要服务 {self.base_url}：{exc}"
             ) from exc
+        _check_cancel(cancel_check)
         _raise_provider_error(response, "纪要生成")
         elapsed = time.perf_counter() - started
         response_payload = response.json()

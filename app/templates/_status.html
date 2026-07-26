@@ -12,18 +12,29 @@
       <div>
         <h2>{{ meeting.current_step }}</h2>
         <p>
-          {% if meeting.status in active_statuses %}
-            后台正在处理，关闭浏览器不会中断任务。
+          {% if meeting.status == "canceling" %}
+            正在结束当前操作。FFmpeg 与隔离转写进程会立即停止；外部 LLM 会在当前请求返回后停止。
+          {% elif meeting.status in active_statuses %}
+            任务已写入本机队列，关闭浏览器不会中断；应用重启后会从最近断点继续。
           {% elif meeting.status == "completed" %}
             逐字稿与纪要均已生成，可以开始审核和导出。
           {% elif meeting.status == "transcribed" %}
             逐字稿已就绪，确认内容后可重新生成纪要。
           {% elif meeting.status == "failed" %}
-            请查看错误信息和处理日志后重新尝试。
+            已保留成功完成的阶段，可以从断点继续，也可以从头重跑。
+          {% elif meeting.status == "canceled" %}
+            任务已安全停止，已有成果仍保存在本机。
           {% else %}
             当前任务状态已保存到本机。
           {% endif %}
         </p>
+        {% if job and meeting.status != "completed" %}
+        <div class="job-meta" aria-label="任务断点信息">
+          <span>任务 #{{ job.id }}</span>
+          {% if resume_label %}<span>{{ resume_label }}</span>{% endif %}
+          {% if job.attempts %}<span>已执行 {{ job.attempts }} 次</span>{% endif %}
+        </div>
+        {% endif %}
       </div>
     </div>
     <div class="progress-orbit" style="--progress: {{ meeting.progress }}">
@@ -36,17 +47,17 @@
   </div>
 
   <div class="process-steps">
-    <div class="process-step {% if meeting.progress >= 5 %}done{% elif meeting.status != 'failed' %}active{% endif %}">
+    <div class="process-step {% if meeting.progress >= 5 %}done{% elif meeting.status not in ['failed', 'canceled'] %}active{% endif %}">
       <span>{% if meeting.progress >= 5 %}✓{% else %}1{% endif %}</span>
       <div><strong>录音接收</strong><small>格式检查</small></div>
     </div>
     <i class="{% if meeting.progress >= 30 %}done{% endif %}"></i>
-    <div class="process-step {% if meeting.progress >= 75 %}done{% elif meeting.progress >= 5 and meeting.status != 'failed' %}active{% endif %}">
+    <div class="process-step {% if meeting.progress >= 75 %}done{% elif meeting.progress >= 5 and meeting.status not in ['failed', 'canceled'] %}active{% endif %}">
       <span>{% if meeting.progress >= 75 %}✓{% else %}2{% endif %}</span>
       <div><strong>语音转写</strong><small>说话人区分</small></div>
     </div>
     <i class="{% if meeting.progress >= 85 %}done{% endif %}"></i>
-    <div class="process-step {% if meeting.progress >= 100 %}done{% elif meeting.progress >= 75 and meeting.status != 'failed' %}active{% endif %}">
+    <div class="process-step {% if meeting.progress >= 100 %}done{% elif meeting.progress >= 75 and meeting.status not in ['failed', 'canceled'] %}active{% endif %}">
       <span>{% if meeting.progress >= 100 %}✓{% else %}3{% endif %}</span>
       <div><strong>纪要生成</strong><small>事实与行动项</small></div>
     </div>
@@ -62,5 +73,53 @@
       <span class="error-icon" aria-hidden="true">!</span>
       <div><strong>处理失败</strong><p>{{ meeting.error }}</p></div>
     </div>
+  {% endif %}
+
+  {% if meeting.status in ['queued', 'processing', 'generating_minutes'] %}
+  <div class="task-controls">
+    <div>
+      <strong>需要停止？</strong>
+      <span>取消不会删除已经完成的阶段。</span>
+    </div>
+    <form action="{{ url_for('cancel_meeting', meeting_id=meeting.id) }}" method="post">
+      <button class="button compact danger-outline" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        取消任务
+      </button>
+    </form>
+  </div>
+  {% elif meeting.status == "canceling" %}
+  <div class="task-controls is-canceling">
+    <div>
+      <strong>正在安全停止</strong>
+      <span>请稍候，完成后可从当前断点继续。</span>
+    </div>
+    <button class="button compact secondary" type="button" disabled>停止中…</button>
+  </div>
+  {% elif meeting.status in ['failed', 'canceled'] and meeting.lifecycle_state != 'archived' %}
+  <div class="task-controls recovery-controls">
+    <div>
+      <strong>恢复处理</strong>
+      <span>{% if resume_label %}推荐{{ resume_label }}，不会重复已完成的阶段。{% else %}可以从最近可用成果继续。{% endif %}</span>
+    </div>
+    <div class="task-control-actions">
+      <form action="{{ url_for('resume_meeting', meeting_id=meeting.id) }}" method="post">
+        <button class="button compact primary" type="submit">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5z"/></svg>
+          从断点继续
+        </button>
+      </form>
+      <form
+        action="{{ url_for('retry_meeting', meeting_id=meeting.id) }}"
+        method="post"
+        data-confirm-message="从头重跑会删除现有逐字稿和纪要，但保留原始录音。确定继续吗？"
+      >
+        <button class="button compact secondary" type="submit">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>
+          从头重跑
+        </button>
+      </form>
+    </div>
+  </div>
   {% endif %}
 </section>

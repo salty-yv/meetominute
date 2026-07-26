@@ -43,6 +43,32 @@ def render_transcript_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
+def render_transcript_text(
+    meeting: dict[str, Any],
+    segments: list[dict[str, Any]],
+    speakers: dict[str, str],
+) -> str:
+    lines = [
+        f"{meeting['title']}：录音转写",
+        f"日期：{meeting['meeting_date']}",
+        f"预计发言人数：{meeting['expected_speakers']}",
+        "",
+    ]
+    for segment in segments:
+        speaker = speakers.get(segment["speaker"]) or segment["speaker"]
+        timestamp = segment.get("timestamp") or format_timestamp(
+            segment.get("start")
+        )
+        lines.extend(
+            [
+                f"[{timestamp}] {speaker}",
+                str(segment.get("text") or "").strip(),
+                "",
+            ]
+        )
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def render_minutes_markdown(minutes: dict[str, Any]) -> str:
     meeting = minutes.get("meeting", {})
     lines = [

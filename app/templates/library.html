@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{% if view == "archived" %}会议归档{% else %}回收站{% endif %} · MeetOminute{% endblock %}
+{% block content %}
+<header class="library-hero">
+  <div>
+    <p class="eyebrow">LOCAL LIBRARY</p>
+    <h1>{% if view == "archived" %}会议归档{% else %}回收站{% endif %}</h1>
+    <p>
+      {% if view == "archived" %}
+        收起暂时不需要出现在工作台的会议，录音、逐字稿和纪要仍完整保存在本机。
+      {% else %}
+        回收站中的会议不会出现在工作台；恢复前不会参与任务处理。
+      {% endif %}
+    </p>
+  </div>
+  <a class="button secondary" href="{{ url_for('backups_page') }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM8 5v5h8V5M8 16h8"/></svg>
+    备份与恢复
+  </a>
+</header>
+
+<nav class="library-tabs" aria-label="资料库分类">
+  <a href="{{ url_for('index') }}#meeting-history">
+    <span>工作台</span><b>{{ lifecycle_counts.active }}</b>
+  </a>
+  <a href="{{ url_for('calendar_page') }}"><span>日历</span></a>
+  <a href="{{ url_for('archive_page') }}" {% if view == "archived" %}class="active" aria-current="page"{% endif %}>
+    <span>已归档</span><b>{{ lifecycle_counts.archived }}</b>
+  </a>
+  <a href="{{ url_for('trash_page') }}" {% if view == "trashed" %}class="active" aria-current="page"{% endif %}>
+    <span>回收站</span><b>{{ lifecycle_counts.trashed }}</b>
+  </a>
+  <a href="{{ url_for('backups_page') }}"><span>备份</span></a>
+</nav>
+
+<section class="panel library-panel">
+  <div class="section-heading">
+    <div class="heading-with-icon">
+      <span class="section-icon neutral">
+        {% if view == "archived" %}
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v13H4zM3 4h18v4H3zM9 12h6"/></svg>
+        {% else %}
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+        {% endif %}
+      </span>
+      <div>
+        <p class="eyebrow">{% if view == "archived" %}ARCHIVED{% else %}RECYCLE BIN{% endif %}</p>
+        <h2>{% if view == "archived" %}已归档会议{% else %}等待处理的删除项{% endif %}</h2>
+      </div>
+    </div>
+    <span class="count">{{ meetings|length }} 场</span>
+  </div>
+
+  {% if meetings %}
+  <div class="library-list">
+    {% for meeting in meetings %}
+    <article class="library-row">
+      <span class="date-block">
+        <strong>{{ meeting.meeting_date[8:10] }}</strong>
+        <small>{{ meeting.meeting_date[:7] }}</small>
+      </span>
+      <div class="library-row-main">
+        <div>
+          <h3>{{ meeting.title }}</h3>
+          <span class="status status-{{ meeting.status }}"><i></i>{{ status_labels[meeting.status] }}</span>
+        </div>
+        <p>{{ meeting.source_filename }} · {{ meeting.current_step }}</p>
+        {% if view == "trashed" and meeting.trashed_at %}
+        <small>移入时间：{{ meeting.trashed_at[:19]|replace("T", " ") }}</small>
+        {% elif meeting.archived_at %}
+        <small>归档时间：{{ meeting.archived_at[:19]|replace("T", " ") }}</small>
+        {% endif %}
+      </div>
+      <div class="library-row-actions">
+        {% if view == "archived" %}
+        <a class="button compact secondary" href="{{ url_for('meeting_detail', meeting_id=meeting.id) }}">查看</a>
+        <form action="{{ url_for('unarchive_meeting', meeting_id=meeting.id) }}" method="post">
+          <button class="button compact primary" type="submit">取消归档</button>
+        </form>
+        <form
+          action="{{ url_for('trash_meeting', meeting_id=meeting.id) }}"
+          method="post"
+          data-confirm-message="将这场会议移入回收站吗？"
+        >
+          <button class="button compact danger-outline" type="submit">移入回收站</button>
+        </form>
+        {% else %}
+        <form action="{{ url_for('restore_meeting', meeting_id=meeting.id) }}" method="post">
+          <button class="button compact primary" type="submit">恢复</button>
+        </form>
+        <form
+          action="{{ url_for('permanently_delete_meeting', meeting_id=meeting.id) }}"
+          method="post"
+          data-confirm-message="永久删除后，原始录音、逐字稿、纪要和任务记录都无法恢复。确定永久删除吗？"
+        >
+          <button class="button compact danger-solid" type="submit">永久删除</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state library-empty">
+    <span class="empty-illustration small" aria-hidden="true">
+      {% if view == "archived" %}
+      <svg viewBox="0 0 72 72"><path d="M14 23h44v35H14zM10 14h52v12H10zM27 36h18"/></svg>
+      {% else %}
+      <svg viewBox="0 0 72 72"><path d="M19 21h34M27 21v-7h18v7M23 21l4 38h18l4-38M32 31v18M40 31v18"/></svg>
+      {% endif %}
+    </span>
+    <h3>{% if view == "archived" %}还没有归档会议{% else %}回收站是空的{% endif %}</h3>
+    <p>{% if view == "archived" %}在会议详情页点击“归档”，会议会从工作台移到这里。{% else %}移入回收站的会议会保留在这里，直到恢复或永久删除。{% endif %}</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

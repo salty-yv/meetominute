@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}会议日历 · MeetOminute{% endblock %}
+{% block content %}
+<header class="library-hero calendar-hero">
+  <div>
+    <p class="eyebrow">MEETING CALENDAR</p>
+    <h1>会议日历</h1>
+    <p>按实际会议日期查看录音、逐字稿和纪要，归档与回收站记录也会保留在原来的日期。</p>
+  </div>
+  <a class="button primary" href="{{ url_for('index') }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    创建新会议
+  </a>
+</header>
+
+<nav class="library-tabs" aria-label="会议资料视图">
+  <a href="{{ url_for('index') }}#meeting-history">
+    <span>工作台</span><b>{{ lifecycle_counts.active }}</b>
+  </a>
+  <a class="active" href="{{ url_for('calendar_page') }}" aria-current="page"><span>日历</span></a>
+  <a href="{{ url_for('archive_page') }}">
+    <span>已归档</span><b>{{ lifecycle_counts.archived }}</b>
+  </a>
+  <a href="{{ url_for('trash_page') }}">
+    <span>回收站</span><b>{{ lifecycle_counts.trashed }}</b>
+  </a>
+  <a href="{{ url_for('backups_page') }}"><span>备份</span></a>
+</nav>
+
+<section class="calendar-summary" aria-label="{{ month_title }}概览">
+  <div><span>本月会议</span><strong>{{ month_counts.total }}</strong></div>
+  <div><span>有记录日期</span><strong>{{ days_with_meetings }}</strong></div>
+  <div><span>正常记录</span><strong>{{ month_counts.active }}</strong></div>
+  <div><span>已归档</span><strong>{{ month_counts.archived }}</strong></div>
+</section>
+
+<section class="panel calendar-panel">
+  <div class="calendar-toolbar">
+    <div>
+      <p class="eyebrow">MONTH VIEW</p>
+      <h2>{{ month_title }}</h2>
+    </div>
+    <div class="calendar-navigation">
+      <a
+        class="calendar-arrow"
+        href="{{ url_for('calendar_page') }}?month={{ previous_month }}"
+        aria-label="查看上一个月"
+        title="上一个月"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+      </a>
+      <form class="calendar-month-form" action="{{ url_for('calendar_page') }}" method="get">
+        <label>
+          <span class="sr-only">选择月份</span>
+          <input type="month" name="month" value="{{ selected_month }}" aria-label="选择月份">
+        </label>
+        <button class="button compact secondary" type="submit">跳转</button>
+      </form>
+      <a
+        class="calendar-arrow"
+        href="{{ url_for('calendar_page') }}?month={{ next_month }}"
+        aria-label="查看下一个月"
+        title="下一个月"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+      </a>
+      {% if selected_month != current_month %}
+      <a class="button compact secondary calendar-today-link" href="{{ url_for('calendar_page') }}">回到本月</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="calendar-legend" aria-label="会议记录图例">
+    <span><i class="active"></i>正常记录</span>
+    <span><i class="archived"></i>已归档</span>
+    <span><i class="trashed"></i>回收站</span>
+  </div>
+
+  <div class="calendar-scroll">
+    <div class="calendar-weekdays" aria-hidden="true">
+      {% for label in weekday_labels %}<span>{{ label }}</span>{% endfor %}
+    </div>
+    <div class="calendar-grid">
+      {% for week in calendar_weeks %}
+        {% for day in week %}
+        <section
+          class="calendar-day{% if not day.in_month %} outside-month{% endif %}{% if day.is_today %} today{% endif %}{% if day.meetings %} has-meetings{% endif %}"
+          aria-label="{{ day.iso }}，{{ day.meetings|length }}场会议"
+        >
+          <div class="calendar-day-head">
+            <time datetime="{{ day.iso }}">{{ day.day }}</time>
+            {% if day.is_today %}<span>今天</span>{% endif %}
+          </div>
+          {% if day.meetings %}
+          <div class="calendar-events">
+            {% for meeting in day.meetings %}
+            <a
+              class="calendar-event lifecycle-{{ meeting.lifecycle_state }}"
+              href="{% if meeting.lifecycle_state == 'trashed' %}{{ url_for('trash_page') }}{% else %}{{ url_for('meeting_detail', meeting_id=meeting.id) }}{% endif %}"
+              title="{{ meeting.title }} · {% if meeting.lifecycle_state == 'archived' %}已归档{% elif meeting.lifecycle_state == 'trashed' %}回收站{% else %}{{ status_labels[meeting.status] }}{% endif %}"
+            >
+              <i aria-hidden="true"></i>
+              <span>
+                <strong>{{ meeting.title }}</strong>
+                <small>
+                  {% if meeting.lifecycle_state == "archived" %}
+                    已归档
+                  {% elif meeting.lifecycle_state == "trashed" %}
+                    回收站
+                  {% else %}
+                    {{ status_labels[meeting.status] }}
+                  {% endif %}
+                </small>
+              </span>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </section>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="calendar-mobile-agenda">
+    {% if agenda_days %}
+      {% for day in agenda_days %}
+      <section class="agenda-day{% if day.is_today %} today{% endif %}">
+        <header>
+          <time datetime="{{ day.iso }}"><strong>{{ day.day }}</strong><span>{{ selected_month }}</span></time>
+          <b>{{ day.meetings|length }} 场</b>
+        </header>
+        <div>
+          {% for meeting in day.meetings %}
+          <a
+            class="agenda-event lifecycle-{{ meeting.lifecycle_state }}"
+            href="{% if meeting.lifecycle_state == 'trashed' %}{{ url_for('trash_page') }}{% else %}{{ url_for('meeting_detail', meeting_id=meeting.id) }}{% endif %}"
+          >
+            <i aria-hidden="true"></i>
+            <span><strong>{{ meeting.title }}</strong><small>{% if meeting.lifecycle_state == "archived" %}已归档{% elif meeting.lifecycle_state == "trashed" %}回收站{% else %}{{ status_labels[meeting.status] }}{% endif %}</small></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+    {% else %}
+    <div class="calendar-empty">
+      <strong>这个月还没有会议</strong>
+      <span>切换月份查看其他记录，或创建一场新会议。</span>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

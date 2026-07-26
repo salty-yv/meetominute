@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import time
 from pathlib import Path
+from typing import Callable
 
 from .config import Settings
 
@@ -12,11 +14,76 @@ class AudioProcessingError(RuntimeError):
     pass
 
 
+CancelCheck = Callable[[], None]
+
+
 def _creation_flags() -> int:
     return subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
 
 
-def probe_duration(source: Path, settings: Settings) -> float:
+def _terminate_process(process: subprocess.Popen[str]) -> None:
+    if process.poll() is not None:
+        return
+    process.terminate()
+    try:
+        process.communicate(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.communicate()
+
+
+def _run_process(
+    command: list[str],
+    *,
+    timeout: float,
+    cancel_check: CancelCheck | None,
+) -> subprocess.CompletedProcess[str]:
+    if cancel_check is not None:
+        cancel_check()
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        creationflags=_creation_flags(),
+    )
+    started = time.monotonic()
+    try:
+        while True:
+            try:
+                stdout, stderr = process.communicate(timeout=0.25)
+                break
+            except subprocess.TimeoutExpired:
+                if cancel_check is not None:
+                    cancel_check()
+                if time.monotonic() - started >= timeout:
+                    raise subprocess.TimeoutExpired(command, timeout)
+    except BaseException:
+        _terminate_process(process)
+        raise
+    result = subprocess.CompletedProcess(
+        command,
+        process.returncode,
+        stdout,
+        stderr,
+    )
+    if result.returncode != 0:
+        raise subprocess.CalledProcessError(
+            result.returncode,
+            command,
+            output=stdout,
+            stderr=stderr,
+        )
+    return result
+
+
+def probe_duration(
+    source: Path,
+    settings: Settings,
+    cancel_check: CancelCheck | None = None,
+) -> float:
     command = [
         settings.ffprobe_bin,
         "-v",
@@ -28,15 +95,10 @@ def probe_duration(source: Path, settings: Settings) -> float:
         str(source),
     ]
     try:
-        result = subprocess.run(
+        result = _run_process(
             command,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
             timeout=120,
-            check=True,
-            creationflags=_creation_flags(),
+            cancel_check=cancel_check,
         )
         payload = json.loads(result.stdout)
         return float(payload["format"]["duration"])
@@ -58,8 +120,9 @@ def normalize_audio(
     source: Path,
     destination: Path,
     settings: Settings,
+    cancel_check: CancelCheck | None = None,
 ) -> float:
-    duration = probe_duration(source, settings)
+    duration = probe_duration(source, settings, cancel_check)
     temporary = destination.with_suffix(".tmp.wav")
     command = [
         settings.ffmpeg_bin,
@@ -79,16 +142,13 @@ def normalize_audio(
         str(temporary),
     ]
     try:
-        subprocess.run(
+        _run_process(
             command,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
             timeout=max(600, int(duration * 2)),
-            check=True,
-            creationflags=_creation_flags(),
+            cancel_check=cancel_check,
         )
+        if cancel_check is not None:
+            cancel_check()
         temporary.replace(destination)
     except FileNotFoundError as exc:
         temporary.unlink(missing_ok=True)
@@ -104,5 +164,7 @@ def normalize_audio(
         raise AudioProcessingError(
             f"音频预处理失败：{detail or '未知 FFmpeg 错误'}"
         ) from exc
+    except Exception:
+        temporary.unlink(missing_ok=True)
+        raise
     return duration
-

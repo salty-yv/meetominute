@@ -33,7 +33,10 @@
       <nav class="primary-nav" aria-label="主导航">
         <a href="{{ url_for('index') }}" {% if request.url.path == '/' %}class="active" aria-current="page"{% endif %}>工作台</a>
         <a href="{{ url_for('index') }}#meeting-history">会议记录</a>
+        <a href="{{ url_for('calendar_page') }}" {% if request.url.path == '/calendar' %}class="active" aria-current="page"{% endif %}>日历</a>
+        <a href="{{ url_for('archive_page') }}" {% if request.url.path in ['/archive', '/trash', '/backups'] %}class="active" aria-current="page"{% endif %}>资料库</a>
         <a href="{{ url_for('external_llm_settings') }}" {% if request.url.path == '/settings/external-llm' %}class="active" aria-current="page"{% endif %}>外部 LLM</a>
+        <a href="{{ url_for('diagnostics_page') }}" {% if request.url.path == '/diagnostics' %}class="active" aria-current="page"{% endif %}>运行诊断</a>
       </nav>
 
       <div class="header-actions">
@@ -41,10 +44,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.5"/></svg>
           <span>模型设置</span>
         </a>
-        <span class="engine-state" title="录音和逐字稿默认不离开本机">
-          <i aria-hidden="true"></i>
-          本地 AI 在线
-        </span>
+        <a class="settings-shortcut" href="{{ url_for('diagnostics_page') }}" title="检查本地运行环境">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h3l2-6 4 11 2-5h5"/><path d="M4 4h16v16H4z"/></svg>
+          <span>运行诊断</span>
+        </a>
         <span class="privacy-badge">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7.5 10V7.5a4.5 4.5 0 0 1 9 0V10M6 10h12v10H6z"/>

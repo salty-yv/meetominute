@@ -8,6 +8,8 @@ from typing import Any
 VALID_STATUSES = {
     "queued",
     "processing",
+    "canceling",
+    "canceled",
     "transcribed",
     "generating_minutes",
     "completed",
@@ -47,4 +49,3 @@ class MeetingCreate:
     expected_speakers: int
     glossary: str
     processing_mode: str
-

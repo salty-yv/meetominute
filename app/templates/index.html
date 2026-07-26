@@ -170,6 +170,23 @@
       <span class="count">{{ meetings|length }} 场</span>
     </div>
 
+    <nav class="library-shortcuts" aria-label="会议资料管理">
+      <a href="{{ url_for('calendar_page') }}">
+        <span>会议日历</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v15H5zM8 3v4M16 3v4M5 10h14"/></svg>
+      </a>
+      <a href="{{ url_for('archive_page') }}">
+        <span>归档</span><b>{{ lifecycle_counts.archived }}</b>
+      </a>
+      <a href="{{ url_for('trash_page') }}">
+        <span>回收站</span><b>{{ lifecycle_counts.trashed }}</b>
+      </a>
+      <a href="{{ url_for('backups_page') }}">
+        <span>备份与恢复</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      </a>
+    </nav>
+
     {% if meetings %}
       <div class="history-tools">
         <label class="search-field">
@@ -184,6 +201,7 @@
             <option value="processing">处理中</option>
             <option value="queued">等待处理</option>
             <option value="transcribed">待生成纪要</option>
+            <option value="canceled">已取消</option>
             <option value="failed">失败</option>
           </select>
         </label>

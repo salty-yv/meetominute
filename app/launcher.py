@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import sys
 import threading
 import time
 import urllib.error
@@ -89,9 +90,16 @@ def _ensure_ollama_ready(settings: Settings) -> None:
 def main() -> None:
     load_dotenv()
     settings = Settings.from_env()
-    if "ollama" in {settings.local_llm, settings.cloud_llm}:
-        _ensure_ollama_ready(settings)
     url = f"http://{settings.host}:{settings.port}"
+    if "ollama" in {settings.local_llm, settings.cloud_llm}:
+        try:
+            _ensure_ollama_ready(settings)
+        except RuntimeError as exc:
+            print(f"本地 Ollama 未就绪：{exc}", file=sys.stderr)
+            print(
+                f"MeetOminute 仍会启动，请打开 {url}/diagnostics 查看修复建议。",
+                file=sys.stderr,
+            )
     threading.Thread(
         target=_open_when_ready, args=(url,), daemon=True
     ).start()
