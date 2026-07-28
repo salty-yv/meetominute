@@ -887,12 +887,12 @@ class Database:
                     """
                     UPDATE meetings
                     SET status = 'queued',
-                        current_step = '应用已停止，将在下次启动时从断点继续',
+                        current_step = ?,
                         error = NULL,
                         updated_at = ?
                     WHERE id = ?
                     """,
-                    (now, meeting_id),
+                    (reason[:500], now, meeting_id),
                 )
 
     def job_cancel_requested(self, job_id: int) -> bool:

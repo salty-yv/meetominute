@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import copy
+import logging
 import threading
 import traceback
 from typing import Any, Literal
@@ -11,6 +12,7 @@ from .config import Settings
 from .database import Database
 from .domain import utc_now
 from .external_llm import ExternalLLMConfigStore
+from .maintenance import MaintenanceGate
 from .minutes_templates import DEFAULT_TEMPLATE_ID
 from .providers import (
     create_minutes_generator,
@@ -29,6 +31,9 @@ from .storage import MeetingStorage
 
 TaskKind = Literal["pipeline", "minutes"]
 Checkpoint = Literal["uploaded", "normalized", "transcribed"]
+InfrastructureRetryState = Literal["enqueue", "retry", "terminal"]
+
+LOGGER = logging.getLogger(__name__)
 
 CHECKPOINT_PROGRESS: dict[Checkpoint, int] = {
     "uploaded": 0,
@@ -57,15 +62,29 @@ class TaskQueue:
         database: Database,
         storage: MeetingStorage,
         external_llm_store: ExternalLLMConfigStore,
+        maintenance_gate: MaintenanceGate | None = None,
+        infrastructure_retry_limit: int = 3,
+        infrastructure_retry_delay: float = 0.25,
     ):
         self.settings = settings
         self.database = database
         self.storage = storage
         self.external_llm_store = external_llm_store
+        self.maintenance_gate = maintenance_gate
         self._queue: asyncio.Queue[int | None] = asyncio.Queue()
         self._queued: set[int] = set()
         self._worker: asyncio.Task[None] | None = None
         self._stopping = threading.Event()
+        self._infrastructure_retry_limit = max(
+            0, int(infrastructure_retry_limit)
+        )
+        self._infrastructure_retry_delay = max(
+            0.0, float(infrastructure_retry_delay)
+        )
+        self._infrastructure_retry_attempts: dict[int, int] = {}
+        self._infrastructure_retry_tasks: set[
+            asyncio.Task[None]
+        ] = set()
 
     async def start(self) -> None:
         if self._worker is not None:
@@ -81,10 +100,17 @@ class TaskQueue:
         if self._worker is None:
             return
         self._stopping.set()
+        retry_tasks = list(self._infrastructure_retry_tasks)
+        for task in retry_tasks:
+            task.cancel()
+        if retry_tasks:
+            await asyncio.gather(*retry_tasks, return_exceptions=True)
+        self._infrastructure_retry_tasks.clear()
         await self._queue.put(None)
         await self._worker
         self._worker = None
         self._queued.clear()
+        self._infrastructure_retry_attempts.clear()
 
     async def enqueue(
         self,
@@ -162,20 +188,41 @@ class TaskQueue:
             if job_id is None:
                 self._queue.task_done()
                 break
+            retry_required = False
             try:
-                await asyncio.to_thread(self._execute_job, job_id)
+                try:
+                    retry_required = await asyncio.to_thread(
+                        self._execute_job, job_id
+                    )
+                except Exception:
+                    retry_required = True
+                    LOGGER.exception(
+                        "Task %s escaped its execution boundary", job_id
+                    )
             finally:
                 self._queued.discard(job_id)
                 self._queue.task_done()
+            if retry_required:
+                self._schedule_infrastructure_retry(job_id)
+            else:
+                self._infrastructure_retry_attempts.pop(job_id, None)
 
-    def _execute_job(self, job_id: int) -> None:
-        if not self.database.claim_job(job_id):
-            return
-        job = self.database.get_job(job_id)
-        if job is None:
-            return
-        meeting = self._require_meeting(str(job["meeting_id"]))
+    def _execute_job(self, job_id: int) -> bool:
+        if self.maintenance_gate is None:
+            return self._execute_job_with_mutation_registered(job_id)
+        with self.maintenance_gate.mutation(wait=True):
+            return self._execute_job_with_mutation_registered(job_id)
+
+    def _execute_job_with_mutation_registered(self, job_id: int) -> bool:
+        job: dict[str, Any] | None = None
+        meeting: dict[str, Any] | None = None
         try:
+            if not self.database.claim_job(job_id):
+                return False
+            job = self.database.get_job(job_id)
+            if job is None:
+                return False
+            meeting = self._require_meeting(str(job["meeting_id"]))
             checkpoint = self.available_checkpoint(meeting)
             if checkpoint != job["checkpoint"]:
                 self.database.update_job_checkpoint(job_id, checkpoint)
@@ -208,6 +255,7 @@ class TaskQueue:
             self._raise_if_canceled(job_id)
             self.database.complete_job(job_id, meeting["id"])
         except TaskCanceled:
+            assert job is not None and meeting is not None
             current_job = self.database.get_job(job_id) or job
             checkpoint = current_job.get("checkpoint", "uploaded")
             resume_label = CHECKPOINT_RESUME_LABELS.get(
@@ -220,8 +268,9 @@ class TaskQueue:
             )
             self._log(meeting, f"任务 #{job_id} 已取消，{resume_label}")
             self._sync_metadata(meeting["id"])
-            return
+            return False
         except TaskInterrupted:
+            assert meeting is not None
             reason = "应用停止时任务被中断，已保留最近断点。"
             self.database.requeue_job(job_id, reason, meeting["id"])
             self._log(
@@ -229,19 +278,263 @@ class TaskQueue:
                 f"任务 #{job_id} 随应用停止；下次启动会自动继续",
             )
             self._sync_metadata(meeting["id"])
-            return
+            return False
         except Exception as exc:
-            message = str(exc).strip() or exc.__class__.__name__
-            self.database.fail_job(job_id, message, meeting["id"])
-            self._log(
-                meeting,
-                f"ERROR: {message}\n{traceback.format_exc(limit=8)}",
+            failure_recorded = self._record_job_failure(
+                job_id, exc, job, meeting
             )
-            self._sync_metadata(meeting["id"])
-            return
+            return not failure_recorded
 
         self._log(meeting, f"任务 #{job_id} 处理完成")
         self._sync_metadata(meeting["id"])
+
+        return False
+
+    def _record_job_failure(
+        self,
+        job_id: int,
+        exc: Exception,
+        job: dict[str, Any] | None = None,
+        meeting: dict[str, Any] | None = None,
+    ) -> bool:
+        message = str(exc).strip() or exc.__class__.__name__
+        trace = "".join(
+            traceback.format_exception(
+                exc.__class__, exc, exc.__traceback__, limit=8
+            )
+        )
+
+        if job is None:
+            try:
+                job = self.database.get_job(job_id)
+            except Exception:
+                LOGGER.exception(
+                    "Could not reload failed task %s", job_id
+                )
+
+        meeting_id = (
+            str(job["meeting_id"])
+            if job is not None and job.get("meeting_id") is not None
+            else None
+        )
+        if meeting is None and meeting_id is not None:
+            try:
+                meeting = self.database.get_meeting(meeting_id)
+            except Exception:
+                LOGGER.exception(
+                    "Could not reload meeting for failed task %s", job_id
+                )
+
+        failure_recorded = True
+        try:
+            self.database.fail_job(job_id, message, meeting_id)
+        except Exception:
+            failure_recorded = False
+            LOGGER.exception("Could not mark task %s as failed", job_id)
+
+        if meeting is None:
+            LOGGER.error(
+                "Task %s failed before its meeting could be loaded: %s",
+                job_id,
+                message,
+            )
+            return failure_recorded
+
+        try:
+            self._log(meeting, f"ERROR: {message}\n{trace}")
+        except Exception:
+            LOGGER.exception(
+                "Could not append the failure log for task %s", job_id
+            )
+        try:
+            self._sync_metadata(meeting["id"])
+        except Exception:
+            LOGGER.exception(
+                "Could not sync failure metadata for task %s", job_id
+            )
+        return failure_recorded
+
+    def _schedule_infrastructure_retry(self, job_id: int) -> None:
+        if self._stopping.is_set():
+            return
+
+        previous_attempts = self._infrastructure_retry_attempts.get(
+            job_id, 0
+        )
+        if previous_attempts >= self._infrastructure_retry_limit:
+            task = asyncio.create_task(
+                self._finish_exhausted_infrastructure_retry(
+                    job_id, previous_attempts
+                ),
+                name=f"meetominute-retry-exhausted-{job_id}",
+            )
+            self._track_infrastructure_retry_task(task)
+            return
+
+        attempt = previous_attempts + 1
+        self._infrastructure_retry_attempts[job_id] = attempt
+        delay = min(
+            self._infrastructure_retry_delay * (2 ** (attempt - 1)),
+            5.0,
+        )
+        LOGGER.warning(
+            "Task %s infrastructure retry %s/%s scheduled in %.2fs",
+            job_id,
+            attempt,
+            self._infrastructure_retry_limit,
+            delay,
+        )
+        task = asyncio.create_task(
+            self._retry_job_after_delay(job_id, attempt, delay),
+            name=f"meetominute-infrastructure-retry-{job_id}-{attempt}",
+        )
+        self._track_infrastructure_retry_task(task)
+
+    def _track_infrastructure_retry_task(
+        self, task: asyncio.Task[None]
+    ) -> None:
+        self._infrastructure_retry_tasks.add(task)
+        task.add_done_callback(
+            self._infrastructure_retry_tasks.discard
+        )
+
+    async def _retry_job_after_delay(
+        self, job_id: int, attempt: int, delay: float
+    ) -> None:
+        try:
+            if delay > 0:
+                await asyncio.sleep(delay)
+            if self._stopping.is_set():
+                return
+            reason = (
+                "基础设施异常自动恢复，"
+                f"准备第 {attempt}/{self._infrastructure_retry_limit} 次重试"
+            )
+            state = await asyncio.to_thread(
+                self._prepare_job_for_infrastructure_retry,
+                job_id,
+                reason,
+            )
+            if self._stopping.is_set():
+                return
+            if state == "enqueue":
+                await self._queue_job(job_id)
+            elif state == "retry":
+                self._schedule_infrastructure_retry(job_id)
+            else:
+                self._infrastructure_retry_attempts.pop(job_id, None)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            LOGGER.exception(
+                "Task %s infrastructure retry preparation failed",
+                job_id,
+            )
+            self._schedule_infrastructure_retry(job_id)
+
+    async def _finish_exhausted_infrastructure_retry(
+        self, job_id: int, attempts: int
+    ) -> None:
+        message = (
+            f"基础设施自动重试已达到上限（{attempts} 次）；"
+            "任务保持排队状态，重启应用后仍可恢复。"
+        )
+        try:
+            state = await asyncio.to_thread(
+                self._prepare_job_for_infrastructure_retry,
+                job_id,
+                message,
+            )
+            if state != "terminal":
+                await asyncio.to_thread(
+                    self._record_infrastructure_retry_diagnostic,
+                    job_id,
+                    message,
+                )
+            LOGGER.error("Task %s: %s", job_id, message)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            LOGGER.exception(
+                "Could not finalize exhausted retries for task %s",
+                job_id,
+            )
+        finally:
+            self._infrastructure_retry_attempts.pop(job_id, None)
+
+    def _prepare_job_for_infrastructure_retry(
+        self, job_id: int, reason: str
+    ) -> InfrastructureRetryState:
+        if self.maintenance_gate is None:
+            return self._prepare_job_for_infrastructure_retry_registered(
+                job_id, reason
+            )
+        with self.maintenance_gate.mutation(wait=True):
+            return self._prepare_job_for_infrastructure_retry_registered(
+                job_id, reason
+            )
+
+    def _prepare_job_for_infrastructure_retry_registered(
+        self, job_id: int, reason: str
+    ) -> InfrastructureRetryState:
+        try:
+            job = self.database.get_job(job_id)
+        except Exception:
+            LOGGER.exception(
+                "Could not inspect task %s before infrastructure retry",
+                job_id,
+            )
+            return "retry"
+        if job is None:
+            return "terminal"
+
+        status = str(job.get("status") or "")
+        if status not in {"queued", "running"}:
+            return "terminal"
+        meeting_id = (
+            str(job["meeting_id"])
+            if job.get("meeting_id") is not None
+            else None
+        )
+        if job.get("cancel_requested"):
+            try:
+                self.database.mark_job_canceled(job_id, meeting_id)
+            except Exception:
+                LOGGER.exception(
+                    "Could not cancel task %s during retry recovery",
+                    job_id,
+                )
+                return "retry"
+            return "terminal"
+
+        try:
+            self.database.requeue_job(job_id, reason, meeting_id)
+        except Exception:
+            LOGGER.exception(
+                "Could not restore task %s to queued state", job_id
+            )
+            return "retry"
+        return "enqueue"
+
+    def _record_infrastructure_retry_diagnostic(
+        self, job_id: int, message: str
+    ) -> None:
+        try:
+            job = self.database.get_job(job_id)
+            meeting = (
+                self.database.get_meeting(str(job["meeting_id"]))
+                if job is not None and job.get("meeting_id") is not None
+                else None
+            )
+            if meeting is None:
+                return
+            self._log(meeting, f"ERROR: {message}")
+            self._sync_metadata(meeting["id"])
+        except Exception:
+            LOGGER.exception(
+                "Could not persist retry diagnostics for task %s",
+                job_id,
+            )
 
     def _process_pipeline(
         self,

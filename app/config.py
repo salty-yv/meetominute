@@ -52,6 +52,7 @@ class Settings:
     ollama_bin: str
     request_timeout_seconds: int
     llm_chunk_chars: int
+    llm_input_char_budget: int
     llm_max_tokens: int
     llm_reasoning_effort: str
     ollama_reasoning_effort: str
@@ -115,6 +116,9 @@ class Settings:
             ),
             llm_chunk_chars=_env_int(
                 "MEETOMINUTE_LLM_CHUNK_CHARS", 6000
+            ),
+            llm_input_char_budget=_env_int(
+                "MEETOMINUTE_LLM_INPUT_CHAR_BUDGET", 6000
             ),
             llm_max_tokens=_env_int(
                 "MEETOMINUTE_LLM_MAX_TOKENS", 4096

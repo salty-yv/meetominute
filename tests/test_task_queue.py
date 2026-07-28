@@ -385,3 +385,97 @@ def test_application_restart_automatically_resumes_running_job(
     assert resumed_job["id"] == interrupted_job["id"]
     assert resumed_job["status"] == "completed"
     assert resumed_job["attempts"] == 2
+
+
+def test_worker_survives_infrastructure_and_recovery_failures(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv(
+        "MEETOMINUTE_DATA_DIR", str(tmp_path / "data")
+    )
+    monkeypatch.setenv("MEETOMINUTE_LOCAL_TRANSCRIBER", "mock")
+    monkeypatch.setenv("MEETOMINUTE_LOCAL_LLM", "mock")
+    monkeypatch.setattr(
+        pipeline_module, "normalize_audio", _fake_normalize
+    )
+    monkeypatch.setattr(
+        pipeline_module, "release_ollama_model", lambda settings: False
+    )
+    application = create_app(Settings.from_env())
+    database = application.state.database
+    task_queue = application.state.task_queue
+    original_claim_job = database.claim_job
+    original_fail_job = database.fail_job
+    original_complete_job = database.complete_job
+    fragile_job_id: int | None = None
+    claim_failures = 0
+    recovery_failures = 0
+    completion_order: list[str] = []
+    task_queue._infrastructure_retry_limit = 3
+    task_queue._infrastructure_retry_delay = 0.15
+
+    def fail_first_claim(job_id: int) -> bool:
+        nonlocal fragile_job_id, claim_failures
+        if fragile_job_id is None:
+            fragile_job_id = job_id
+        if job_id == fragile_job_id and claim_failures < 2:
+            claim_failures += 1
+            raise RuntimeError("simulated claim infrastructure failure")
+        return original_claim_job(job_id)
+
+    def fail_first_recovery(
+        job_id: int,
+        error: str,
+        meeting_id: str | None = None,
+    ) -> None:
+        nonlocal recovery_failures
+        if job_id == fragile_job_id and recovery_failures < 2:
+            recovery_failures += 1
+            raise RuntimeError("simulated recovery write failure")
+        original_fail_job(job_id, error, meeting_id)
+
+    def record_completion(
+        job_id: int, meeting_id: str | None = None
+    ) -> None:
+        original_complete_job(job_id, meeting_id)
+        if meeting_id is not None:
+            completion_order.append(meeting_id)
+
+    monkeypatch.setattr(database, "claim_job", fail_first_claim)
+    monkeypatch.setattr(database, "fail_job", fail_first_recovery)
+    monkeypatch.setattr(database, "complete_job", record_completion)
+
+    with TestClient(application) as client:
+        _post_meeting(client, "Infrastructure failure")
+        first_meeting = database.list_meetings()[0]
+
+        _post_meeting(client, "Following healthy meeting")
+        meetings = {
+            meeting["title"]: meeting
+            for meeting in database.list_meetings()
+        }
+        second_meeting = meetings["Following healthy meeting"]
+        completed = _wait_for_status(
+            database, second_meeting["id"], "completed"
+        )
+        first_before_retry = database.get_meeting(first_meeting["id"])
+        recovered = _wait_for_status(
+            database, first_meeting["id"], "completed"
+        )
+
+        worker = task_queue._worker
+        assert completed["status"] == "completed"
+        assert recovered["status"] == "completed"
+        assert first_before_retry["status"] != "completed"
+        assert worker is not None
+        assert not worker.done()
+        assert claim_failures == 2
+        assert recovery_failures == 2
+        assert completion_order[:2] == [
+            second_meeting["id"],
+            first_meeting["id"],
+        ]
+
+        first_job = database.get_latest_job(first_meeting["id"])
+        assert first_job is not None
+        assert first_job["status"] == "completed"

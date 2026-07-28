@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}请稍后重试 · MeetOminute{% endblock %}
+
+{% block content %}
+<section class="panel empty-state">
+  <span class="empty-illustration" aria-hidden="true">
+    <svg viewBox="0 0 72 72">
+      <path d="M18 14h36v44H18z"/>
+      <path d="M27 8v12M45 8v12M26 31h20M26 41h14"/>
+    </svg>
+  </span>
+  <span class="eyebrow">数据保护</span>
+  <h1>当前操作需要稍后重试</h1>
+  <p>{{ maintenance_message }}</p>
+  <div class="button-row">
+    <a class="button primary" href="{{ url_for('index') }}">返回工作台</a>
+    <a class="button secondary" href="{{ url_for('backups_page') }}">查看备份中心</a>
+  </div>
+</section>
+{% endblock %}

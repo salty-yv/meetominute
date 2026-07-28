@@ -45,6 +45,7 @@ from .minutes_templates import (
     minutes_template_form_values,
     normalize_minutes_template,
 )
+from .maintenance import MaintenanceBusyError, MaintenanceGate
 from .pipeline import CHECKPOINT_RESUME_LABELS, TaskQueue
 from .rendering import (
     minutes_item_text,
@@ -85,6 +86,12 @@ DOWNLOAD_FILES = {
     ),
     "json": ("minutes.json", "application/json; charset=utf-8"),
 }
+MAX_SPEAKER_NAME_CHARS = 100
+MAX_TRANSCRIPT_SEGMENT_CHARS = 100_000
+_FORM_ENCODED_BYTES_PER_CHAR = 12
+_FORM_FIELD_OVERHEAD_BYTES = 1_024
+_MAX_SPEAKER_FORM_BODY_BYTES = 1024 * 1024
+_MAX_EDIT_FORM_BODY_BYTES = 64 * 1024 * 1024
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -94,10 +101,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     external_llm_store = ExternalLLMConfigStore(
         config.data_dir / "external-llm.json", config
     )
+    maintenance_gate = MaintenanceGate()
     task_queue = TaskQueue(
-        config, database, storage, external_llm_store
+        config,
+        database,
+        storage,
+        external_llm_store,
+        maintenance_gate=maintenance_gate,
     )
-    backup_manager = BackupManager(config, database, storage)
+    backup_manager = BackupManager(
+        config,
+        database,
+        storage,
+        maintenance_gate=maintenance_gate,
+    )
     templates = Jinja2Templates(directory=config.base_dir / "app" / "templates")
     templates.env.filters["timestamp"] = format_timestamp
     templates.env.filters["minutes_item_text"] = minutes_item_text
@@ -128,11 +145,54 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.task_queue = task_queue
     application.state.external_llm_store = external_llm_store
     application.state.backup_manager = backup_manager
+    application.state.maintenance_gate = maintenance_gate
     application.mount(
         "/static",
         StaticFiles(directory=config.base_dir / "app" / "static"),
         name="static",
     )
+
+    @application.middleware("http")
+    async def coordinate_data_mutations(
+        request: Request,
+        call_next,
+    ) -> Response:
+        is_mutation = request.method.upper() in {
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+        }
+        path = request.url.path
+        mutates_meeting_data = (
+            path == "/meetings"
+            or path.startswith("/meetings/")
+            or path == "/minutes-templates"
+            or path.startswith("/minutes-templates/")
+        )
+        if not is_mutation or not mutates_meeting_data:
+            return await call_next(request)
+        try:
+            with maintenance_gate.mutation():
+                return await call_next(request)
+        except MaintenanceBusyError as exc:
+            expects_json = (
+                request.url.path.startswith("/api/")
+                or request.url.path == "/settings/external-llm/test"
+                or "application/json"
+                in request.headers.get("accept", "").lower()
+            )
+            if expects_json:
+                return JSONResponse(
+                    {"detail": str(exc)},
+                    status_code=409,
+                )
+            return templates.TemplateResponse(
+                request=request,
+                name="maintenance.html",
+                context={"maintenance_message": str(exc)},
+                status_code=409,
+            )
 
     @application.get("/", response_class=HTMLResponse)
     async def index(request: Request) -> HTMLResponse:
@@ -845,9 +905,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not transcript.get("segments"):
             raise HTTPException(409, "逐字稿尚未生成")
         current = storage.read_json(meeting, "speakers.json", default={})
-        form = await request.form()
+        form = await _parse_limited_edit_form(
+            request,
+            max_fields=len(current),
+            max_body_bytes=_speaker_form_body_limit(len(current)),
+            max_part_size=(
+                MAX_SPEAKER_NAME_CHARS * _FORM_ENCODED_BYTES_PER_CHAR
+                + _FORM_FIELD_OVERHEAD_BYTES
+            ),
+        )
         speakers = {
-            key: str(form.get(f"name_{key}", "")).strip()[:100]
+            key: str(form.get(f"name_{key}", "")).strip()[
+                :MAX_SPEAKER_NAME_CHARS
+            ]
             for key in current
         }
         storage.write_json(meeting, "speakers.json", speakers)
@@ -873,7 +943,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not segments:
             raise HTTPException(409, "逐字稿尚未生成")
         speakers = storage.read_json(meeting, "speakers.json", default={})
-        form = await request.form()
+        form = await _parse_limited_edit_form(
+            request,
+            max_fields=len(segments) * 2,
+            max_body_bytes=_transcript_form_body_limit(len(segments)),
+            max_part_size=(
+                MAX_TRANSCRIPT_SEGMENT_CHARS
+                * _FORM_ENCODED_BYTES_PER_CHAR
+                + _FORM_FIELD_OVERHEAD_BYTES
+            ),
+        )
         known_speakers = set(speakers)
         for segment in segments:
             segment_id = segment["id"]
@@ -883,7 +962,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
             if speaker_value not in known_speakers:
                 raise HTTPException(422, "说话人标签无效")
-            segment["text"] = text_value[:100_000]
+            segment["text"] = text_value[:MAX_TRANSCRIPT_SEGMENT_CHARS]
             segment["speaker"] = speaker_value
         transcript["edited_at"] = utc_now()
         storage.write_json(meeting, "transcript_edited.json", transcript)
@@ -988,6 +1067,81 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {"status": "ok", "version": application.version}
 
     return application
+
+
+def _speaker_form_body_limit(speaker_count: int) -> int:
+    per_speaker = (
+        MAX_SPEAKER_NAME_CHARS * _FORM_ENCODED_BYTES_PER_CHAR
+        + _FORM_FIELD_OVERHEAD_BYTES
+    )
+    return min(
+        _MAX_SPEAKER_FORM_BODY_BYTES,
+        max(_FORM_FIELD_OVERHEAD_BYTES, speaker_count * per_speaker),
+    )
+
+
+def _transcript_form_body_limit(segment_count: int) -> int:
+    per_segment = (
+        MAX_TRANSCRIPT_SEGMENT_CHARS * _FORM_ENCODED_BYTES_PER_CHAR
+        + (2 * _FORM_FIELD_OVERHEAD_BYTES)
+    )
+    return min(
+        _MAX_EDIT_FORM_BODY_BYTES,
+        max(_FORM_FIELD_OVERHEAD_BYTES, segment_count * per_segment),
+    )
+
+
+async def _parse_limited_edit_form(
+    request: Request,
+    *,
+    max_fields: int,
+    max_body_bytes: int,
+    max_part_size: int,
+) -> Any:
+    declared_length = request.headers.get("content-length")
+    if declared_length is not None:
+        try:
+            declared_bytes = int(declared_length)
+        except ValueError as exc:
+            raise HTTPException(400, "Content-Length 无效") from exc
+        if declared_bytes < 0:
+            raise HTTPException(400, "Content-Length 无效")
+        if declared_bytes > max_body_bytes:
+            raise HTTPException(413, "编辑内容过大，请缩短后再保存")
+
+    chunks: list[bytes] = []
+    received_bytes = 0
+    async for chunk in request.stream():
+        received_bytes += len(chunk)
+        if received_bytes > max_body_bytes:
+            raise HTTPException(413, "编辑内容过大，请缩短后再保存")
+        if chunk:
+            chunks.append(chunk)
+
+    chunk_index = 0
+
+    async def replay_body() -> dict[str, Any]:
+        nonlocal chunk_index
+        if chunk_index >= len(chunks):
+            return {
+                "type": "http.request",
+                "body": b"",
+                "more_body": False,
+            }
+        chunk = chunks[chunk_index]
+        chunk_index += 1
+        return {
+            "type": "http.request",
+            "body": chunk,
+            "more_body": chunk_index < len(chunks),
+        }
+
+    replay_request = Request(request.scope, receive=replay_body)
+    return await replay_request.form(
+        max_files=0,
+        max_fields=max_fields,
+        max_part_size=max_part_size,
+    )
 
 
 def _meeting_or_404(

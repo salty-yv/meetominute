@@ -27,6 +27,7 @@ from .minutes_templates import (
     MinutesTemplateError,
     normalize_minutes_template,
 )
+from .maintenance import MaintenanceBusyError, MaintenanceGate
 from .storage import SAFE_SUFFIXES, MeetingStorage, UploadTooLargeError
 
 
@@ -83,16 +84,25 @@ class BackupManager:
         settings: Settings,
         database: Database,
         storage: MeetingStorage,
+        maintenance_gate: MaintenanceGate | None = None,
     ):
         self.settings = settings
         self.database = database
         self.storage = storage
+        self.maintenance_gate = maintenance_gate or MaintenanceGate()
         self.backups_dir = settings.data_dir / "backups"
 
     def ensure_directory(self) -> None:
         self.backups_dir.mkdir(parents=True, exist_ok=True)
 
     def create_backup(self) -> BackupInfo:
+        try:
+            with self.maintenance_gate.maintenance("正在创建完整备份"):
+                return self._create_backup()
+        except MaintenanceBusyError as exc:
+            raise BackupError(str(exc)) from exc
+
+    def _create_backup(self) -> BackupInfo:
         if self.database.has_active_jobs():
             raise BackupError("有任务正在处理，请等待完成或取消后再备份。")
         self.ensure_directory()
@@ -104,19 +114,40 @@ class BackupManager:
         destination = self.backups_dir / name
         temporary_archive = self.backups_dir / f".{name}.tmp"
         snapshot = self.backups_dir / f".snapshot-{uuid4().hex}.sqlite3"
-        meetings = self.database.list_meetings(
-            limit=1_000_000, lifecycle_state=None
-        )
-        manifest = {
-            "format": BACKUP_FORMAT,
-            "format_version": BACKUP_FORMAT_VERSION,
-            "created_at": utc_now(),
-            "database_schema_version": self.database.schema_version(),
-            "meeting_count": len(meetings),
-            "contains_external_llm_credentials": False,
-        }
+        meetings: list[dict[str, Any]] = []
+        manifest: dict[str, Any] = {}
         try:
             self.database.create_snapshot(snapshot)
+            snapshot_connection = sqlite3.connect(snapshot)
+            snapshot_connection.row_factory = sqlite3.Row
+            try:
+                meetings = [
+                    dict(row)
+                    for row in snapshot_connection.execute(
+                        """
+                        SELECT *
+                        FROM meetings
+                        ORDER BY created_at DESC
+                        LIMIT ?
+                        """,
+                        (1_000_000,),
+                    ).fetchall()
+                ]
+                snapshot_schema = int(
+                    snapshot_connection.execute(
+                        "PRAGMA user_version"
+                    ).fetchone()[0]
+                )
+            finally:
+                snapshot_connection.close()
+            manifest = {
+                "format": BACKUP_FORMAT,
+                "format_version": BACKUP_FORMAT_VERSION,
+                "created_at": utc_now(),
+                "database_schema_version": snapshot_schema,
+                "meeting_count": len(meetings),
+                "contains_external_llm_credentials": False,
+            }
             with zipfile.ZipFile(
                 temporary_archive,
                 "w",
@@ -227,6 +258,13 @@ class BackupManager:
         return destination
 
     def restore_backup(self, archive_path: Path) -> RestoreResult:
+        try:
+            with self.maintenance_gate.maintenance("正在恢复备份"):
+                return self._restore_backup(archive_path)
+        except MaintenanceBusyError as exc:
+            raise BackupError(str(exc)) from exc
+
+    def _restore_backup(self, archive_path: Path) -> RestoreResult:
         if self.database.has_active_jobs():
             raise BackupError("有任务正在处理，请等待完成或取消后再恢复。")
         self.ensure_directory()

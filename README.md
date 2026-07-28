@@ -139,8 +139,12 @@ MEETOMINUTE_OLLAMA_BASE_URL=http://127.0.0.1:11435/v1
 MEETOMINUTE_OLLAMA_MODEL=meetominute-qwen35-9b
 MEETOMINUTE_OLLAMA_REASONING_EFFORT=none
 MEETOMINUTE_LLM_CHUNK_CHARS=6000
+MEETOMINUTE_LLM_INPUT_CHAR_BUDGET=6000
 MEETOMINUTE_LLM_MAX_TOKENS=4096
 ```
+
+纪要输入预算会同时约束系统提示、模板和待处理内容。长会议会先分段抽取，
+再按预算进行多层归并，避免一次性把全部分段结果塞进模型上下文。
 
 15 分钟转写稿的最终纪要基准：
 
@@ -200,7 +204,7 @@ data/
       processing.log
 ```
 
-上传采用 1 MB 分块写入，不会将大文件整体载入内存。任务及 `uploaded → normalized → transcribed → completed` 检查点保存在 SQLite；浏览器关闭不影响后台队列，应用进程退出后再次启动会自动从最近有效断点继续。用户也可在任务页取消处理，已完成的标准化音频或逐字稿不会被删除；“从断点继续”复用这些成果，“从头重跑”才会清理生成文件并重新处理原始录音。FFmpeg 和默认的隔离 FunASR 子进程可即时取消，外部 LLM 请求会在当前 HTTP 请求结束后停止。原始录音与 `transcript_raw.json` 不会被人工编辑覆盖。
+上传采用 1 MB 分块写入，不会将大文件整体载入内存。任务及 `uploaded → normalized → transcribed → completed` 检查点保存在 SQLite；浏览器关闭不影响后台队列，应用进程退出后再次启动会自动从最近有效断点继续。单个任务即使遇到数据库或磁盘级异常也不会拖停整个后台队列。用户也可在任务页取消处理，已完成的标准化音频或逐字稿不会被删除；“从断点继续”复用这些成果，“从头重跑”才会清理生成文件并重新处理原始录音。FFmpeg 和默认的隔离 FunASR 子进程可即时取消，外部 LLM 请求会在当前 HTTP 请求结束后停止。原始录音与 `transcript_raw.json` 不会被人工编辑覆盖。
 
 纪要模板入口为 `http://127.0.0.1:8000/minutes-templates`，会议日历入口为 `http://127.0.0.1:8000/calendar`，资料库入口为 `http://127.0.0.1:8000/archive`，备份中心为 `http://127.0.0.1:8000/backups`：
 
@@ -211,6 +215,7 @@ data/
 - 归档会议会从工作台隐藏并进入只读模式，取消归档后可继续编辑。
 - 移入回收站不会立即删除文件；只有在回收站中再次确认“永久删除”才会删除数据库记录和对应的精确会议目录。
 - 完整备份包含纪要模板、活跃、归档及回收站会议、任务历史和会议目录，不包含模型缓存或外部 LLM API Key。
+- 创建或恢复备份时会进入独占维护状态，新的编辑和后台文件写入会等待或被友好拦截；备份文件清单从同一份 SQLite 快照读取。
 - 恢复采用合并导入，相同会议 ID 或目录名会跳过，不覆盖当前数据；备份中的未完成任务会恢复为已取消状态，可按现有断点手动继续。
 - SQLite 数据库使用显式版本迁移，当前 schema 为 v4；旧版数据库在启动时自动补齐任务表、会议生命周期和纪要模板字段。
 
@@ -221,5 +226,8 @@ data/
 ```powershell
 .\.venv\Scripts\python.exe -m pytest
 ```
+
+仓库中的 GitHub Actions 会在 Windows + Python 3.11 环境自动执行测试、
+Python 编译检查和浏览器 JavaScript 语法检查。
 
 硬件评估和当前实施状态见 `docs/hardware-assessment.md`。
