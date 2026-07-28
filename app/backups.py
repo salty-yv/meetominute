@@ -22,12 +22,18 @@ from .database import (
     Database,
 )
 from .domain import VALID_STATUSES, utc_now
+from .minutes_templates import (
+    DEFAULT_TEMPLATE_ID,
+    MinutesTemplateError,
+    normalize_minutes_template,
+)
 from .storage import SAFE_SUFFIXES, MeetingStorage, UploadTooLargeError
 
 
 BACKUP_FORMAT = "meetominute-backup"
 BACKUP_FORMAT_VERSION = 1
 _SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
+_SAFE_TEMPLATE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 _BACKUP_NAME = re.compile(
     r"^meetominute-backup-\d{8}-\d{6}-[a-f0-9]{8}\.zip$"
 )
@@ -428,6 +434,20 @@ class BackupManager:
                 if jobs_exist is not None
                 else []
             )
+            templates_exist = source.execute(
+                """
+                SELECT 1
+                FROM sqlite_master
+                WHERE type = 'table' AND name = 'minutes_templates'
+                """
+            ).fetchone()
+            template_rows = (
+                source.execute(
+                    "SELECT * FROM minutes_templates ORDER BY created_at"
+                ).fetchall()
+                if templates_exist is not None
+                else []
+            )
         except sqlite3.Error as exc:
             raise BackupError("备份数据库内容无效。") from exc
         finally:
@@ -435,6 +455,7 @@ class BackupManager:
 
         imported = 0
         skipped_items: list[str] = []
+        template_id_map = self._import_minutes_templates(template_rows)
         jobs_by_meeting: dict[str, list[dict[str, Any]]] = {}
         for job_row in job_rows:
             raw_job = dict(job_row)
@@ -448,6 +469,21 @@ class BackupManager:
             except (BackupError, TypeError, ValueError) as exc:
                 skipped_items.append(f"无效会议：{exc}")
                 continue
+            source_template_id = str(
+                record.get("minutes_template_id")
+                or DEFAULT_TEMPLATE_ID
+            )
+            record["minutes_template_id"] = template_id_map.get(
+                source_template_id,
+                (
+                    source_template_id
+                    if self.database.get_minutes_template(
+                        source_template_id
+                    )
+                    is not None
+                    else DEFAULT_TEMPLATE_ID
+                ),
+            )
             label = f"{record['title']}（{record['meeting_date']}）"
             if (
                 self.database.get_meeting(record["id"]) is not None
@@ -485,6 +521,95 @@ class BackupManager:
             imported=imported,
             skipped=len(skipped_items),
             skipped_items=skipped_items[:50],
+        )
+
+    def _import_minutes_templates(
+        self,
+        rows: list[sqlite3.Row],
+    ) -> dict[str, str]:
+        template_id_map = {
+            DEFAULT_TEMPLATE_ID: DEFAULT_TEMPLATE_ID
+        }
+        for row in rows:
+            try:
+                template = self._normalize_template_row(dict(row))
+            except (MinutesTemplateError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+            source_id = template["id"]
+            if source_id == DEFAULT_TEMPLATE_ID or template["is_builtin"]:
+                template_id_map[source_id] = DEFAULT_TEMPLATE_ID
+                continue
+            existing = self.database.get_minutes_template(source_id)
+            if existing is None:
+                self.database.create_minutes_template(template)
+                template_id_map[source_id] = source_id
+                continue
+            comparable_fields = (
+                "name",
+                "description",
+                "instructions",
+                "sections",
+            )
+            if all(
+                existing[field] == template[field]
+                for field in comparable_fields
+            ):
+                template_id_map[source_id] = source_id
+                continue
+            equivalent = next(
+                (
+                    candidate
+                    for candidate in self.database.list_minutes_templates()
+                    if candidate["id"] != source_id
+                    and candidate["description"]
+                    == template["description"]
+                    and candidate["instructions"]
+                    == template["instructions"]
+                    and candidate["sections"] == template["sections"]
+                    and candidate["name"]
+                    in {
+                        template["name"],
+                        f"{template['name']}（恢复）"[:80],
+                    }
+                ),
+                None,
+            )
+            if equivalent is not None:
+                template_id_map[source_id] = equivalent["id"]
+                continue
+            now = utc_now()
+            restored = normalize_minutes_template(
+                {
+                    **template,
+                    "id": uuid4().hex,
+                    "name": f"{template['name']}（恢复）"[:80],
+                    "is_builtin": False,
+                    "created_at": now,
+                    "updated_at": now,
+                }
+            )
+            self.database.create_minutes_template(restored)
+            template_id_map[source_id] = restored["id"]
+        return template_id_map
+
+    @staticmethod
+    def _normalize_template_row(
+        value: dict[str, Any],
+    ) -> dict[str, Any]:
+        sections = value.get("sections")
+        if sections is None:
+            sections = json.loads(str(value.get("sections_json") or "[]"))
+        return normalize_minutes_template(
+            {
+                "id": value.get("id"),
+                "name": value.get("name"),
+                "description": value.get("description"),
+                "instructions": value.get("instructions"),
+                "sections": sections,
+                "is_builtin": bool(value.get("is_builtin")),
+                "created_at": value.get("created_at"),
+                "updated_at": value.get("updated_at"),
+            }
         )
 
     @staticmethod
@@ -611,6 +736,19 @@ class BackupManager:
             ),
             "glossary": str(value.get("glossary") or "")[:20_000],
             "processing_mode": mode,
+            "minutes_template_id": (
+                str(
+                    value.get("minutes_template_id")
+                    or DEFAULT_TEMPLATE_ID
+                )
+                if _SAFE_TEMPLATE_ID.fullmatch(
+                    str(
+                        value.get("minutes_template_id")
+                        or DEFAULT_TEMPLATE_ID
+                    )
+                )
+                else DEFAULT_TEMPLATE_ID
+            ),
             "source_filename": str(value["source_filename"])[:255],
             "source_suffix": suffix,
             "status": status,

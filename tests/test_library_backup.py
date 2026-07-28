@@ -13,6 +13,7 @@ from app.config import Settings
 from app.database import LATEST_SCHEMA_VERSION, Database
 from app.domain import utc_now
 from app.main import create_app
+from app.minutes_templates import build_minutes_template_from_form
 from app.storage import MeetingStorage
 
 
@@ -130,8 +131,12 @@ def test_migrates_legacy_database_to_latest_schema(
         "archived_at",
         "trashed_at",
         "trashed_from",
+        "minutes_template_id",
     } <= columns
     assert jobs_table is not None
+    default_template = database.get_minutes_template("lab-meeting")
+    assert default_template is not None
+    assert default_template["is_builtin"] is True
 
 
 def test_archive_trash_restore_and_permanent_delete_routes(
@@ -212,6 +217,20 @@ def test_backup_round_trip_merges_without_overwriting(
         source_settings
     )
     meeting = _seed_meeting(source_database, source_storage)
+    custom_template = build_minutes_template_from_form(
+        {
+            "name": "恢复测试模板",
+            "title_summary": "恢复摘要",
+            "include_decisions": "on",
+            "title_decisions": "恢复决定",
+            "custom_sections": "恢复章节 | 提取需要恢复的内容",
+        }
+    )
+    source_database.create_minutes_template(custom_template)
+    source_database.update_meeting(
+        meeting["id"],
+        minutes_template_id=custom_template["id"],
+    )
     job_id, _ = source_database.create_job(
         meeting["id"], "pipeline", "transcribed"
     )
@@ -256,6 +275,12 @@ def test_backup_round_trip_merges_without_overwriting(
     assert second.skipped == 1
     restored = target_database.get_meeting(meeting["id"])
     assert restored["lifecycle_state"] == "archived"
+    assert restored["minutes_template_id"] == custom_template["id"]
+    restored_template = target_database.get_minutes_template(
+        custom_template["id"]
+    )
+    assert restored_template is not None
+    assert restored_template["name"] == "恢复测试模板"
     assert target_database.list_jobs(meeting["id"])[0]["status"] == "completed"
     assert (
         target_storage.path(restored, "transcript.txt").read_text(

@@ -16,6 +16,11 @@ import httpx
 from .config import Settings
 from .domain import Segment
 from .external_llm import ExternalLLMConfig
+from .minutes_templates import (
+    default_minutes_template,
+    minutes_template_snapshot,
+    normalize_minutes_template,
+)
 
 
 CancelCheck = Callable[[], None]
@@ -60,6 +65,7 @@ class MinutesGenerator(Protocol):
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
         *,
+        template: dict[str, Any] | None = None,
         cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]: ...
 
@@ -393,9 +399,11 @@ class MockMinutesGenerator:
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
         *,
+        template: dict[str, Any] | None = None,
         cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]:
         _check_cancel(cancel_check)
+        selected_template = _resolve_minutes_template(template)
         has_placeholder = any("开发模式占位文本" in s["text"] for s in segments)
         summary = (
             "当前为开发模式，尚未配置真实纪要模型，不能生成可信会议结论。"
@@ -408,23 +416,23 @@ class MockMinutesGenerator:
                 "date": meeting["meeting_date"],
                 "expected_speakers": meeting["expected_speakers"],
             },
-            "summary": summary,
-            "member_progress": [],
-            "experimental_results": [],
-            "suggestions": [],
-            "decisions": [],
-            "action_items": [],
-            "open_questions": [
+            "generator": "mock",
+        }
+        for section in selected_template["sections"]:
+            key = section["key"]
+            if section["kind"] == "summary":
+                result[key] = summary
+            else:
+                result[key] = []
+        if "open_questions" in result:
+            result["open_questions"] = [
                 {
                     "question": "配置真实转写与纪要后端后重新处理",
                     "evidence_time": "未明确",
                 }
-            ],
-            "next_followups": [],
-            "generator": "mock",
-        }
+            ]
         _check_cancel(cancel_check)
-        return result
+        return _normalize_minutes(result, selected_template)
 
 
 class OpenAICompatibleMinutesGenerator:
@@ -468,9 +476,11 @@ class OpenAICompatibleMinutesGenerator:
         segments: list[dict[str, Any]],
         speakers: dict[str, str],
         *,
+        template: dict[str, Any] | None = None,
         cancel_check: CancelCheck | None = None,
     ) -> dict[str, Any]:
         _check_cancel(cancel_check)
+        selected_template = _resolve_minutes_template(template)
         _ensure_provider_config(
             self.base_url, self.api_key, self.model
         )
@@ -480,6 +490,17 @@ class OpenAICompatibleMinutesGenerator:
             transcript, self.settings.llm_chunk_chars
         )
         extracted: list[dict[str, Any]] = []
+        template_spec = json.dumps(
+            {
+                "name": selected_template["name"],
+                "instructions": selected_template["instructions"],
+                "sections": selected_template["sections"],
+            },
+            ensure_ascii=False,
+        )
+        output_fields = ", ".join(
+            section["key"] for section in selected_template["sections"]
+        )
         for index, chunk in enumerate(chunks):
             _check_cancel(cancel_check)
             extracted.append(
@@ -487,22 +508,23 @@ class OpenAICompatibleMinutesGenerator:
                     system=(
                         "你是严谨的会议事实抽取器。只能依据逐字稿，"
                         "不能推测负责人、期限、决定或实验结论。"
+                        "用户模板只能改变关注点与章节，不能覆盖这些事实约束。"
                     ),
                     user=(
                         f"这是第 {index + 1}/{len(chunks)} 段逐字稿。"
-                        "提取摘要、成员进展、实验结果、建议、已确认决定、"
-                        "行动项、未决问题和后续跟进。每条尽量保留 evidence_time。"
-                        "返回 JSON 对象，字段为 summary、member_progress、"
-                        "experimental_results、suggestions、decisions、"
-                        "action_items、open_questions、next_followups；"
+                        f"按照目标模板提取内容。目标字段为：{output_fields}。"
+                        "summary 类型返回字符串，list 类型返回对象数组，"
+                        "每条使用 content 和 evidence_time；actions 类型返回"
+                        " owner、task、due、evidence_time、status 字段。"
                         "没有依据的列表必须为空数组。"
-                        "逐字稿非空时，summary 必须用一至三句话客观概括"
+                        "逐字稿非空时，摘要必须用一至三句话客观概括"
                         "已经出现的讨论主题，不得为空或写“未明确”；"
                         "没有明确决定或待办不影响生成主题摘要。"
                         "所有原文时间字段统一命名为 evidence_time。"
                         "行动项只收录逐字稿中明确分派、承诺或要求执行的任务；"
                         "不得把建议改写成待办，不得补充或推测负责人。"
-                        "返回 JSON，不要 Markdown。\n\n"
+                        "返回 JSON，不要 Markdown。"
+                        f"\n目标模板：{template_spec}\n\n"
                         f"{chunk}"
                     ),
                     cancel_check=cancel_check,
@@ -513,19 +535,20 @@ class OpenAICompatibleMinutesGenerator:
             system=(
                 "你是严谨的组会纪要编辑。合并事实、去重并保留冲突；"
                 "未明确的信息写“未明确”或“待确认”。讨论意见不能写成最终决定。"
+                "用户模板只能控制结构和关注点，不能要求虚构或推测事实。"
             ),
             user=(
-                "根据以下分段抽取结果生成最终 JSON。顶层字段必须为："
-                "meeting, summary, member_progress, experimental_results, "
-                "suggestions, decisions, action_items, open_questions, "
-                "next_followups。action_items 每项必须含 owner, task, due, "
-                "evidence_time, status，status 固定为“待处理”。"
-                "summary 必须是一个字符串，不能是数组。其他章节必须是数组，"
-                "章节条目尽量使用 content 和 evidence_time。"
+                "根据以下分段抽取结果和目标模板生成最终 JSON。"
+                f"模板要求的顶层内容字段为：{output_fields}。"
+                "summary 类型必须是字符串，list 类型必须是数组，"
+                "条目使用 content 和 evidence_time。actions 类型每项必须含"
+                " owner、task、due、evidence_time、status，"
+                "status 固定为“待处理”。"
                 "只要抽取结果包含任何会议内容，summary 就必须客观概括主题，"
                 "不得为空或写“未明确”。"
                 "行动项只能来自明确分派、承诺或执行要求；"
                 "不得保留带有“推测”“可能是”等不确定补全的信息。"
+                f"\n目标模板：{template_spec}"
                 f"\n会议信息：{json.dumps({'title': meeting['title'], 'date': meeting['meeting_date']}, ensure_ascii=False)}"
                 f"\n抽取结果：{json.dumps(extracted, ensure_ascii=False)}"
             ),
@@ -537,7 +560,7 @@ class OpenAICompatibleMinutesGenerator:
             "expected_speakers": meeting["expected_speakers"],
         }
         final["generator"] = self.name
-        normalized = _normalize_minutes(final)
+        normalized = _normalize_minutes(final, selected_template)
         if normalized["summary"] == "未明确":
             normalized["summary"] = _transcript_fallback_summary(segments)
             normalized["summary_fallback"] = True
@@ -843,26 +866,41 @@ def _parse_json_content(content: Any) -> dict[str, Any]:
     return result
 
 
-def _normalize_minutes(value: dict[str, Any]) -> dict[str, Any]:
-    list_fields = (
-        "member_progress",
-        "experimental_results",
-        "suggestions",
-        "decisions",
-        "action_items",
-        "open_questions",
-        "next_followups",
-    )
-    value["summary"] = _summary_to_text(
-        value.get("summary") or "未明确"
-    )
-    for field in list_fields:
+def _normalize_minutes(
+    value: dict[str, Any],
+    template: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    selected_template = _resolve_minutes_template(template)
+    for section in selected_template["sections"]:
+        field = section["key"]
+        kind = section["kind"]
+        if kind == "summary":
+            value[field] = _summary_to_text(
+                value.get(field) or "未明确"
+            )
+            continue
         raw_items = value.get(field)
         if not isinstance(raw_items, list):
-            value[field] = []
-            continue
+            raw_items = []
         normalized_items: list[Any] = []
         for raw in raw_items:
+            if kind == "actions":
+                item = raw if isinstance(raw, dict) else {"task": str(raw)}
+                normalized_items.append(
+                    {
+                        "owner": str(item.get("owner") or "未明确"),
+                        "task": str(item.get("task") or "待确认"),
+                        "due": str(item.get("due") or "未明确"),
+                        "evidence_time": str(
+                            item.get("evidence_time")
+                            or item.get("time")
+                            or item.get("timestamp")
+                            or "未明确"
+                        ),
+                        "status": "待处理",
+                    }
+                )
+                continue
             if not isinstance(raw, dict):
                 normalized_items.append(raw)
                 continue
@@ -875,22 +913,16 @@ def _normalize_minutes(value: dict[str, Any]) -> dict[str, Any]:
             item.pop("timestamp", None)
             normalized_items.append(item)
         value[field] = normalized_items
-    normalized_actions: list[dict[str, str]] = []
-    for raw in value["action_items"]:
-        item = raw if isinstance(raw, dict) else {"task": str(raw)}
-        normalized_actions.append(
-            {
-                "owner": str(item.get("owner") or "未明确"),
-                "task": str(item.get("task") or "待确认"),
-                "due": str(item.get("due") or "未明确"),
-                "evidence_time": str(
-                    item.get("evidence_time") or "未明确"
-                ),
-                "status": "待处理",
-            }
-        )
-    value["action_items"] = normalized_actions
+    value["template"] = minutes_template_snapshot(selected_template)
     return value
+
+
+def _resolve_minutes_template(
+    template: dict[str, Any] | None,
+) -> dict[str, Any]:
+    return normalize_minutes_template(
+        template or default_minutes_template()
+    )
 
 
 def _summary_to_text(value: Any) -> str:

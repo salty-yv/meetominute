@@ -4,6 +4,10 @@ from pathlib import Path
 
 from docx import Document
 
+from app.minutes_templates import (
+    build_minutes_template_from_form,
+    minutes_template_snapshot,
+)
 from app.rendering import (
     render_minutes_docx,
     render_minutes_markdown,
@@ -53,6 +57,32 @@ def test_docx_is_readable(tmp_path: Path) -> None:
     all_text = "\n".join(paragraph.text for paragraph in document.paragraphs)
     assert "测试组会" in all_text
     assert destination.stat().st_size > 1000
+
+
+def test_custom_template_controls_exported_sections() -> None:
+    template = build_minutes_template_from_form(
+        {
+            "name": "评审模板",
+            "title_summary": "评审结论",
+            "include_decisions": "on",
+            "title_decisions": "确认事项",
+            "custom_sections": "客户原话 | 保留客户直接表述",
+        }
+    )
+    minutes = {
+        "meeting": {"title": "需求评审", "date": "2026-07-28"},
+        "summary": "确认了需求范围。",
+        "decisions": [{"content": "采用方案 A"}],
+        "custom_01": [{"content": "操作步骤需要更少"}],
+        "template": minutes_template_snapshot(template),
+    }
+
+    rendered = render_minutes_markdown(minutes)
+
+    assert "## 评审结论" in rendered
+    assert "## 确认事项" in rendered
+    assert "## 客户原话" in rendered
+    assert "## 各成员工作进展" not in rendered
 
 
 def test_transcript_resolves_speaker_name() -> None:

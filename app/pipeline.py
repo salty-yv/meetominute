@@ -11,6 +11,7 @@ from .config import Settings
 from .database import Database
 from .domain import utc_now
 from .external_llm import ExternalLLMConfigStore
+from .minutes_templates import DEFAULT_TEMPLATE_ID
 from .providers import (
     create_minutes_generator,
     create_transcriber,
@@ -372,11 +373,31 @@ class TaskQueue:
                 meeting["processing_mode"],
                 external_llm=external_llm,
             )
+            template_id = str(
+                meeting.get("minutes_template_id")
+                or DEFAULT_TEMPLATE_ID
+            )
+            minutes_template = self.database.get_minutes_template(
+                template_id
+            )
+            if minutes_template is None:
+                template_id = DEFAULT_TEMPLATE_ID
+                minutes_template = self.database.get_minutes_template(
+                    template_id
+                )
+                if minutes_template is None:
+                    raise RuntimeError("默认纪要模板不存在")
+                self.database.update_meeting(
+                    meeting["id"],
+                    minutes_template_id=template_id,
+                )
+                meeting["minutes_template_id"] = template_id
             used_ollama = generator.name == "ollama"
             minutes = generator.generate(
                 meeting,
                 transcript["segments"],
                 speakers,
+                template=minutes_template,
                 cancel_check=cancel_check,
             )
             self._raise_if_canceled(job_id)
@@ -396,7 +417,9 @@ class TaskQueue:
             meeting["llm_backend"] = generator.name
             self._raise_if_canceled(job_id)
             self._log(
-                meeting, f"纪要生成完成，后端：{generator.name}"
+                meeting,
+                "纪要生成完成，"
+                f"模板：{minutes_template['name']}，后端：{generator.name}",
             )
         finally:
             if used_ollama and release_ollama_model(self.settings):

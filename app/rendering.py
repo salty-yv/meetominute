@@ -8,15 +8,9 @@ from docx import Document
 from docx.shared import Pt
 
 from .domain import format_timestamp
-
-
-SECTION_NAMES = (
-    ("member_progress", "各成员工作进展"),
-    ("experimental_results", "实验结果与数据结论"),
-    ("suggestions", "建议"),
-    ("decisions", "已形成的决定"),
-    ("open_questions", "未解决问题与风险"),
-    ("next_followups", "下次会议跟进"),
+from .minutes_templates import (
+    default_minutes_template,
+    normalize_minutes_template,
 )
 
 
@@ -76,47 +70,50 @@ def render_minutes_markdown(minutes: dict[str, Any]) -> str:
         "",
         f"- 日期：{meeting.get('date', '未明确')}",
         "",
-        "## 会议摘要",
-        "",
-        str(minutes.get("summary") or "未明确"),
-        "",
     ]
-    for key, title in SECTION_NAMES[:3]:
+    for section in minutes_sections(minutes):
+        key = section["key"]
+        title = section["title"]
         lines.extend([f"## {title}", ""])
-        _append_list(lines, minutes.get(key, []))
-    lines.extend(["## 已形成的决定", ""])
-    _append_list(lines, minutes.get("decisions", []))
-    lines.extend(["## 待办事项", ""])
-    actions = minutes.get("action_items", [])
-    if not actions:
-        lines.extend(["- 无明确待办事项", ""])
-    else:
-        lines.extend(
-            [
-                "| 负责人 | 任务 | 截止日期 | 原文时间 | 状态 |",
-                "| --- | --- | --- | --- | --- |",
-            ]
-        )
-        for item in actions:
-            lines.append(
-                "| {owner} | {task} | {due} | {evidence_time} | {status} |".format(
-                    **{
-                        key: _escape_table(str(item.get(key, "未明确")))
-                        for key in (
-                            "owner",
-                            "task",
-                            "due",
-                            "evidence_time",
-                            "status",
-                        )
-                    }
-                )
+        if section["kind"] == "summary":
+            lines.extend(
+                [str(minutes.get(key) or "未明确"), ""]
             )
-        lines.append("")
-    for key, title in SECTION_NAMES[4:]:
-        lines.extend([f"## {title}", ""])
-        _append_list(lines, minutes.get(key, []))
+        elif section["kind"] == "actions":
+            _append_actions_markdown(lines, minutes.get(key, []))
+        else:
+            _append_list(lines, minutes.get(key, []))
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _append_actions_markdown(lines: list[str], actions: Any) -> None:
+    if not isinstance(actions, list) or not actions:
+        lines.extend(["- 无明确待办事项", ""])
+        return
+    lines.extend(
+        [
+            "| 负责人 | 任务 | 截止日期 | 原文时间 | 状态 |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for item in actions:
+        if not isinstance(item, dict):
+            item = {"task": str(item)}
+        lines.append(
+            "| {owner} | {task} | {due} | {evidence_time} | {status} |".format(
+                **{
+                    key: _escape_table(str(item.get(key, "未明确")))
+                    for key in (
+                        "owner",
+                        "task",
+                        "due",
+                        "evidence_time",
+                        "status",
+                    )
+                }
+            )
+        )
+    lines.append("")
 
 
 def render_minutes_text(minutes: dict[str, Any]) -> str:
@@ -134,39 +131,43 @@ def render_minutes_docx(minutes: dict[str, Any], destination: Path) -> None:
     meeting = minutes.get("meeting", {})
     document.add_heading(str(meeting.get("title") or "会议纪要"), level=0)
     document.add_paragraph(f"日期：{meeting.get('date', '未明确')}")
-    document.add_heading("会议摘要", level=1)
-    document.add_paragraph(str(minutes.get("summary") or "未明确"))
-
-    for key, title in SECTION_NAMES[:4]:
+    for section in minutes_sections(minutes):
+        key = section["key"]
+        title = section["title"]
         document.add_heading(title, level=1)
-        _add_docx_list(document, minutes.get(key, []))
-
-    document.add_heading("待办事项", level=1)
-    actions = minutes.get("action_items", [])
-    if not actions:
-        document.add_paragraph("无明确待办事项")
-    else:
-        table = document.add_table(rows=1, cols=5)
-        table.style = "Table Grid"
-        headers = ("负责人", "任务", "截止日期", "原文时间", "状态")
-        for cell, header in zip(table.rows[0].cells, headers):
-            cell.text = header
-        for item in actions:
-            cells = table.add_row().cells
-            values = (
-                item.get("owner", "未明确"),
-                item.get("task", "待确认"),
-                item.get("due", "未明确"),
-                item.get("evidence_time", "未明确"),
-                item.get("status", "待处理"),
+        if section["kind"] == "summary":
+            document.add_paragraph(
+                str(minutes.get(key) or "未明确")
             )
-            for cell, value in zip(cells, values):
-                cell.text = str(value)
-
-    for key, title in SECTION_NAMES[4:]:
-        document.add_heading(title, level=1)
-        _add_docx_list(document, minutes.get(key, []))
+        elif section["kind"] == "actions":
+            _add_docx_actions(document, minutes.get(key, []))
+        else:
+            _add_docx_list(document, minutes.get(key, []))
     document.save(destination)
+
+
+def _add_docx_actions(document: Document, actions: Any) -> None:
+    if not isinstance(actions, list) or not actions:
+        document.add_paragraph("无明确待办事项")
+        return
+    table = document.add_table(rows=1, cols=5)
+    table.style = "Table Grid"
+    headers = ("负责人", "任务", "截止日期", "原文时间", "状态")
+    for cell, header in zip(table.rows[0].cells, headers):
+        cell.text = header
+    for item in actions:
+        if not isinstance(item, dict):
+            item = {"task": str(item)}
+        cells = table.add_row().cells
+        values = (
+            item.get("owner", "未明确"),
+            item.get("task", "待确认"),
+            item.get("due", "未明确"),
+            item.get("evidence_time", "未明确"),
+            item.get("status", "待处理"),
+        )
+        for cell, value in zip(cells, values):
+            cell.text = str(value)
 
 
 def _append_list(lines: list[str], items: Any) -> None:
@@ -190,6 +191,13 @@ def _item_to_text(item: Any) -> str:
     if not isinstance(item, dict):
         return str(item)
     evidence = item.get("evidence_time")
+    main = minutes_item_text(item)
+    return f"{main}（原文时间：{evidence}）" if evidence else main
+
+
+def minutes_item_text(item: Any) -> str:
+    if not isinstance(item, dict):
+        return str(item)
     preferred = (
         "content",
         "progress",
@@ -208,7 +216,20 @@ def _item_to_text(item: Any) -> str:
             if key != "evidence_time"
         ),
     )
-    return f"{main}（原文时间：{evidence}）" if evidence else main
+    return main
+
+
+def minutes_sections(minutes: dict[str, Any]) -> list[dict[str, str]]:
+    raw_template = minutes.get("template")
+    try:
+        template = normalize_minutes_template(
+            raw_template
+            if isinstance(raw_template, dict)
+            else default_minutes_template()
+        )
+    except (TypeError, ValueError):
+        template = default_minutes_template()
+    return list(template["sections"])
 
 
 def _escape_table(value: str) -> str:

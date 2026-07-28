@@ -117,6 +117,7 @@ async function inspectPage(page, name) {
 
   for (const [path, name] of [
     ["/calendar", "calendar-desktop"],
+    ["/minutes-templates", "minutes-templates-desktop"],
     ["/archive", "archive-desktop"],
     ["/trash", "trash-desktop"],
     ["/backups", "backups-desktop"],
@@ -192,6 +193,17 @@ async function inspectPage(page, name) {
     fullPage: true,
   });
   results.push(await inspectPage(mobilePage, "calendar-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/minutes-templates`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-minutes-templates-mobile.png`,
+    fullPage: true,
+  });
+  results.push(
+    await inspectPage(mobilePage, "minutes-templates-mobile"),
+  );
 
   await browser.close();
   process.stdout.write(

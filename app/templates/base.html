@@ -35,6 +35,7 @@
         <a href="{{ url_for('index') }}#meeting-history">会议记录</a>
         <a href="{{ url_for('calendar_page') }}" {% if request.url.path == '/calendar' %}class="active" aria-current="page"{% endif %}>日历</a>
         <a href="{{ url_for('archive_page') }}" {% if request.url.path in ['/archive', '/trash', '/backups'] %}class="active" aria-current="page"{% endif %}>资料库</a>
+        <a href="{{ url_for('minutes_templates_page') }}" {% if request.url.path.startswith('/minutes-templates') %}class="active" aria-current="page"{% endif %}>纪要模板</a>
         <a href="{{ url_for('external_llm_settings') }}" {% if request.url.path == '/settings/external-llm' %}class="active" aria-current="page"{% endif %}>外部 LLM</a>
         <a href="{{ url_for('diagnostics_page') }}" {% if request.url.path == '/diagnostics' %}class="active" aria-current="page"{% endif %}>运行诊断</a>
       </nav>

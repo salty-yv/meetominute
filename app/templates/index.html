@@ -130,6 +130,21 @@
       </div>
 
       <label class="field">
+        <span>纪要模板</span>
+        <select name="minutes_template_id" required>
+          {% for template in minutes_templates %}
+          <option value="{{ template.id }}" {% if template.id == "lab-meeting" %}selected{% endif %}>
+            {{ template.name }}{% if template.is_builtin %} · 内置{% endif %}
+          </option>
+          {% endfor %}
+        </select>
+        <small class="field-help">
+          模板决定纪要章节和提取重点。
+          <a href="{{ url_for('minutes_templates_page') }}">管理自定义模板</a>
+        </small>
+      </label>
+
+      <label class="field">
         <span>专业词表 <small>可选</small></span>
         <textarea name="glossary" rows="3" placeholder="人名、项目名、英文缩写；每行一个或用逗号分隔"></textarea>
       </label>

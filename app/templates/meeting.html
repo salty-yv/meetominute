@@ -272,6 +272,17 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V7z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg>
         </span>
         <div><strong>基于已校正的逐字稿生成</strong><p>重新生成不会覆盖原始转写；请在正式导出前人工确认事实。</p></div>
+        <label class="inline-template-select">
+          <span>纪要模板</span>
+          <select name="minutes_template_id" aria-label="选择纪要模板">
+            {% for template in minutes_templates %}
+            <option value="{{ template.id }}" {% if selected_minutes_template and template.id == selected_minutes_template.id %}selected{% endif %}>
+              {{ template.name }}
+            </option>
+            {% endfor %}
+          </select>
+          <a href="{{ url_for('minutes_templates_page') }}">管理模板</a>
+        </label>
         <button class="button secondary" type="submit">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>
           重新生成
@@ -283,88 +294,59 @@
         <article class="minutes-document">
           <div class="minutes-cover">
             <div class="minutes-cover-top">
-              <span class="document-label">MEETING SUMMARY</span>
+              <span class="document-label">{{ minutes.template.name if minutes.template else "MEETING SUMMARY" }}</span>
               <button class="icon-button" type="button" data-copy-summary data-copy-text="{{ minutes.summary }}" title="复制摘要" aria-label="复制会议摘要">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="1"/><path d="M16 8V4H5v12h3"/></svg>
               </button>
             </div>
-            <h3>会议摘要</h3>
+            <h3>{{ minute_summary_section.title if minute_summary_section else "会议摘要" }}</h3>
             <p class="summary">{{ minutes.summary }}</p>
             <div class="minutes-stats">
-              <span><b>{{ minutes.action_items|length }}</b> 项待办</span>
-              <span><b>{{ minutes.decisions|length }}</b> 项决定</span>
-              <span><b>{{ minutes.open_questions|length }}</b> 个未决问题</span>
-              <span><b>{{ minutes.next_followups|length }}</b> 项后续跟进</span>
+              <span><b>{{ minute_sections|length }}</b> 个章节</span>
+              <span><b>{{ minute_list_sections|length }}</b> 个信息分区</span>
+              {% if minute_actions_section %}
+              <span><b>{{ minutes.get(minute_actions_section.key, [])|length }}</b> 项待办</span>
+              {% endif %}
+              <span><b>{{ minutes.generator or meeting.llm_backend or "—" }}</b> 生成后端</span>
             </div>
           </div>
 
+          {% if minute_list_sections %}
           <div class="minutes-grid">
-            <section class="minutes-section tone-green">
-              <div class="minutes-section-head"><span>01</span><h3>各成员工作进展</h3><b>{{ minutes.member_progress|length }}</b></div>
-              {% if minutes.member_progress %}
-              <ul>{% for item in minutes.member_progress %}
-                <li><span>{{ item.progress or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
+            {% for section in minute_list_sections %}
+            {% set items = minutes.get(section.key, []) %}
+            <section class="minutes-section {{ loop.cycle('tone-green','tone-blue','tone-amber','tone-purple','tone-red','tone-slate') }}">
+              <div class="minutes-section-head">
+                <span>{{ "%02d"|format(loop.index) }}</span>
+                <h3>{{ section.title }}</h3>
+                <b>{{ items|length }}</b>
+              </div>
+              {% if items %}
+              <ul>{% for item in items %}
+                <li>
+                  <span>{{ item|minutes_item_text }}</span>
+                  {% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}
+                </li>
               {% endfor %}</ul>
               {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
             </section>
-
-            <section class="minutes-section tone-blue">
-              <div class="minutes-section-head"><span>02</span><h3>实验结果与数据结论</h3><b>{{ minutes.experimental_results|length }}</b></div>
-              {% if minutes.experimental_results %}
-              <ul>{% for item in minutes.experimental_results %}
-                <li><span>{{ item.result or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
-            </section>
-
-            <section class="minutes-section tone-amber">
-              <div class="minutes-section-head"><span>03</span><h3>建议</h3><b>{{ minutes.suggestions|length }}</b></div>
-              {% if minutes.suggestions %}
-              <ul>{% for item in minutes.suggestions %}
-                <li><span>{{ item.suggestion or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
-            </section>
-
-            <section class="minutes-section tone-purple">
-              <div class="minutes-section-head"><span>04</span><h3>已形成的决定</h3><b>{{ minutes.decisions|length }}</b></div>
-              {% if minutes.decisions %}
-              <ul>{% for item in minutes.decisions %}
-                <li><span>{{ item.content or item.decision or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
-            </section>
-
-            <section class="minutes-section tone-red">
-              <div class="minutes-section-head"><span>05</span><h3>未解决问题与风险</h3><b>{{ minutes.open_questions|length }}</b></div>
-              {% if minutes.open_questions %}
-              <ul>{% for item in minutes.open_questions %}
-                <li><span>{{ item.question or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
-            </section>
-
-            <section class="minutes-section tone-slate">
-              <div class="minutes-section-head"><span>06</span><h3>下次会议跟进</h3><b>{{ minutes.next_followups|length }}</b></div>
-              {% if minutes.next_followups %}
-              <ul>{% for item in minutes.next_followups %}
-                <li><span>{{ item.followup or item.content or item }}</span>{% if item.evidence_time %}<button type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button>{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<p class="muted">逐字稿中未明确</p>{% endif %}
-            </section>
+            {% endfor %}
           </div>
+          {% endif %}
 
+          {% if minute_actions_section %}
+          {% set action_items = minutes.get(minute_actions_section.key, []) %}
           <section class="action-section">
             <div class="action-section-title">
-              <div><p class="eyebrow">ACTION ITEMS</p><h3>待办事项</h3></div>
-              <span>{{ minutes.action_items|length }} 项</span>
+              <div><p class="eyebrow">ACTION ITEMS</p><h3>{{ minute_actions_section.title }}</h3></div>
+              <span>{{ action_items|length }} 项</span>
             </div>
-            {% if minutes.action_items %}
+            {% if action_items %}
             <div class="table-wrap">
               <table>
                 <thead><tr><th>负责人</th><th>具体任务</th><th>截止日期</th><th>原文时间</th><th>状态</th></tr></thead>
                 <tbody>
-                {% for item in minutes.action_items %}
+                {% for item in action_items %}
                 <tr>
                   <td><span class="owner-chip">{{ item.owner }}</span></td>
                   <td>{{ item.task }}</td>
@@ -380,6 +362,7 @@
             <div class="no-actions"><span>✓</span><p>逐字稿中没有明确的待办事项</p></div>
             {% endif %}
           </section>
+          {% endif %}
         </article>
 
         <div class="export-bar">

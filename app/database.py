@@ -6,9 +6,14 @@ from pathlib import Path
 from typing import Any
 
 from .domain import utc_now
+from .minutes_templates import (
+    DEFAULT_TEMPLATE_ID,
+    default_minutes_template,
+    normalize_minutes_template,
+)
 
 
-LATEST_SCHEMA_VERSION = 3
+LATEST_SCHEMA_VERSION = 4
 LIFECYCLE_STATES = {"active", "archived", "trashed"}
 
 
@@ -37,6 +42,7 @@ class Database:
                 1: self._migrate_to_v1,
                 2: self._migrate_to_v2,
                 3: self._migrate_to_v3,
+                4: self._migrate_to_v4,
             }
             for version in range(current + 1, LATEST_SCHEMA_VERSION + 1):
                 migrations[version](connection)
@@ -151,6 +157,62 @@ class Database:
             """
         )
 
+    @staticmethod
+    def _migrate_to_v4(connection: sqlite3.Connection) -> None:
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS minutes_templates (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                description TEXT NOT NULL DEFAULT '',
+                instructions TEXT NOT NULL DEFAULT '',
+                sections_json TEXT NOT NULL,
+                is_builtin INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+            """
+        )
+        default = default_minutes_template()
+        connection.execute(
+            """
+            INSERT OR IGNORE INTO minutes_templates (
+                id, name, description, instructions, sections_json,
+                is_builtin, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, 1, ?, ?)
+            """,
+            (
+                default["id"],
+                default["name"],
+                default["description"],
+                default["instructions"],
+                json.dumps(default["sections"], ensure_ascii=False),
+                default["created_at"],
+                default["updated_at"],
+            ),
+        )
+        columns = {
+            str(row["name"])
+            for row in connection.execute(
+                "PRAGMA table_info(meetings)"
+            ).fetchall()
+        }
+        if "minutes_template_id" not in columns:
+            connection.execute(
+                """
+                ALTER TABLE meetings
+                ADD COLUMN minutes_template_id
+                TEXT NOT NULL DEFAULT 'lab-meeting'
+                """
+            )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_meetings_minutes_template
+            ON meetings(minutes_template_id)
+            """
+        )
+
     def schema_version(self) -> int:
         with self.connect() as connection:
             return int(
@@ -229,6 +291,150 @@ class Database:
                 (start_date, end_date),
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def list_minutes_templates(self) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT *
+                FROM minutes_templates
+                ORDER BY is_builtin DESC, updated_at DESC, name
+                """
+            ).fetchall()
+        return [self._minutes_template_from_row(row) for row in rows]
+
+    def get_minutes_template(
+        self, template_id: str
+    ) -> dict[str, Any] | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM minutes_templates WHERE id = ?",
+                (template_id,),
+            ).fetchone()
+        return self._minutes_template_from_row(row) if row else None
+
+    def create_minutes_template(
+        self, template: dict[str, Any]
+    ) -> None:
+        normalized = normalize_minutes_template(template)
+        with self.connect() as connection:
+            connection.execute(
+                """
+                INSERT INTO minutes_templates (
+                    id, name, description, instructions, sections_json,
+                    is_builtin, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                self._minutes_template_values(normalized),
+            )
+
+    def update_minutes_template(
+        self, template: dict[str, Any]
+    ) -> bool:
+        normalized = normalize_minutes_template(template)
+        if normalized["id"] == DEFAULT_TEMPLATE_ID:
+            return False
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE minutes_templates
+                SET name = ?,
+                    description = ?,
+                    instructions = ?,
+                    sections_json = ?,
+                    updated_at = ?
+                WHERE id = ? AND is_builtin = 0
+                """,
+                (
+                    normalized["name"],
+                    normalized["description"],
+                    normalized["instructions"],
+                    json.dumps(
+                        normalized["sections"], ensure_ascii=False
+                    ),
+                    normalized["updated_at"],
+                    normalized["id"],
+                ),
+            )
+        return cursor.rowcount == 1
+
+    def delete_minutes_template(self, template_id: str) -> str:
+        if template_id == DEFAULT_TEMPLATE_ID:
+            return "builtin"
+        with self.connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            template = connection.execute(
+                """
+                SELECT is_builtin
+                FROM minutes_templates
+                WHERE id = ?
+                """,
+                (template_id,),
+            ).fetchone()
+            if template is None:
+                return "missing"
+            if int(template["is_builtin"]):
+                return "builtin"
+            usage = connection.execute(
+                """
+                SELECT COUNT(*)
+                FROM meetings
+                WHERE minutes_template_id = ?
+                """,
+                (template_id,),
+            ).fetchone()[0]
+            if int(usage):
+                return "in_use"
+            connection.execute(
+                "DELETE FROM minutes_templates WHERE id = ?",
+                (template_id,),
+            )
+        return "deleted"
+
+    def count_meetings_using_template(self, template_id: str) -> int:
+        with self.connect() as connection:
+            row = connection.execute(
+                """
+                SELECT COUNT(*)
+                FROM meetings
+                WHERE minutes_template_id = ?
+                """,
+                (template_id,),
+            ).fetchone()
+        return int(row[0])
+
+    @staticmethod
+    def _minutes_template_values(
+        template: dict[str, Any],
+    ) -> tuple[Any, ...]:
+        return (
+            template["id"],
+            template["name"],
+            template["description"],
+            template["instructions"],
+            json.dumps(template["sections"], ensure_ascii=False),
+            1 if template["is_builtin"] else 0,
+            template["created_at"],
+            template["updated_at"],
+        )
+
+    @staticmethod
+    def _minutes_template_from_row(
+        row: sqlite3.Row,
+    ) -> dict[str, Any]:
+        return normalize_minutes_template(
+            {
+                "id": row["id"],
+                "name": row["name"],
+                "description": row["description"],
+                "instructions": row["instructions"],
+                "sections": json.loads(row["sections_json"]),
+                "is_builtin": bool(row["is_builtin"]),
+                "created_at": row["created_at"],
+                "updated_at": row["updated_at"],
+            }
+        )
 
     def lifecycle_counts(self) -> dict[str, int]:
         result = {state: 0 for state in LIFECYCLE_STATES}

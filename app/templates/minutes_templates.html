@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}纪要模板 · MeetOminute{% endblock %}
+{% block content %}
+<section class="settings-hero template-hero">
+  <div>
+    <a class="back-link" href="{{ url_for('index') }}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M10 7l-5 5 5 5"/></svg>
+      返回工作台
+    </a>
+    <p class="eyebrow">MINUTES BLUEPRINTS</p>
+    <h1>自定义纪要模板</h1>
+    <p>决定纪要包含哪些章节、各章节叫什么，以及模型需要特别关注的内容。事实约束和证据时间规则始终保留。</p>
+  </div>
+  <div class="template-hero-count">
+    <span>{{ minutes_templates|length }}</span>
+    <div><strong>个可用模板</strong><small>本机保存 · 随数据库备份</small></div>
+  </div>
+</section>
+
+{% if created_template %}
+<div class="operation-message success"><strong>模板已创建</strong><span>{{ created_template }}</span></div>
+{% endif %}
+{% if updated_template %}
+<div class="operation-message success"><strong>模板已保存</strong><span>{{ updated_template }}</span></div>
+{% endif %}
+{% if duplicated_template %}
+<div class="operation-message success"><strong>副本已创建</strong><span>{{ duplicated_template }}</span></div>
+{% endif %}
+{% if deleted_template %}
+<div class="operation-message success"><strong>模板已删除</strong><span>{{ deleted_template }}</span></div>
+{% endif %}
+{% if template_error %}
+<div class="operation-message error"><strong>无法保存模板</strong><span>{{ template_error }}</span></div>
+{% endif %}
+
+<div class="template-workspace">
+  <aside class="panel template-library">
+    <div class="template-library-head">
+      <div><p class="eyebrow">LIBRARY</p><h2>模板库</h2></div>
+      <a class="button compact primary" href="{{ url_for('minutes_templates_page') }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        新建
+      </a>
+    </div>
+    <div class="template-card-list">
+      {% for template in minutes_templates %}
+      <article class="template-card{% if editing_template and editing_template.id == template.id %} active{% endif %}">
+        <a href="{{ url_for('minutes_templates_page') }}?edit={{ template.id }}">
+          <div>
+            <span class="template-kind {% if template.is_builtin %}builtin{% endif %}">
+              {% if template.is_builtin %}内置{% else %}自定义{% endif %}
+            </span>
+            <small>{{ template.sections|length }} 个章节</small>
+          </div>
+          <h3>{{ template.name }}</h3>
+          <p>{{ template.description or "未填写模板说明" }}</p>
+          <footer>
+            <span>{{ template.usage_count }} 场会议使用</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+          </footer>
+        </a>
+        <div class="template-card-actions">
+          <form action="{{ url_for('duplicate_minutes_template', template_id=template.id) }}" method="post">
+            <button type="submit">复制</button>
+          </form>
+          {% if not template.is_builtin %}
+          <form
+            action="{{ url_for('delete_minutes_template', template_id=template.id) }}"
+            method="post"
+            data-confirm-message="确定删除模板“{{ template.name }}”吗？使用中的模板不能删除。"
+          >
+            <button class="danger" type="submit">删除</button>
+          </form>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <section class="panel template-editor">
+    {% if editing_template and editing_template.is_builtin %}
+      <div class="template-editor-heading">
+        <div>
+          <p class="eyebrow">BUILT-IN TEMPLATE</p>
+          <h2>{{ editing_template.name }}</h2>
+          <p>{{ editing_template.description }}</p>
+        </div>
+        <span class="config-source">只读</span>
+      </div>
+      <div class="template-readonly-note">
+        <span>内置模板用于保证默认行为稳定。如需修改，请先创建一个副本。</span>
+        <form action="{{ url_for('duplicate_minutes_template', template_id=editing_template.id) }}" method="post">
+          <button class="button compact primary" type="submit">复制后编辑</button>
+        </form>
+      </div>
+      <div class="template-preview">
+        <div>
+          <small>专项要求</small>
+          <p>{{ editing_template.instructions or "无额外要求" }}</p>
+        </div>
+        <ol>
+          {% for section in editing_template.sections %}
+          <li>
+            <span>{{ "%02d"|format(loop.index) }}</span>
+            <div><strong>{{ section.title }}</strong><small>{{ section.guidance }}</small></div>
+            <b>{% if section.kind == "summary" %}摘要{% elif section.kind == "actions" %}待办表{% else %}列表{% endif %}</b>
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+    {% else %}
+      <div class="template-editor-heading">
+        <div>
+          <p class="eyebrow">{% if editing_template %}EDIT TEMPLATE{% else %}NEW TEMPLATE{% endif %}</p>
+          <h2>{% if editing_template %}编辑模板{% else %}创建新模板{% endif %}</h2>
+          <p>摘要为必选章节；其他章节可以启用、关闭或改名。</p>
+        </div>
+        {% if editing_template %}<span class="config-source">自定义</span>{% endif %}
+      </div>
+
+      <form
+        class="minutes-template-form"
+        action="{% if editing_template %}{{ url_for('update_minutes_template', template_id=editing_template.id) }}{% else %}{{ url_for('create_minutes_template') }}{% endif %}"
+        method="post"
+      >
+        <div class="template-basic-fields">
+          <label class="field">
+            <span>模板名称 <b>必填</b></span>
+            <input name="name" required maxlength="80" value="{{ form_values.name }}" placeholder="例如：项目评审会">
+          </label>
+          <label class="field">
+            <span>模板说明</span>
+            <input name="description" maxlength="500" value="{{ form_values.description }}" placeholder="说明这个模板适用于什么会议">
+          </label>
+        </div>
+
+        <label class="field">
+          <span>专项提取要求 <small>可选</small></span>
+          <textarea name="instructions" rows="4" maxlength="8000" placeholder="例如：重点区分客户明确确认的需求与尚待讨论的建议；保留版本号和验收条件。">{{ form_values.instructions }}</textarea>
+          <small class="field-help">要求会进入分段抽取和最终合并提示词，但不能覆盖“不虚构事实”等安全约束。</small>
+        </label>
+
+        <fieldset class="template-section-builder">
+          <legend>
+            <span>结构化章节</span>
+            <small>勾选需要的章节，并可修改导出时显示的名称</small>
+          </legend>
+          <div>
+            {% for section in core_sections %}
+            <label class="template-section-row">
+              <span class="template-section-toggle">
+                <input
+                  type="checkbox"
+                  name="include_{{ section.key }}"
+                  {% if section.key in form_values.included %}checked{% endif %}
+                  {% if section.required %}disabled{% endif %}
+                >
+                <i></i>
+              </span>
+              <span class="template-section-number">{{ "%02d"|format(loop.index) }}</span>
+              <span class="template-section-copy">
+                <strong>{{ section.title }}{% if section.required %}<b>必选</b>{% endif %}</strong>
+                <small>{{ section.guidance }}</small>
+              </span>
+              <input
+                name="title_{{ section.key }}"
+                maxlength="80"
+                value="{{ form_values.titles[section.key] }}"
+                aria-label="{{ section.title }}的自定义名称"
+              >
+            </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        <label class="field">
+          <span>额外自定义章节 <small>最多 8 个</small></span>
+          <textarea name="custom_sections" rows="5" placeholder="每行一个章节：章节名称 | 希望提取的内容&#10;例如：客户原话 | 记录客户对需求和体验的直接表述">{{ form_values.custom_sections }}</textarea>
+          <small class="field-help">格式为“章节名称 | 提取要求”；自定义章节以带证据时间的列表呈现。</small>
+        </label>
+
+        <div class="template-form-actions">
+          {% if editing_template %}
+          <a class="button secondary" href="{{ url_for('minutes_templates_page') }}">取消编辑</a>
+          {% endif %}
+          <button class="button primary" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5zM8 4v6h8V4M8 16h8"/></svg>
+            {% if editing_template %}保存模板{% else %}创建模板{% endif %}
+          </button>
+        </div>
+      </form>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

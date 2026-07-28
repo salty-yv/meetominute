@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import calendar as calendar_module
+import copy
 from contextlib import asynccontextmanager
 from datetime import date, timedelta
 from pathlib import Path
@@ -35,8 +36,22 @@ from .external_llm import (
     ExternalLLMConfigStore,
     test_external_llm_connection,
 )
+from .minutes_templates import (
+    CORE_SECTION_DEFINITIONS,
+    DEFAULT_TEMPLATE_ID,
+    MinutesTemplateError,
+    blank_minutes_template_form,
+    build_minutes_template_from_form,
+    minutes_template_form_values,
+    normalize_minutes_template,
+)
 from .pipeline import CHECKPOINT_RESUME_LABELS, TaskQueue
-from .rendering import render_transcript_markdown, render_transcript_text
+from .rendering import (
+    minutes_item_text,
+    minutes_sections,
+    render_transcript_markdown,
+    render_transcript_text,
+)
 from .storage import (
     SAFE_SUFFIXES,
     MeetingStorage,
@@ -85,6 +100,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     backup_manager = BackupManager(config, database, storage)
     templates = Jinja2Templates(directory=config.base_dir / "app" / "templates")
     templates.env.filters["timestamp"] = format_timestamp
+    templates.env.filters["minutes_item_text"] = minutes_item_text
     templates.env.globals["status_labels"] = STATUS_LABELS
     templates.env.globals["active_statuses"] = ACTIVE_STATUSES
 
@@ -132,6 +148,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "local_llm": config.local_llm,
                 "ollama_model": config.ollama_model,
                 "external_llm": external_llm_store.load().public_dict(),
+                "minutes_templates": database.list_minutes_templates(),
             },
         )
 
@@ -360,6 +377,189 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def external_llm_settings_api() -> dict[str, Any]:
         return external_llm_store.load().public_dict()
 
+    def render_minutes_templates_page(
+        request: Request,
+        *,
+        edit_id: str | None = None,
+        form_values: dict[str, Any] | None = None,
+        template_error: str = "",
+        status_code: int = 200,
+    ) -> HTMLResponse:
+        selected = (
+            database.get_minutes_template(edit_id)
+            if edit_id
+            else None
+        )
+        if edit_id and selected is None:
+            raise HTTPException(404, "纪要模板不存在")
+        values = form_values or (
+            minutes_template_form_values(selected)
+            if selected
+            else blank_minutes_template_form()
+        )
+        template_records = []
+        for template in database.list_minutes_templates():
+            template_records.append(
+                {
+                    **template,
+                    "usage_count": database.count_meetings_using_template(
+                        template["id"]
+                    ),
+                }
+            )
+        return templates.TemplateResponse(
+            request=request,
+            name="minutes_templates.html",
+            context={
+                "minutes_templates": template_records,
+                "form_values": values,
+                "editing_template": selected,
+                "core_sections": CORE_SECTION_DEFINITIONS,
+                "template_error": template_error,
+                "created_template": request.query_params.get(
+                    "created", ""
+                ),
+                "updated_template": request.query_params.get(
+                    "updated", ""
+                ),
+                "duplicated_template": request.query_params.get(
+                    "duplicated", ""
+                ),
+                "deleted_template": request.query_params.get(
+                    "deleted", ""
+                ),
+            },
+            status_code=status_code,
+        )
+
+    @application.get(
+        "/minutes-templates", response_class=HTMLResponse
+    )
+    async def minutes_templates_page(
+        request: Request,
+        edit: str | None = None,
+    ) -> HTMLResponse:
+        return render_minutes_templates_page(
+            request,
+            edit_id=edit,
+        )
+
+    @application.post("/minutes-templates")
+    async def create_minutes_template(request: Request) -> Response:
+        form = await request.form()
+        try:
+            template = build_minutes_template_from_form(form)
+            database.create_minutes_template(template)
+        except (MinutesTemplateError, ValueError) as exc:
+            return render_minutes_templates_page(
+                request,
+                form_values=_minutes_template_raw_form_values(form),
+                template_error=str(exc),
+                status_code=422,
+            )
+        target = request.url_for(
+            "minutes_templates_page"
+        ).include_query_params(
+            created=template["name"],
+            edit=template["id"],
+        )
+        return RedirectResponse(target, status_code=303)
+
+    @application.post("/minutes-templates/{template_id}")
+    async def update_minutes_template(
+        request: Request,
+        template_id: str,
+    ) -> Response:
+        existing = database.get_minutes_template(template_id)
+        if existing is None:
+            raise HTTPException(404, "纪要模板不存在")
+        if existing["is_builtin"]:
+            raise HTTPException(409, "内置模板不能直接修改，请先复制")
+        form = await request.form()
+        try:
+            template = build_minutes_template_from_form(
+                form,
+                template_id=template_id,
+                existing=existing,
+            )
+            if not database.update_minutes_template(template):
+                raise MinutesTemplateError("纪要模板未能更新")
+        except (MinutesTemplateError, ValueError) as exc:
+            return render_minutes_templates_page(
+                request,
+                edit_id=template_id,
+                form_values=_minutes_template_raw_form_values(
+                    form,
+                    template_id=template_id,
+                ),
+                template_error=str(exc),
+                status_code=422,
+            )
+        target = request.url_for(
+            "minutes_templates_page"
+        ).include_query_params(
+            updated=template["name"],
+            edit=template["id"],
+        )
+        return RedirectResponse(target, status_code=303)
+
+    @application.post(
+        "/minutes-templates/{template_id}/duplicate"
+    )
+    async def duplicate_minutes_template(
+        request: Request,
+        template_id: str,
+    ) -> RedirectResponse:
+        source = database.get_minutes_template(template_id)
+        if source is None:
+            raise HTTPException(404, "纪要模板不存在")
+        now = utc_now()
+        duplicate = normalize_minutes_template(
+            {
+                **copy.deepcopy(source),
+                "id": uuid4().hex,
+                "name": f"{source['name']} 副本"[:80],
+                "is_builtin": False,
+                "created_at": now,
+                "updated_at": now,
+            }
+        )
+        database.create_minutes_template(duplicate)
+        target = request.url_for(
+            "minutes_templates_page"
+        ).include_query_params(
+            duplicated=duplicate["name"],
+            edit=duplicate["id"],
+        )
+        return RedirectResponse(target, status_code=303)
+
+    @application.post("/minutes-templates/{template_id}/delete")
+    async def delete_minutes_template(
+        request: Request,
+        template_id: str,
+    ) -> Response:
+        template = database.get_minutes_template(template_id)
+        if template is None:
+            raise HTTPException(404, "纪要模板不存在")
+        result = database.delete_minutes_template(template_id)
+        if result == "in_use":
+            return render_minutes_templates_page(
+                request,
+                edit_id=template_id,
+                template_error=(
+                    "这个模板仍被会议使用。请先为这些会议选择其他模板。"
+                ),
+                status_code=409,
+            )
+        if result == "builtin":
+            raise HTTPException(409, "内置模板不能删除")
+        if result != "deleted":
+            raise HTTPException(404, "纪要模板不存在")
+        target = request.url_for(
+            "minutes_templates_page"
+        ).include_query_params(deleted=template["name"])
+        return RedirectResponse(target, status_code=303)
+
     @application.get("/diagnostics", response_class=HTMLResponse)
     async def diagnostics_page(request: Request) -> HTMLResponse:
         report = await asyncio.to_thread(run_diagnostics, config, database)
@@ -382,6 +582,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         expected_speakers: int = Form(...),
         glossary: str = Form(""),
         processing_mode: str = Form("local"),
+        minutes_template_id: str = Form(DEFAULT_TEMPLATE_ID),
         recording: UploadFile = File(...),
     ) -> RedirectResponse:
         clean_title = title.strip()
@@ -391,6 +592,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(422, "预计发言人数必须在 1 到 50 之间")
         if processing_mode not in {"local", "mixed", "cloud"}:
             raise HTTPException(422, "无效的处理模式")
+        if database.get_minutes_template(minutes_template_id) is None:
+            raise HTTPException(422, "选择的纪要模板不存在")
         original_name = _safe_display_filename(recording.filename)
         suffix = Path(original_name).suffix.lower()
         if suffix not in SAFE_SUFFIXES:
@@ -407,6 +610,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "expected_speakers": expected_speakers,
             "glossary": glossary.strip()[:20_000],
             "processing_mode": processing_mode,
+            "minutes_template_id": minutes_template_id,
             "source_filename": original_name,
             "source_suffix": suffix,
             "status": "queued",
@@ -692,7 +896,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @application.post("/meetings/{meeting_id}/minutes")
     async def generate_minutes(
-        request: Request, meeting_id: str
+        request: Request,
+        meeting_id: str,
+        minutes_template_id: str = Form(""),
     ) -> RedirectResponse:
         meeting = _meeting_or_404(database, meeting_id)
         if meeting["status"] in ACTIVE_STATUSES:
@@ -703,8 +909,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
         if not transcript.get("segments"):
             raise HTTPException(409, "逐字稿尚未生成")
+        selected_template_id = (
+            minutes_template_id.strip()
+            or str(
+                meeting.get("minutes_template_id")
+                or DEFAULT_TEMPLATE_ID
+            )
+        )
+        if database.get_minutes_template(selected_template_id) is None:
+            raise HTTPException(422, "选择的纪要模板不存在")
         database.update_meeting(
             meeting_id,
+            minutes_template_id=selected_template_id,
             status="queued",
             progress=75,
             current_step="纪要已进入队列",
@@ -938,6 +1154,17 @@ def _meeting_context(
     )
     speakers = storage.read_json(meeting, "speakers.json", default={})
     minutes = storage.read_json(meeting, "minutes.json")
+    minute_sections = minutes_sections(minutes) if minutes else []
+    selected_template = database.get_minutes_template(
+        str(
+            meeting.get("minutes_template_id")
+            or DEFAULT_TEMPLATE_ID
+        )
+    )
+    if selected_template is None:
+        selected_template = database.get_minutes_template(
+            DEFAULT_TEMPLATE_ID
+        )
     log_path = storage.path(meeting, "processing.log")
     log_text = (
         "\n".join(log_path.read_text(encoding="utf-8").splitlines()[-200:])
@@ -950,6 +1177,30 @@ def _meeting_context(
         "segments": transcript.get("segments", []),
         "speakers": speakers,
         "minutes": minutes,
+        "minute_sections": minute_sections,
+        "minute_summary_section": next(
+            (
+                section
+                for section in minute_sections
+                if section["kind"] == "summary"
+            ),
+            None,
+        ),
+        "minute_list_sections": [
+            section
+            for section in minute_sections
+            if section["kind"] == "list"
+        ],
+        "minute_actions_section": next(
+            (
+                section
+                for section in minute_sections
+                if section["kind"] == "actions"
+            ),
+            None,
+        ),
+        "selected_minutes_template": selected_template,
+        "minutes_templates": database.list_minutes_templates(),
         "log_text": log_text,
         **_task_context(meeting, database, task_queue),
     }
@@ -1026,6 +1277,37 @@ def _download_title(value: str) -> str:
         for character in value
     ).strip(" .")
     return result[:80] or "会议"
+
+
+def _minutes_template_raw_form_values(
+    form: Any,
+    *,
+    template_id: str = "",
+) -> dict[str, Any]:
+    return {
+        "id": template_id,
+        "name": str(form.get("name") or ""),
+        "description": str(form.get("description") or ""),
+        "instructions": str(form.get("instructions") or ""),
+        "included": {
+            str(section["key"])
+            for section in CORE_SECTION_DEFINITIONS
+            if bool(section["required"])
+            or str(
+                form.get(f"include_{section['key']}") or ""
+            ).lower()
+            in {"on", "true", "1", "yes"}
+        },
+        "titles": {
+            str(section["key"]): str(
+                form.get(f"title_{section['key']}")
+                or section["title"]
+            )
+            for section in CORE_SECTION_DEFINITIONS
+        },
+        "custom_sections": str(form.get("custom_sections") or ""),
+        "is_builtin": False,
+    }
 
 
 app = create_app()

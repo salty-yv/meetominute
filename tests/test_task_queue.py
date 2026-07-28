@@ -223,6 +223,7 @@ def test_minutes_failure_resumes_without_retranscribing(
             segments,
             speakers,
             *,
+            template=None,
             cancel_check=None,
         ):
             calls["minutes"] += 1
