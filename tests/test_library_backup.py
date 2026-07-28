@@ -169,7 +169,8 @@ def test_archive_trash_restore_and_permanent_delete_routes(
         assert archive_page.status_code == 200
         assert "资料库测试会议" in archive_page.text
         detail = client.get(f"/meetings/{meeting['id']}")
-        assert "当前为只读模式" in detail.text
+        assert "这场会议的内容已归档" in detail.text
+        assert "仍可试听、导出和更新待办状态" in detail.text
 
         trash = client.post(
             f"/meetings/{meeting['id']}/trash",

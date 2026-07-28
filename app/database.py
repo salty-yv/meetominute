@@ -464,6 +464,13 @@ class Database:
                 fields,
             )
 
+    def touch_meeting(self, meeting_id: str) -> None:
+        with self.connect() as connection:
+            connection.execute(
+                "UPDATE meetings SET updated_at = ? WHERE id = ?",
+                (utc_now(), meeting_id),
+            )
+
     def has_active_jobs(self, meeting_id: str | None = None) -> bool:
         query = """
             SELECT 1

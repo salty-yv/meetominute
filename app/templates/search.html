@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}跨会议搜索 · MeetOminute{% endblock %}
+{% block content %}
+<header class="library-hero search-hero">
+  <div>
+    <p class="eyebrow">MEETING SEARCH</p>
+    <h1>跨会议搜索</h1>
+    <p>一次查找会议标题、逐字稿与纪要，并直接回到原始证据所在的位置。</p>
+  </div>
+  {% if query %}
+  <div class="search-hero-count" aria-label="搜索结果数量">
+    <strong>{{ result_count }}</strong>
+    <span>条匹配结果</span>
+  </div>
+  {% endif %}
+</header>
+
+<section class="panel search-filter-panel" aria-labelledby="search-filter-title">
+  <div class="search-filter-heading">
+    <div>
+      <p class="eyebrow">FIND EVIDENCE</p>
+      <h2 id="search-filter-title">搜索会议资料</h2>
+    </div>
+    <span>标题、文件名、说话人、逐字稿与纪要</span>
+  </div>
+  <form class="search-filter-form" action="{{ url_for('search_page') }}" method="get" role="search">
+    <label class="search-query-field">
+      <span class="sr-only">搜索关键词</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+      <input
+        type="search"
+        name="q"
+        value="{{ query }}"
+        placeholder="输入议题、人名、结论或原话"
+        autocomplete="off"
+        autofocus
+      >
+    </label>
+    <label>
+      <span>搜索范围</span>
+      <select name="scope">
+        <option value="all" {% if scope == "all" %}selected{% endif %}>全部内容</option>
+        <option value="metadata" {% if scope == "metadata" %}selected{% endif %}>会议信息</option>
+        <option value="transcript" {% if scope == "transcript" %}selected{% endif %}>逐字稿</option>
+        <option value="minutes" {% if scope == "minutes" %}selected{% endif %}>会议纪要</option>
+      </select>
+    </label>
+    <label>
+      <span>记录状态</span>
+      <select name="lifecycle">
+        <option value="all" {% if lifecycle == "all" %}selected{% endif %}>全部记录</option>
+        <option value="active" {% if lifecycle == "active" %}selected{% endif %}>正常记录</option>
+        <option value="archived" {% if lifecycle == "archived" %}selected{% endif %}>已归档</option>
+        <option value="trashed" {% if lifecycle == "trashed" %}selected{% endif %}>回收站</option>
+      </select>
+    </label>
+    <button class="button primary search-submit" type="submit">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+      搜索
+    </button>
+  </form>
+</section>
+
+<section class="panel search-results-panel" aria-labelledby="search-results-title" aria-live="polite">
+  <div class="section-heading search-results-heading">
+    <div class="heading-with-icon">
+      <span class="section-icon neutral">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M5 10h10M5 15h14M5 20h8"/></svg>
+      </span>
+      <div>
+        <p class="eyebrow">RESULTS</p>
+        <h2 id="search-results-title">{% if query %}搜索结果{% else %}查找你的会议知识{% endif %}</h2>
+      </div>
+    </div>
+    {% if query %}<span class="count">{{ result_count }} 条</span>{% endif %}
+  </div>
+
+  {% if results %}
+  <div class="search-result-list">
+    {% for item in results %}
+    <article class="search-result-item">
+      <div class="search-result-meta">
+        <span class="search-source source-{{ item.source }}">{{ item.source_label }}</span>
+        <time datetime="{{ item.meeting_date }}">{{ item.meeting_date }}</time>
+        <span class="lifecycle-chip lifecycle-{{ item.lifecycle_state }}">
+          {% if item.lifecycle_state == "archived" %}
+            已归档
+          {% elif item.lifecycle_state == "trashed" %}
+            回收站
+          {% else %}
+            正常记录
+          {% endif %}
+        </span>
+      </div>
+      <h3>
+        <a href="{% if item.lifecycle_state == 'trashed' %}{{ url_for('trash_page') }}{% else %}{{ url_for('meeting_detail', meeting_id=item.meeting_id) }}{{ item.anchor }}{% endif %}">
+          {{ item.title }}
+        </a>
+      </h3>
+      <p class="search-result-snippet">{{ item.snippet }}</p>
+      <footer>
+        {% if item.evidence_time %}
+        <span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>
+          {{ item.evidence_time }}
+        </span>
+        {% else %}
+        <span>会议资料</span>
+        {% endif %}
+        <a href="{% if item.lifecycle_state == 'trashed' %}{{ url_for('trash_page') }}{% else %}{{ url_for('meeting_detail', meeting_id=item.meeting_id) }}{{ item.anchor }}{% endif %}">
+          {% if item.lifecycle_state == "trashed" %}前往回收站{% else %}查看原文{% endif %}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </a>
+      </footer>
+    </article>
+    {% endfor %}
+  </div>
+  {% elif query %}
+  <div class="empty-state search-empty">
+    <span class="empty-illustration small" aria-hidden="true">
+      <svg viewBox="0 0 72 72"><circle cx="31" cy="31" r="17"/><path d="m44 44 14 14M23 31h16"/></svg>
+    </span>
+    <h3>没有找到“{{ query }}”</h3>
+    <p>试试更短的关键词，或把搜索范围和记录状态调整为“全部”。</p>
+  </div>
+  {% else %}
+  <div class="empty-state search-empty search-empty-start">
+    <span class="empty-illustration small" aria-hidden="true">
+      <svg viewBox="0 0 72 72"><path d="M16 18h40v36H16zM24 28h24M24 36h17M24 44h21"/><circle cx="53" cy="51" r="9"/><path d="m60 58 6 6"/></svg>
+    </span>
+    <h3>从一个关键词开始</h3>
+    <p>可以搜索项目名、发言人、决策、待办或某句会议原话。</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

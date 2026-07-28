@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import calendar as calendar_module
 import copy
+import json
+import shutil
 from contextlib import asynccontextmanager
 from datetime import date, timedelta
 from pathlib import Path
@@ -27,6 +29,12 @@ from fastapi.responses import (
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from .actions import (
+    ACTION_STATUS_LABELS,
+    ActionItemsError,
+    ActionItemsService,
+    annotate_action_items,
+)
 from .backups import BackupError, BackupManager
 from .config import Settings
 from .database import Database
@@ -50,9 +58,13 @@ from .pipeline import CHECKPOINT_RESUME_LABELS, TaskQueue
 from .rendering import (
     minutes_item_text,
     minutes_sections,
+    render_minutes_docx,
+    render_minutes_markdown,
+    render_minutes_text,
     render_transcript_markdown,
     render_transcript_text,
 )
+from .search import MeetingSearchService
 from .storage import (
     SAFE_SUFFIXES,
     MeetingStorage,
@@ -115,11 +127,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         storage,
         maintenance_gate=maintenance_gate,
     )
+    meeting_search = MeetingSearchService(database, storage)
+    action_items = ActionItemsService(database, storage)
+    meeting_operation_locks: dict[str, asyncio.Lock] = {}
+
+    def meeting_operation_lock(meeting_id: str) -> asyncio.Lock:
+        return meeting_operation_locks.setdefault(
+            meeting_id, asyncio.Lock()
+        )
     templates = Jinja2Templates(directory=config.base_dir / "app" / "templates")
     templates.env.filters["timestamp"] = format_timestamp
     templates.env.filters["minutes_item_text"] = minutes_item_text
     templates.env.globals["status_labels"] = STATUS_LABELS
     templates.env.globals["active_statuses"] = ACTIVE_STATUSES
+    templates.env.globals["action_status_labels"] = ACTION_STATUS_LABELS
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
@@ -146,6 +167,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.external_llm_store = external_llm_store
     application.state.backup_manager = backup_manager
     application.state.maintenance_gate = maintenance_gate
+    application.state.meeting_search = meeting_search
+    application.state.action_items = action_items
     application.mount(
         "/static",
         StaticFiles(directory=config.base_dir / "app" / "static"),
@@ -238,7 +261,91 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 database,
                 month,
                 today=date.today(),
+                action_items=action_items,
             ),
+        )
+
+    @application.get("/search", response_class=HTMLResponse)
+    async def search_page(
+        request: Request,
+        q: str = "",
+        scope: str = "all",
+        lifecycle: str = "all",
+    ) -> HTMLResponse:
+        query = q.strip()[:300]
+        try:
+            results = await asyncio.to_thread(
+                meeting_search.search,
+                query,
+                scope=scope,
+                lifecycle_state=lifecycle,
+                limit=100,
+            )
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        return templates.TemplateResponse(
+            request=request,
+            name="search.html",
+            context={
+                "query": query,
+                "scope": scope,
+                "lifecycle": lifecycle,
+                "results": results,
+                "result_count": len(results),
+            },
+        )
+
+    @application.get("/actions", response_class=HTMLResponse)
+    async def actions_page(
+        request: Request,
+        status: str = "pending",
+        q: str = "",
+    ) -> HTMLResponse:
+        selected_status = status.strip().lower() or "pending"
+        if selected_status not in {
+            "all",
+            "pending",
+            "overdue",
+            "done",
+            "dismissed",
+        }:
+            raise HTTPException(422, "无效的待办状态")
+        query = q.strip()[:300]
+        all_actions = await asyncio.to_thread(
+            action_items.list_actions,
+            status=None,
+            query=query or None,
+            today=date.today(),
+        )
+        visible_actions = [
+            item
+            for item in all_actions
+            if item.get("lifecycle_state") != "trashed"
+        ]
+        counts = _action_counts(visible_actions)
+        if selected_status == "all":
+            filtered_actions = visible_actions
+        elif selected_status == "overdue":
+            filtered_actions = [
+                item
+                for item in visible_actions
+                if item.get("is_overdue")
+            ]
+        else:
+            filtered_actions = [
+                item
+                for item in visible_actions
+                if item.get("status") == selected_status
+            ]
+        return templates.TemplateResponse(
+            request=request,
+            name="actions.html",
+            context={
+                "actions": filtered_actions,
+                "counts": counts,
+                "selected_status": selected_status,
+                "query": query,
+            },
         )
 
     @application.get("/trash", response_class=HTMLResponse)
@@ -723,7 +830,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             request=request,
             name="meeting.html",
             context=_meeting_context(
-                meeting, storage, database, task_queue
+                meeting,
+                storage,
+                database,
+                task_queue,
             ),
         )
 
@@ -739,6 +849,77 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             name="_status.html",
             context=_task_context(meeting, database, task_queue),
         )
+
+    @application.post(
+        "/meetings/{meeting_id}/actions/{action_id}"
+    )
+    async def update_action_status(
+        request: Request,
+        meeting_id: str,
+        action_id: str,
+        status: str = Form(...),
+        return_to: str = Form("actions"),
+        selected_status: str = Form("pending"),
+        query: str = Form(""),
+    ) -> RedirectResponse:
+        async with meeting_operation_lock(meeting_id):
+            meeting = _meeting_or_404(database, meeting_id)
+            if meeting["status"] in ACTIVE_STATUSES:
+                raise HTTPException(
+                    409, "会议正在处理，请完成后再更新待办状态"
+                )
+            try:
+                minutes = await asyncio.to_thread(
+                    action_items.update_status,
+                    meeting_id,
+                    action_id,
+                    status,
+                    on_updated=lambda previous, updated: (
+                        _commit_minutes_bundle(
+                            storage,
+                            meeting,
+                            previous,
+                            updated,
+                        )
+                    ),
+                )
+            except ActionItemsError as exc:
+                raise HTTPException(422, str(exc)) from exc
+            storage.append_log(
+                meeting,
+                (
+                    f"{utc_now()} 用户将待办 {action_id} 更新为"
+                    f"{ACTION_STATUS_LABELS.get(status, status)}"
+                ),
+            )
+        if return_to == "meeting":
+            target = str(
+                request.url_for(
+                    "meeting_detail", meeting_id=meeting_id
+                )
+            )
+            return RedirectResponse(
+                target + "#minutes", status_code=303
+            )
+        safe_selected_status = (
+            selected_status
+            if selected_status
+            in {
+                "all",
+                "pending",
+                "overdue",
+                "done",
+                "dismissed",
+            }
+            else "pending"
+        )
+        target = request.url_for(
+            "actions_page"
+        ).include_query_params(status=safe_selected_status)
+        clean_query = query.strip()[:300]
+        if clean_query:
+            target = target.include_query_params(q=clean_query)
+        return RedirectResponse(target, status_code=303)
 
     @application.post("/meetings/{meeting_id}/archive")
     async def archive_meeting(
@@ -838,26 +1019,31 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def resume_meeting(
         request: Request, meeting_id: str
     ) -> RedirectResponse:
-        meeting = _meeting_or_404(database, meeting_id)
-        if meeting["status"] in ACTIVE_STATUSES:
-            raise HTTPException(409, "任务当前正在处理，不能重复加入队列")
-        _ensure_meeting_editable(meeting)
-        if meeting["status"] not in {"failed", "canceled"}:
-            raise HTTPException(409, "当前任务不需要断点续跑")
-        kind, checkpoint, progress, label = task_queue.resume_info(meeting)
-        database.update_meeting(
-            meeting_id,
-            status="queued",
-            progress=progress,
-            current_step=f"已排队，{label}",
-            error=None,
-        )
-        storage.append_log(
-            meeting, f"{utc_now()} 用户请求断点续跑：{label}"
-        )
-        await task_queue.enqueue(
-            kind, meeting_id, checkpoint=checkpoint
-        )
+        async with meeting_operation_lock(meeting_id):
+            meeting = _meeting_or_404(database, meeting_id)
+            if meeting["status"] in ACTIVE_STATUSES:
+                raise HTTPException(
+                    409, "任务当前正在处理，不能重复加入队列"
+                )
+            _ensure_meeting_editable(meeting)
+            if meeting["status"] not in {"failed", "canceled"}:
+                raise HTTPException(409, "当前任务不需要断点续跑")
+            kind, checkpoint, progress, label = task_queue.resume_info(
+                meeting
+            )
+            database.update_meeting(
+                meeting_id,
+                status="queued",
+                progress=progress,
+                current_step=f"已排队，{label}",
+                error=None,
+            )
+            storage.append_log(
+                meeting, f"{utc_now()} 用户请求断点续跑：{label}"
+            )
+            await task_queue.enqueue(
+                kind, meeting_id, checkpoint=checkpoint
+            )
         return RedirectResponse(
             request.url_for("meeting_detail", meeting_id=meeting_id),
             status_code=303,
@@ -867,25 +1053,30 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def retry_meeting(
         request: Request, meeting_id: str
     ) -> RedirectResponse:
-        meeting = _meeting_or_404(database, meeting_id)
-        if meeting["status"] in ACTIVE_STATUSES:
-            raise HTTPException(409, "任务当前正在处理，不能重复加入队列")
-        _ensure_meeting_editable(meeting)
-        storage.remove_generated_files(meeting)
-        database.update_meeting(
-            meeting_id,
-            status="queued",
-            progress=0,
-            current_step="等待重新处理",
-            error=None,
-            duration_seconds=None,
-            transcriber_backend=None,
-            llm_backend=None,
-        )
-        storage.append_log(meeting, f"{utc_now()} 用户请求重新处理")
-        await task_queue.enqueue(
-            "pipeline", meeting_id, checkpoint="uploaded"
-        )
+        async with meeting_operation_lock(meeting_id):
+            meeting = _meeting_or_404(database, meeting_id)
+            if meeting["status"] in ACTIVE_STATUSES:
+                raise HTTPException(
+                    409, "任务当前正在处理，不能重复加入队列"
+                )
+            _ensure_meeting_editable(meeting)
+            storage.remove_generated_files(meeting)
+            database.update_meeting(
+                meeting_id,
+                status="queued",
+                progress=0,
+                current_step="等待重新处理",
+                error=None,
+                duration_seconds=None,
+                transcriber_backend=None,
+                llm_backend=None,
+            )
+            storage.append_log(
+                meeting, f"{utc_now()} 用户请求重新处理"
+            )
+            await task_queue.enqueue(
+                "pipeline", meeting_id, checkpoint="uploaded"
+            )
         return RedirectResponse(
             request.url_for("meeting_detail", meeting_id=meeting_id),
             status_code=303,
@@ -979,35 +1170,39 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         meeting_id: str,
         minutes_template_id: str = Form(""),
     ) -> RedirectResponse:
-        meeting = _meeting_or_404(database, meeting_id)
-        if meeting["status"] in ACTIVE_STATUSES:
-            raise HTTPException(409, "当前已有任务正在处理")
-        _ensure_meeting_editable(meeting)
-        transcript = storage.read_json(
-            meeting, "transcript_edited.json", default={}
-        )
-        if not transcript.get("segments"):
-            raise HTTPException(409, "逐字稿尚未生成")
-        selected_template_id = (
-            minutes_template_id.strip()
-            or str(
-                meeting.get("minutes_template_id")
-                or DEFAULT_TEMPLATE_ID
+        async with meeting_operation_lock(meeting_id):
+            meeting = _meeting_or_404(database, meeting_id)
+            if meeting["status"] in ACTIVE_STATUSES:
+                raise HTTPException(409, "当前已有任务正在处理")
+            _ensure_meeting_editable(meeting)
+            transcript = storage.read_json(
+                meeting, "transcript_edited.json", default={}
             )
-        )
-        if database.get_minutes_template(selected_template_id) is None:
-            raise HTTPException(422, "选择的纪要模板不存在")
-        database.update_meeting(
-            meeting_id,
-            minutes_template_id=selected_template_id,
-            status="queued",
-            progress=75,
-            current_step="纪要已进入队列",
-            error=None,
-        )
-        await task_queue.enqueue(
-            "minutes", meeting_id, checkpoint="transcribed"
-        )
+            if not transcript.get("segments"):
+                raise HTTPException(409, "逐字稿尚未生成")
+            selected_template_id = (
+                minutes_template_id.strip()
+                or str(
+                    meeting.get("minutes_template_id")
+                    or DEFAULT_TEMPLATE_ID
+                )
+            )
+            if (
+                database.get_minutes_template(selected_template_id)
+                is None
+            ):
+                raise HTTPException(422, "选择的纪要模板不存在")
+            database.update_meeting(
+                meeting_id,
+                minutes_template_id=selected_template_id,
+                status="queued",
+                progress=75,
+                current_step="纪要已进入队列",
+                error=None,
+            )
+            await task_queue.enqueue(
+                "minutes", meeting_id, checkpoint="transcribed"
+            )
         target = str(
             request.url_for("meeting_detail", meeting_id=meeting_id)
         )
@@ -1191,6 +1386,7 @@ def _calendar_context(
     requested_month: str | None,
     *,
     today: date,
+    action_items: ActionItemsService | None = None,
 ) -> dict[str, Any]:
     selected = _parse_calendar_month(requested_month, today)
     weeks = calendar_module.Calendar(firstweekday=0).monthdatescalendar(
@@ -1203,6 +1399,34 @@ def _calendar_context(
         first_visible.isoformat(),
         last_visible.isoformat(),
     )
+    action_counts_by_meeting: dict[str, dict[str, int]] = {}
+    if action_items is not None:
+        try:
+            calendar_actions = action_items.list_actions(today=today)
+        except ActionItemsError:
+            calendar_actions = []
+        for item in calendar_actions:
+            if item.get("status") != "pending":
+                continue
+            meeting_counts = action_counts_by_meeting.setdefault(
+                str(item["meeting_id"]),
+                {"pending": 0, "overdue": 0},
+            )
+            meeting_counts["pending"] += 1
+            if item.get("is_overdue"):
+                meeting_counts["overdue"] += 1
+    meetings = [
+        {
+            **meeting,
+            "pending_action_count": action_counts_by_meeting.get(
+                str(meeting["id"]), {}
+            ).get("pending", 0),
+            "overdue_action_count": action_counts_by_meeting.get(
+                str(meeting["id"]), {}
+            ).get("overdue", 0),
+        }
+        for meeting in meetings
+    ]
     meetings_by_date: dict[str, list[dict[str, Any]]] = {}
     for meeting in meetings:
         meetings_by_date.setdefault(
@@ -1220,6 +1444,11 @@ def _calendar_context(
         "active": 0,
         "archived": 0,
         "trashed": 0,
+        "pending_actions": sum(
+            int(meeting["pending_action_count"])
+            for meeting in month_meetings
+            if meeting["lifecycle_state"] != "trashed"
+        ),
     }
     for meeting in month_meetings:
         lifecycle_state = str(meeting["lifecycle_state"])
@@ -1308,6 +1537,13 @@ def _meeting_context(
     )
     speakers = storage.read_json(meeting, "speakers.json", default={})
     minutes = storage.read_json(meeting, "minutes.json")
+    if minutes:
+        try:
+            minutes = annotate_action_items(
+                str(meeting["id"]), minutes
+            )
+        except ActionItemsError:
+            pass
     minute_sections = minutes_sections(minutes) if minutes else []
     selected_template = database.get_minutes_template(
         str(
@@ -1399,6 +1635,106 @@ def _save_transcript_exports(
             meeting, transcript.get("segments", []), speakers
         ),
     )
+
+
+def _commit_minutes_bundle(
+    storage: MeetingStorage,
+    meeting: dict[str, Any],
+    _previous_minutes: dict[str, Any],
+    updated_minutes: dict[str, Any],
+) -> None:
+    token = uuid4().hex
+    targets = {
+        "minutes.json": storage.path(meeting, "minutes.json"),
+        "minutes.md": storage.path(meeting, "minutes.md"),
+        "minutes.txt": storage.path(meeting, "minutes.txt"),
+        "minutes.docx": storage.path(meeting, "minutes.docx"),
+    }
+    staged = {
+        name: target.with_name(f".{target.name}.stage-{token}")
+        for name, target in targets.items()
+    }
+    backups = {
+        name: target.with_name(f".{target.name}.rollback-{token}")
+        for name, target in targets.items()
+    }
+    existed = {
+        name: target.exists() for name, target in targets.items()
+    }
+    keep_backups = False
+    try:
+        staged["minutes.json"].write_text(
+            json.dumps(
+                updated_minutes,
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        staged["minutes.md"].write_text(
+            render_minutes_markdown(updated_minutes),
+            encoding="utf-8",
+        )
+        staged["minutes.txt"].write_text(
+            render_minutes_text(updated_minutes),
+            encoding="utf-8",
+        )
+        render_minutes_docx(
+            updated_minutes, staged["minutes.docx"]
+        )
+
+        for name, target in targets.items():
+            if existed[name]:
+                shutil.copy2(target, backups[name])
+        committed: list[str] = []
+        try:
+            for name, target in targets.items():
+                staged[name].replace(target)
+                committed.append(name)
+        except Exception:
+            rollback_errors: list[Exception] = []
+            for name in reversed(committed):
+                target = targets[name]
+                try:
+                    if existed[name]:
+                        backups[name].replace(target)
+                    else:
+                        target.unlink(missing_ok=True)
+                except Exception as rollback_exc:
+                    rollback_errors.append(rollback_exc)
+            if rollback_errors:
+                keep_backups = True
+                raise RuntimeError(
+                    "待办状态保存失败，且导出文件回滚不完整；"
+                    "恢复副本已保留在会议目录"
+                ) from rollback_errors[0]
+            raise
+    finally:
+        for path in staged.values():
+            path.unlink(missing_ok=True)
+        if not keep_backups:
+            for path in backups.values():
+                path.unlink(missing_ok=True)
+
+
+def _action_counts(
+    actions: list[dict[str, Any]],
+) -> dict[str, int]:
+    return {
+        "all": len(actions),
+        "pending": sum(
+            item.get("status") == "pending" for item in actions
+        ),
+        "overdue": sum(
+            bool(item.get("is_overdue")) for item in actions
+        ),
+        "done": sum(
+            item.get("status") == "done" for item in actions
+        ),
+        "dismissed": sum(
+            item.get("status") == "dismissed" for item in actions
+        ),
+    }
 
 
 def _mark_transcript_changed(

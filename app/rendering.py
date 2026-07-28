@@ -99,18 +99,21 @@ def _append_actions_markdown(lines: list[str], actions: Any) -> None:
     for item in actions:
         if not isinstance(item, dict):
             item = {"task": str(item)}
+        values = {
+            key: _escape_table(str(item.get(key, "未明确")))
+            for key in (
+                "owner",
+                "task",
+                "due",
+                "evidence_time",
+            )
+        }
+        values["status"] = _escape_table(
+            _action_status_label(item.get("status"))
+        )
         lines.append(
             "| {owner} | {task} | {due} | {evidence_time} | {status} |".format(
-                **{
-                    key: _escape_table(str(item.get(key, "未明确")))
-                    for key in (
-                        "owner",
-                        "task",
-                        "due",
-                        "evidence_time",
-                        "status",
-                    )
-                }
+                **values
             )
         )
     lines.append("")
@@ -164,7 +167,7 @@ def _add_docx_actions(document: Document, actions: Any) -> None:
             item.get("task", "待确认"),
             item.get("due", "未明确"),
             item.get("evidence_time", "未明确"),
-            item.get("status", "待处理"),
+            _action_status_label(item.get("status")),
         )
         for cell, value in zip(cells, values):
             cell.text = str(value)
@@ -234,3 +237,13 @@ def minutes_sections(minutes: dict[str, Any]) -> list[dict[str, str]]:
 
 def _escape_table(value: str) -> str:
     return value.replace("|", "\\|").replace("\n", " ")
+
+
+def _action_status_label(value: Any) -> str:
+    labels = {
+        "pending": "待处理",
+        "done": "已完成",
+        "dismissed": "已忽略",
+    }
+    clean = str(value or "").strip()
+    return labels.get(clean.casefold(), clean or "待处理")

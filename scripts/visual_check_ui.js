@@ -85,6 +85,14 @@ async function inspectPage(page, name) {
         path: `${outputDir}/ui-minutes-desktop.png`,
         fullPage: false,
       });
+      const meetingActions = page.locator(".action-section");
+      if (await meetingActions.count()) {
+        await meetingActions.scrollIntoViewIfNeeded();
+        await page.screenshot({
+          path: `${outputDir}/ui-meeting-actions-desktop.png`,
+          fullPage: false,
+        });
+      }
     }
   }
 
@@ -116,6 +124,8 @@ async function inspectPage(page, name) {
     (await page.locator(".diagnostic-card").count()) === 7;
 
   for (const [path, name] of [
+    ["/search", "search-desktop"],
+    ["/actions", "actions-desktop"],
     ["/calendar", "calendar-desktop"],
     ["/minutes-templates", "minutes-templates-desktop"],
     ["/archive", "archive-desktop"],
@@ -129,6 +139,15 @@ async function inspectPage(page, name) {
     });
     results.push(await inspectPage(page, name));
   }
+
+  await page.goto(`${baseUrl}/search?q=验收`, {
+    waitUntil: "networkidle",
+  });
+  await page.screenshot({
+    path: `${outputDir}/ui-search-results-desktop.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(page, "search-results-desktop"));
 
   const mobile = await browser.newContext({
     viewport: { width: 390, height: 844 },
@@ -146,6 +165,8 @@ async function inspectPage(page, name) {
     fullPage: true,
   });
   results.push(await inspectPage(mobilePage, "home-mobile"));
+  interactions.mobileNavigationTargets =
+    await mobilePage.locator(".mobile-primary-nav a").count();
 
   const mobileMeetingLink = mobilePage.locator("[data-meeting-row]").first();
   if (await mobileMeetingLink.count()) {
@@ -156,6 +177,19 @@ async function inspectPage(page, name) {
       fullPage: false,
     });
     results.push(await inspectPage(mobilePage, "meeting-mobile"));
+    const mobileMinutes = mobilePage.locator("#minutes");
+    if (await mobileMinutes.count()) {
+      const mobileMeetingActions = mobilePage.locator(".action-section");
+      if (await mobileMeetingActions.count()) {
+        await mobileMeetingActions.scrollIntoViewIfNeeded();
+      } else {
+        await mobileMinutes.scrollIntoViewIfNeeded();
+      }
+      await mobilePage.screenshot({
+        path: `${outputDir}/ui-meeting-actions-mobile.png`,
+        fullPage: false,
+      });
+    }
   }
 
   await mobilePage.goto(`${baseUrl}/settings/external-llm`, {
@@ -193,6 +227,24 @@ async function inspectPage(page, name) {
     fullPage: true,
   });
   results.push(await inspectPage(mobilePage, "calendar-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/search`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-search-mobile.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(mobilePage, "search-mobile"));
+
+  await mobilePage.goto(`${baseUrl}/actions`, {
+    waitUntil: "networkidle",
+  });
+  await mobilePage.screenshot({
+    path: `${outputDir}/ui-actions-mobile.png`,
+    fullPage: true,
+  });
+  results.push(await inspectPage(mobilePage, "actions-mobile"));
 
   await mobilePage.goto(`${baseUrl}/minutes-templates`, {
     waitUntil: "networkidle",

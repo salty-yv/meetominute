@@ -32,6 +32,7 @@
   <div><span>有记录日期</span><strong>{{ days_with_meetings }}</strong></div>
   <div><span>正常记录</span><strong>{{ month_counts.active }}</strong></div>
   <div><span>已归档</span><strong>{{ month_counts.archived }}</strong></div>
+  <div class="pending-actions"><span>待处理事项</span><strong>{{ month_counts.pending_actions }}</strong></div>
 </section>
 
 <section class="panel calendar-panel">
@@ -111,6 +112,11 @@
                     {{ status_labels[meeting.status] }}
                   {% endif %}
                 </small>
+                {% if meeting.lifecycle_state != "trashed" and meeting.pending_action_count %}
+                <em class="calendar-action-count{% if meeting.overdue_action_count %} overdue{% endif %}">
+                  {{ meeting.pending_action_count }} 项待办{% if meeting.overdue_action_count %} · {{ meeting.overdue_action_count }} 项逾期{% endif %}
+                </em>
+                {% endif %}
               </span>
             </a>
             {% endfor %}
@@ -137,7 +143,15 @@
             href="{% if meeting.lifecycle_state == 'trashed' %}{{ url_for('trash_page') }}{% else %}{{ url_for('meeting_detail', meeting_id=meeting.id) }}{% endif %}"
           >
             <i aria-hidden="true"></i>
-            <span><strong>{{ meeting.title }}</strong><small>{% if meeting.lifecycle_state == "archived" %}已归档{% elif meeting.lifecycle_state == "trashed" %}回收站{% else %}{{ status_labels[meeting.status] }}{% endif %}</small></span>
+            <span>
+              <strong>{{ meeting.title }}</strong>
+              <small>{% if meeting.lifecycle_state == "archived" %}已归档{% elif meeting.lifecycle_state == "trashed" %}回收站{% else %}{{ status_labels[meeting.status] }}{% endif %}</small>
+              {% if meeting.lifecycle_state != "trashed" and meeting.pending_action_count %}
+              <em class="calendar-action-count{% if meeting.overdue_action_count %} overdue{% endif %}">
+                {{ meeting.pending_action_count }} 项待办{% if meeting.overdue_action_count %} · {{ meeting.overdue_action_count }} 项逾期{% endif %}
+              </em>
+              {% endif %}
+            </span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
           </a>
           {% endfor %}

@@ -50,6 +50,16 @@ def test_minutes_markdown_has_traceable_action() -> None:
     assert "未明确" in rendered
 
 
+def test_minutes_exports_translate_canonical_action_status() -> None:
+    minutes = sample_minutes()
+    minutes["action_items"][0]["status"] = "done"
+
+    rendered = render_minutes_markdown(minutes)
+
+    assert "已完成" in rendered
+    assert "| done |" not in rendered
+
+
 def test_docx_is_readable(tmp_path: Path) -> None:
     destination = tmp_path / "minutes.docx"
     render_minutes_docx(sample_minutes(), destination)

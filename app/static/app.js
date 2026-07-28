@@ -165,6 +165,55 @@ function initAudioNavigation() {
     });
   });
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const initialSeek = parseSeekValue(searchParams.get("seek") || "");
+  const focus = searchParams.get("focus") || "";
+  if (Number.isFinite(initialSeek)) {
+    if (audio) {
+      const setInitialAudioTime = () => {
+        audio.currentTime = Math.max(0, initialSeek);
+      };
+      if (audio.readyState >= 1) {
+        setInitialAudioTime();
+      } else {
+        audio.addEventListener(
+          "loadedmetadata",
+          setInitialAudioTime,
+          { once: true },
+        );
+      }
+    }
+    let evidenceTarget = null;
+    if (focus === "transcript") {
+      evidenceTarget = segments.find((segment) => {
+        const start = Number.parseFloat(
+          segment.dataset.start || "0",
+        );
+        const end = Number.parseFloat(
+          segment.dataset.end || String(start + 1),
+        );
+        return initialSeek >= start && initialSeek < end;
+      });
+    } else if (focus === "minutes") {
+      const evidenceButton = seekButtons.find((button) => {
+        if (!button.closest("#minutes")) return false;
+        const value = parseSeekValue(button.dataset.seek || "");
+        return Number.isFinite(value) && Math.abs(value - initialSeek) < 1;
+      });
+      evidenceTarget =
+        evidenceButton?.closest("li, tr") || evidenceButton || null;
+    }
+    if (evidenceTarget) {
+      evidenceTarget.classList.add("evidence-target");
+      window.requestAnimationFrame(() => {
+        evidenceTarget.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      });
+    }
+  }
+
   if (!audio || !segments.length) return;
   let activeSegment = null;
   audio.addEventListener("timeupdate", () => {

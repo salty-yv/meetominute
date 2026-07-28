@@ -34,13 +34,33 @@
         <a href="{{ url_for('index') }}" {% if request.url.path == '/' %}class="active" aria-current="page"{% endif %}>工作台</a>
         <a href="{{ url_for('index') }}#meeting-history">会议记录</a>
         <a href="{{ url_for('calendar_page') }}" {% if request.url.path == '/calendar' %}class="active" aria-current="page"{% endif %}>日历</a>
+        <a href="{{ url_for('search_page') }}" {% if request.url.path == '/search' %}class="active" aria-current="page"{% endif %}>搜索</a>
+        <a href="{{ url_for('actions_page') }}" {% if request.url.path == '/actions' %}class="active" aria-current="page"{% endif %}>待办</a>
         <a href="{{ url_for('archive_page') }}" {% if request.url.path in ['/archive', '/trash', '/backups'] %}class="active" aria-current="page"{% endif %}>资料库</a>
         <a href="{{ url_for('minutes_templates_page') }}" {% if request.url.path.startswith('/minutes-templates') %}class="active" aria-current="page"{% endif %}>纪要模板</a>
         <a href="{{ url_for('external_llm_settings') }}" {% if request.url.path == '/settings/external-llm' %}class="active" aria-current="page"{% endif %}>外部 LLM</a>
         <a href="{{ url_for('diagnostics_page') }}" {% if request.url.path == '/diagnostics' %}class="active" aria-current="page"{% endif %}>运行诊断</a>
       </nav>
 
+      <form class="global-search" action="{{ url_for('search_page') }}" method="get" role="search">
+        <label class="sr-only" for="global-search-query">搜索全部会议</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <input
+          id="global-search-query"
+          type="search"
+          name="q"
+          value="{{ query|default('', true) }}"
+          placeholder="搜索会议…"
+          autocomplete="off"
+        >
+        <button type="submit">搜索</button>
+      </form>
+
       <div class="header-actions">
+        <a class="settings-shortcut mobile-action-shortcut" href="{{ url_for('actions_page') }}" title="查看会议待办" aria-label="查看会议待办">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/><path d="m16 17 2 2 4-5"/></svg>
+          <span>待办</span>
+        </a>
         <a class="settings-shortcut" href="{{ url_for('external_llm_settings') }}" title="配置外部 LLM">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.5"/></svg>
           <span>模型设置</span>
@@ -57,6 +77,16 @@
         </span>
       </div>
     </div>
+    <nav class="mobile-primary-nav" aria-label="移动端主导航">
+      <a href="{{ url_for('index') }}" {% if request.url.path == '/' %}class="active" aria-current="page"{% endif %}>工作台</a>
+      <a href="{{ url_for('calendar_page') }}" {% if request.url.path == '/calendar' %}class="active" aria-current="page"{% endif %}>日历</a>
+      <a href="{{ url_for('search_page') }}" {% if request.url.path == '/search' %}class="active" aria-current="page"{% endif %}>搜索</a>
+      <a href="{{ url_for('actions_page') }}" {% if request.url.path == '/actions' %}class="active" aria-current="page"{% endif %}>待办</a>
+      <a href="{{ url_for('archive_page') }}" {% if request.url.path in ['/archive', '/trash', '/backups'] %}class="active" aria-current="page"{% endif %}>资料库</a>
+      <a href="{{ url_for('minutes_templates_page') }}" {% if request.url.path.startswith('/minutes-templates') %}class="active" aria-current="page"{% endif %}>纪要模板</a>
+      <a href="{{ url_for('external_llm_settings') }}" {% if request.url.path == '/settings/external-llm' %}class="active" aria-current="page"{% endif %}>模型设置</a>
+      <a href="{{ url_for('diagnostics_page') }}" {% if request.url.path == '/diagnostics' %}class="active" aria-current="page"{% endif %}>运行诊断</a>
+    </nav>
   </header>
 
   <main class="page-shell" id="main-content">

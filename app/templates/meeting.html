@@ -71,8 +71,8 @@
 {% if meeting.lifecycle_state == "archived" %}
 <div class="archived-notice">
   <div>
-    <strong>这场会议已归档，当前为只读模式。</strong>
-    <span>可以试听和导出；若要修改逐字稿或重新生成纪要，请先取消归档。</span>
+    <strong>这场会议的内容已归档。</strong>
+    <span>仍可试听、导出和更新待办状态；若要修改逐字稿或重新生成纪要，请先取消归档。</span>
   </div>
   <form action="{{ url_for('unarchive_meeting', meeting_id=meeting.id) }}" method="post">
     <button class="button compact primary" type="submit">取消归档并编辑</button>
@@ -339,20 +339,48 @@
           <section class="action-section">
             <div class="action-section-title">
               <div><p class="eyebrow">ACTION ITEMS</p><h3>{{ minute_actions_section.title }}</h3></div>
-              <span>{{ action_items|length }} 项</span>
+              <div class="action-section-tools">
+                <span>{{ action_items|length }} 项</span>
+                <a href="{{ url_for('actions_page') }}">打开待办中心</a>
+              </div>
             </div>
             {% if action_items %}
             <div class="table-wrap">
               <table>
-                <thead><tr><th>负责人</th><th>具体任务</th><th>截止日期</th><th>原文时间</th><th>状态</th></tr></thead>
+                <thead><tr><th>负责人</th><th>具体任务</th><th>截止日期</th><th>原文时间</th><th>状态</th><th>操作</th></tr></thead>
                 <tbody>
                 {% for item in action_items %}
                 <tr>
-                  <td><span class="owner-chip">{{ item.owner }}</span></td>
-                  <td>{{ item.task }}</td>
-                  <td>{{ item.due }}</td>
-                  <td><button class="table-time" type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button></td>
-                  <td><span class="task-status">{{ item.status }}</span></td>
+                  <td data-label="负责人"><span class="sr-only">负责人：</span><span class="owner-chip">{{ item.owner }}</span></td>
+                  <td data-label="具体任务"><span class="sr-only">具体任务：</span>{{ item.task }}</td>
+                  <td data-label="截止日期"><span class="sr-only">截止日期：</span>{{ item.due }}</td>
+                  <td data-label="原文时间"><span class="sr-only">原文时间：</span><button class="table-time" type="button" data-seek="{{ item.evidence_time }}">{{ item.evidence_time }}</button></td>
+                  <td data-label="状态"><span class="sr-only">状态：</span><span class="task-status status-{{ item.status }}">{{ action_status_labels.get(item.status, item.status) }}</span></td>
+                  <td data-label="操作">
+                    <span class="sr-only">操作：</span>
+                    {% if meeting.status in active_statuses %}
+                    <span class="muted">处理完成后可更新</span>
+                    {% elif item.status == "pending" %}
+                    <div class="inline-action-forms">
+                      <form action="{{ url_for('update_action_status', meeting_id=meeting.id, action_id=item.action_id) }}" method="post">
+                        <input type="hidden" name="status" value="done">
+                        <input type="hidden" name="return_to" value="meeting">
+                        <button class="button compact primary" type="submit">完成</button>
+                      </form>
+                      <form action="{{ url_for('update_action_status', meeting_id=meeting.id, action_id=item.action_id) }}" method="post">
+                        <input type="hidden" name="status" value="dismissed">
+                        <input type="hidden" name="return_to" value="meeting">
+                        <button class="action-text-button" type="submit">忽略</button>
+                      </form>
+                    </div>
+                    {% else %}
+                    <form action="{{ url_for('update_action_status', meeting_id=meeting.id, action_id=item.action_id) }}" method="post">
+                      <input type="hidden" name="status" value="pending">
+                      <input type="hidden" name="return_to" value="meeting">
+                      <button class="button compact secondary" type="submit">重新打开</button>
+                    </form>
+                    {% endif %}
+                  </td>
                 </tr>
                 {% endfor %}
                 </tbody>

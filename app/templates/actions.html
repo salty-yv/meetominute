@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}会议待办 · MeetOminute{% endblock %}
+{% block content %}
+<header class="library-hero actions-hero">
+  <div>
+    <p class="eyebrow">ACTION CENTER</p>
+    <h1>会议待办</h1>
+    <p>把散落在各场纪要中的任务集中到一起，按负责人、期限和状态持续跟进。</p>
+  </div>
+  <a class="button secondary" href="{{ url_for('search_page') }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+    搜索会议资料
+  </a>
+</header>
+
+<section class="action-summary" aria-label="待办概览">
+  <div>
+    <span>全部待办</span>
+    <strong>{{ counts.get("all", actions|length) }}</strong>
+  </div>
+  <div class="pending">
+    <span>待处理</span>
+    <strong>{{ counts.get("pending", 0) }}</strong>
+  </div>
+  <div class="overdue">
+    <span>已逾期</span>
+    <strong>{{ counts.get("overdue", 0) }}</strong>
+  </div>
+  <div class="done">
+    <span>已完成</span>
+    <strong>{{ counts.get("done", 0) }}</strong>
+  </div>
+</section>
+
+<section class="panel actions-panel" aria-labelledby="actions-list-title">
+  <div class="actions-toolbar">
+    <div>
+      <p class="eyebrow">FOLLOW UP</p>
+      <h2 id="actions-list-title">待办清单</h2>
+    </div>
+    <form action="{{ url_for('actions_page') }}" method="get" class="actions-filter-form">
+      <label class="actions-query-field">
+        <span class="sr-only">搜索任务、负责人或会议</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <input type="search" name="q" value="{{ query }}" placeholder="搜索任务或负责人" autocomplete="off">
+      </label>
+      <label>
+        <span class="sr-only">筛选待办状态</span>
+        <select name="status">
+          <option value="all" {% if selected_status == "all" %}selected{% endif %}>全部状态</option>
+          <option value="pending" {% if selected_status == "pending" %}selected{% endif %}>待处理</option>
+          <option value="overdue" {% if selected_status == "overdue" %}selected{% endif %}>已逾期</option>
+          <option value="done" {% if selected_status == "done" %}selected{% endif %}>已完成</option>
+          <option value="dismissed" {% if selected_status == "dismissed" %}selected{% endif %}>已忽略</option>
+        </select>
+      </label>
+      <button class="button compact secondary" type="submit">筛选</button>
+    </form>
+  </div>
+
+  {% if actions %}
+  <div class="action-center-list" aria-live="polite">
+    {% for item in actions %}
+    <article class="action-center-item state-{{ item.status }}{% if item.is_overdue %} is-overdue{% endif %}">
+      <div class="action-check" aria-hidden="true">
+        {% if item.status == "done" %}
+        <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+        {% elif item.status == "dismissed" %}
+        <svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>
+        {% else %}
+        <span></span>
+        {% endif %}
+      </div>
+      <div class="action-center-main">
+        <div class="action-center-meta">
+          <span class="action-state">
+            {% if item.status == "done" %}
+              已完成
+            {% elif item.status == "dismissed" %}
+              已忽略
+            {% elif item.is_overdue %}
+              已逾期
+            {% else %}
+              待处理
+            {% endif %}
+          </span>
+          <span class="lifecycle-chip lifecycle-{{ item.lifecycle_state }}">
+            {% if item.lifecycle_state == "archived" %}
+              已归档
+            {% elif item.lifecycle_state == "trashed" %}
+              回收站
+            {% else %}
+              正常记录
+            {% endif %}
+          </span>
+          <time datetime="{{ item.meeting_date }}">{{ item.meeting_date }}</time>
+        </div>
+        <h3>{{ item.task }}</h3>
+        <dl class="action-center-facts">
+          <div>
+            <dt>负责人</dt>
+            <dd>{{ item.owner or "未指定" }}</dd>
+          </div>
+          <div{% if item.is_overdue %} class="overdue"{% endif %}>
+            <dt>截止时间</dt>
+            <dd>{{ item.due or "未指定" }}</dd>
+          </div>
+          {% if item.evidence_time %}
+          <div>
+            <dt>原文位置</dt>
+            <dd>{{ item.evidence_time }}</dd>
+          </div>
+          {% endif %}
+        </dl>
+        <a class="action-meeting-link" href="{{ url_for('meeting_detail', meeting_id=item.meeting_id) }}#minutes">
+          <span>{{ item.meeting_title }}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="action-center-controls" aria-label="更新“{{ item.task }}”的状态">
+        {% if item.meeting_status in active_statuses %}
+        <span class="muted">会议处理完成后可更新</span>
+        {% elif item.status == "pending" %}
+        <form action="{{ url_for('update_action_status', meeting_id=item.meeting_id, action_id=item.id) }}" method="post">
+          <input type="hidden" name="status" value="done">
+          <input type="hidden" name="selected_status" value="{{ selected_status }}">
+          <input type="hidden" name="query" value="{{ query }}">
+          <button class="button compact primary" type="submit">标为完成</button>
+        </form>
+        <form action="{{ url_for('update_action_status', meeting_id=item.meeting_id, action_id=item.id) }}" method="post">
+          <input type="hidden" name="status" value="dismissed">
+          <input type="hidden" name="selected_status" value="{{ selected_status }}">
+          <input type="hidden" name="query" value="{{ query }}">
+          <button class="action-text-button" type="submit">忽略</button>
+        </form>
+        {% else %}
+        <form action="{{ url_for('update_action_status', meeting_id=item.meeting_id, action_id=item.id) }}" method="post">
+          <input type="hidden" name="status" value="pending">
+          <input type="hidden" name="selected_status" value="{{ selected_status }}">
+          <input type="hidden" name="query" value="{{ query }}">
+          <button class="button compact secondary" type="submit">重新打开</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state actions-empty">
+    <span class="empty-illustration small" aria-hidden="true">
+      <svg viewBox="0 0 72 72"><path d="M17 14h38v46H17zM25 27l4 4 7-8M25 43l4 4 7-8M41 27h7M41 43h7"/></svg>
+    </span>
+    {% if query %}
+    <h3>没有匹配的待办</h3>
+    <p>换一个关键词，或把状态切换为“全部状态”再试一次。</p>
+    {% elif selected_status != "all" %}
+    <h3>当前状态下没有待办</h3>
+    <p>切换其他状态，查看仍需跟进或已经处理的任务。</p>
+    {% else %}
+    <h3>还没有可跟进的待办</h3>
+    <p>会议纪要生成后，其中的待办事项会自动汇总到这里。</p>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

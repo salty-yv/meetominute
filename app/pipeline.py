@@ -3,10 +3,17 @@ from __future__ import annotations
 import asyncio
 import copy
 import logging
+import shutil
 import threading
 import traceback
+from pathlib import Path
 from typing import Any, Literal
 
+from .actions import (
+    ActionItemsError,
+    minutes_file_lock,
+    reconcile_action_items,
+)
 from .audio import normalize_audio
 from .config import Settings
 from .database import Database
@@ -644,6 +651,32 @@ class TaskQueue:
         used_ollama = False
         cancel_check = lambda: self._raise_if_canceled(job_id)
         try:
+            try:
+                previous_minutes = self.storage.read_json(
+                    meeting, "minutes.json", default=None
+                )
+            except (OSError, ValueError):
+                backup = self._preserve_invalid_minutes(
+                    job_id, meeting
+                )
+                self._log(
+                    meeting,
+                    "已有纪要损坏，已保留副本 "
+                    f"{backup.name}；本次将重建纪要。",
+                )
+                previous_minutes = None
+            if previous_minutes is not None and not isinstance(
+                previous_minutes, dict
+            ):
+                backup = self._preserve_invalid_minutes(
+                    job_id, meeting
+                )
+                self._log(
+                    meeting,
+                    "已有纪要格式无效，已保留副本 "
+                    f"{backup.name}；本次将重建纪要。",
+                )
+                previous_minutes = None
             transcript = self.storage.read_json(
                 meeting, "transcript_edited.json"
             )
@@ -694,16 +727,81 @@ class TaskQueue:
                 cancel_check=cancel_check,
             )
             self._raise_if_canceled(job_id)
-            self.storage.write_json(meeting, "minutes.json", minutes)
-            self.storage.write_text(
-                meeting, "minutes.md", render_minutes_markdown(minutes)
-            )
-            self.storage.write_text(
-                meeting, "minutes.txt", render_minutes_text(minutes)
-            )
-            render_minutes_docx(
-                minutes, self.storage.path(meeting, "minutes.docx")
-            )
+            with minutes_file_lock(self.storage, meeting):
+                try:
+                    latest_minutes = self.storage.read_json(
+                        meeting,
+                        "minutes.json",
+                        default=previous_minutes,
+                    )
+                except (OSError, ValueError):
+                    backup = self._preserve_invalid_minutes(
+                        job_id, meeting
+                    )
+                    self._log(
+                        meeting,
+                        "写入前发现已有纪要损坏，已保留副本 "
+                        f"{backup.name}。",
+                    )
+                    latest_minutes = None
+                if latest_minutes is not None and not isinstance(
+                    latest_minutes, dict
+                ):
+                    backup = self._preserve_invalid_minutes(
+                        job_id, meeting
+                    )
+                    self._log(
+                        meeting,
+                        "写入前发现已有纪要格式无效，已保留副本 "
+                        f"{backup.name}。",
+                    )
+                    latest_minutes = None
+                try:
+                    minutes = reconcile_action_items(
+                        str(meeting["id"]),
+                        minutes,
+                        latest_minutes,
+                    )
+                except ActionItemsError as exc:
+                    if latest_minutes is None:
+                        raise RuntimeError(
+                            f"新纪要待办数据无效：{exc}"
+                        ) from exc
+                    backup = self._preserve_invalid_minutes(
+                        job_id, meeting
+                    )
+                    try:
+                        minutes = reconcile_action_items(
+                            str(meeting["id"]),
+                            minutes,
+                            None,
+                        )
+                    except ActionItemsError as generated_exc:
+                        raise RuntimeError(
+                            f"新纪要待办数据无效：{generated_exc}"
+                        ) from generated_exc
+                    self._log(
+                        meeting,
+                        "已有纪要的待办结构无效，已保留副本 "
+                        f"{backup.name}；无法继承旧状态。",
+                    )
+                self.storage.write_json(
+                    meeting, "minutes.json", minutes
+                )
+                self.storage.write_text(
+                    meeting,
+                    "minutes.md",
+                    render_minutes_markdown(minutes),
+                )
+                self.storage.write_text(
+                    meeting,
+                    "minutes.txt",
+                    render_minutes_text(minutes),
+                )
+                render_minutes_docx(
+                    minutes,
+                    self.storage.path(meeting, "minutes.docx"),
+                )
             self.database.update_meeting(
                 meeting["id"], llm_backend=generator.name
             )
@@ -759,6 +857,19 @@ class TaskQueue:
 
     def _log(self, meeting: dict[str, Any], message: str) -> None:
         self.storage.append_log(meeting, f"{utc_now()} {message}")
+
+    def _preserve_invalid_minutes(
+        self,
+        job_id: int,
+        meeting: dict[str, Any],
+    ) -> Path:
+        source = self.storage.path(meeting, "minutes.json")
+        destination = self.storage.path(
+            meeting, f"minutes.invalid-{job_id}.json"
+        )
+        if source.exists() and not destination.exists():
+            shutil.copy2(source, destination)
+        return destination
 
     def _sync_metadata(self, meeting_id: str) -> None:
         current = self.database.get_meeting(meeting_id)
