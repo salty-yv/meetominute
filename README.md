@@ -1,94 +1,180 @@
 # MeetOminute
 
-MeetOminute 是一个本地优先的个人会议工作流应用：上传录音，后台顺序完成音频标准化、转写、说话人标记和纪要生成，再由用户校正并导出 Markdown、TXT、Word 或 JSON。
+> 本地优先的中文会议录音转写、纪要生成与会议资料管理工具。
 
-当前为 **v0.1 原型**。网页、SQLite 持久化阶段队列、任务取消与断点续跑、FFmpeg 预处理、FunASR 本地转写、Qwen3.5 本地纪要、逐字稿编辑、说话人姓名映射和四种导出格式已落地。本机 `.env` 已启用全本地处理，录音和逐字稿无需发送到第三方。
+[![Windows tests](https://github.com/salty-yv/meetominute/actions/workflows/tests.yml/badge.svg)](https://github.com/salty-yv/meetominute/actions/workflows/tests.yml)
+![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white)
+![Status](https://img.shields.io/badge/Status-v0.1%20Prototype-6C63FF)
 
-## 已配置的项目环境
+MeetOminute 把一次会议从“录音文件”整理成可长期管理的资料：
 
-项目使用独立虚拟环境：
+**上传录音 → 音频标准化 → 语音转写 → 人工校正 → 生成纪要 → 跟进待办 → 搜索、导出和备份**
 
-```text
-E:\meetominute\.venv
-Python 3.11.9
-PyTorch 2.6.0+cu124
-Torchaudio 2.6.0+cu124
-FunASR 1.3.29
-Ollama 0.30.10
-Qwen3.5 9.2B Q4_K_M
-GPU: NVIDIA GeForce RTX 3060 Laptop GPU
+项目以本地使用为第一目标。录音、逐字稿、纪要、任务状态和模板默认都保存在自己的电脑中；需要时也可以接入 OpenAI 兼容的外部转写或大语言模型接口。
+
+<p align="center">
+  <img src="benchmark-results/ui-home-desktop.png" alt="MeetOminute 工作台" width="100%">
+</p>
+
+## 项目简介
+
+很多会议转写工具只解决“把声音变成文字”，但会议结束后还需要继续整理说话人、确认结论、跟进事项、查找历史内容并做好备份。MeetOminute 将这些环节放进同一个浏览器工作台中。
+
+它适合以下场景：
+
+- 个人访谈、课程录音、研究讨论和实验室组会
+- 希望录音和逐字稿尽量不离开本机的用户
+- 需要自定义会议纪要格式的团队
+- 需要按日期、关键词和行动项管理大量会议记录的用户
+- 希望在本地模型与外部 API 之间自由切换的用户
+
+当前版本优先适配 Windows 10/11，并围绕中文会议完成了 FunASR、Ollama、CUDA 和 OpenAI 兼容接口的整合。
+
+## 主要功能
+
+| 模块 | 能力 |
+| --- | --- |
+| 录音处理 | 支持常见音频文件上传，通过 FFmpeg 统一转换为 16 kHz 单声道 WAV |
+| 中文转写 | 支持 FunASR 本地转写、OpenAI 兼容转写接口和用于体验流程的 Mock 后端 |
+| 说话人整理 | 支持说话人聚类、姓名映射、按说话人筛选以及点击时间回听原音 |
+| 会议纪要 | 支持 Ollama 本地模型、OpenAI 兼容外部 LLM、长会议分段抽取与多层归并 |
+| 自定义模板 | 可控制纪要章节、章节名称、额外章节和每个章节的提取要求 |
+| 全文搜索 | 跨会议搜索标题、日期、文件名、术语、说话人、逐字稿和纪要 |
+| 待办中心 | 汇总全部会议行动项，识别逾期事项，支持完成、忽略和重新打开 |
+| 日历管理 | 按会议日期查看记录、待处理数量和逾期数量 |
+| 资料库 | 支持归档、取消归档、回收站恢复和二次确认后的永久删除 |
+| 导出 | 支持逐字稿 TXT，以及纪要 Word、Markdown、TXT 和 JSON |
+| 备份恢复 | 创建 ZIP 一致性快照，并以不覆盖现有会议的方式合并恢复 |
+| 稳定性 | 后台任务队列、阶段检查点、取消、失败重试、断点续跑和应用重启恢复 |
+| 运行诊断 | 检查 Python、磁盘、SQLite、FFmpeg、CUDA、FunASR 和 Ollama |
+
+## 界面预览
+
+<table>
+  <tr>
+    <td width="50%"><img src="benchmark-results/ui-search-results-desktop.png" alt="跨会议全文搜索"></td>
+    <td width="50%"><img src="benchmark-results/ui-actions-desktop.png" alt="待办事项中心"></td>
+  </tr>
+  <tr>
+    <td align="center">跨会议全文搜索</td>
+    <td align="center">待办事项中心</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="benchmark-results/ui-calendar-desktop.png" alt="会议日历"></td>
+    <td width="50%"><img src="benchmark-results/ui-minutes-templates-desktop.png" alt="纪要模板中心"></td>
+  </tr>
+  <tr>
+    <td align="center">会议日历</td>
+    <td align="center">自定义纪要模板</td>
+  </tr>
+</table>
+
+桌面端与 390 px 手机端均已完成浏览器级布局验证。更多截图位于 [`benchmark-results/`](benchmark-results/)。
+
+## 快速开始
+
+### 1. 准备环境
+
+基础运行环境：
+
+- Windows 10 或 Windows 11
+- Python 3.11
+- FFmpeg，并确保 `ffmpeg` 和 `ffprobe` 已加入 `PATH`
+- Git（用于克隆和更新项目）
+
+先在终端确认：
+
+```powershell
+py -3.11 --version
+ffmpeg -version
+ffprobe -version
 ```
 
-CUDA 版 PyTorch 从同为 CPython 3.11 的 `E:\rec\.venv-rec-eval` 复制到项目环境，源环境未被修改；匹配版本的 Torchaudio 和 FunASR 依赖随后安装到本项目。`pip check` 已通过，CUDA 12.4 与 RTX 3060 均已实际验证。
+没有安装 FFmpeg 时，可以从 [FFmpeg 官方下载页](https://ffmpeg.org/download.html) 获取 Windows 版本。
 
-直接双击 `start.bat`，或在 PowerShell 中运行：
+本地真实转写和纪要属于可选能力：
+
+- FunASR 使用 CPU 也能运行，但建议使用 NVIDIA GPU
+- CUDA 模式需要与显卡环境匹配的 PyTorch
+- 本地纪要需要安装 [Ollama](https://ollama.com/) 并准备一个模型
+
+### 2. 克隆项目
+
+```powershell
+git clone https://github.com/salty-yv/meetominute.git
+cd meetominute
+```
+
+### 3. 创建项目虚拟环境
+
+项目依赖应安装在项目目录自己的 `.venv` 中：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+```
+
+### 4. 创建配置文件
+
+```powershell
+Copy-Item .env.example .env
+```
+
+默认配置使用 Mock 转写和 Mock 纪要，适合先确认页面、任务流程和导出功能可以正常工作，但它不会产生真实的语音识别结果。
+
+### 5. 启动应用
+
+最简单的方式是双击项目根目录下的 `start.bat`。
+
+也可以在 PowerShell 中启动：
+
+```powershell
+.\start.bat
+```
+
+或直接运行：
 
 ```powershell
 .\.venv\Scripts\python.exe -m app.launcher
 ```
 
-应用只监听 `http://127.0.0.1:8000`，启动后会自动打开浏览器。按 `Ctrl+C` 停止。若本地纪要后端为 Ollama，启动器会在专用端口 `11435` 自动启动服务，并强制屏蔽 Intel Vulkan 核显、优先使用 RTX/CUDA。
-
-启动后可从顶部“运行诊断”进入本机环境检查页，集中查看 Python 虚拟环境、数据目录、磁盘、SQLite、FFmpeg、PyTorch/CUDA、FunASR 和 Ollama 状态。页面提供逐项修复建议，并可复制不含 API Key 和会议内容的诊断 JSON；程序接口为 `GET /api/diagnostics`。即使 Ollama 自动启动失败，网页仍会打开，便于从诊断页查看原因和处理建议。
-
-## 从零安装
-
-```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
-```
-
-要求系统能在命令行调用 `ffmpeg` 和 `ffprobe`。
-
-## 配置真实后端
-
-复制 `.env.example` 为 `.env`，再按服务填写。三种处理模式的映射：
-
-| 页面模式 | 转写后端 | 纪要后端 |
-| --- | --- | --- |
-| 本地 | `MEETOMINUTE_LOCAL_TRANSCRIBER` | `MEETOMINUTE_LOCAL_LLM` |
-| 混合 | `MEETOMINUTE_LOCAL_TRANSCRIBER` | `MEETOMINUTE_CLOUD_LLM` |
-| 云端 | `MEETOMINUTE_CLOUD_TRANSCRIBER` | `MEETOMINUTE_CLOUD_LLM` |
-
-当前代码支持 `mock`、FunASR、独立 Ollama 后端和 OpenAI 兼容接口。以云端兼容接口为例：
-
-```dotenv
-MEETOMINUTE_CLOUD_TRANSCRIBER=openai
-MEETOMINUTE_CLOUD_LLM=openai
-MEETOMINUTE_OPENAI_BASE_URL=https://your-provider.example/v1
-MEETOMINUTE_OPENAI_API_KEY=...
-MEETOMINUTE_TRANSCRIBE_MODEL=your-transcription-model
-MEETOMINUTE_LLM_MODEL=your-chat-model
-```
-
-原始录音只会发送给所选转写后端；纪要后端只接收校正后的逐字稿。本地模式使用单独的 Ollama 配置，不会覆盖云端接口设置。
-
-### 从界面接入外部 LLM
-
-启动应用后，点击顶部“外部 LLM”或“模型设置”，打开：
+启动器会打开浏览器，默认地址为：
 
 ```text
-http://127.0.0.1:8000/settings/external-llm
+http://127.0.0.1:8000
 ```
 
-填写兼容 OpenAI Chat Completions 协议的 API Base URL、模型名称和 API Key，可先点击“测试连接”，确认后保存。配置保存后立即生效，无需重启：
+按 `Ctrl+C` 停止服务。`127.0.0.1` 只允许当前电脑访问，不会自动暴露给局域网或互联网。
 
-- “全本地”继续使用 Ollama，不调用外部接口。
-- “混合模式”使用本地 FunASR 转写，只把校正后的逐字稿发送给外部 LLM 生成纪要。
-- “云端模式”使用云端转写配置，并使用这里配置的外部 LLM 生成纪要。
+首次启动后建议打开：
 
-API Key 不会写入会议文件、模板或日志。Windows 下使用当前用户的 DPAPI 加密后保存在 `data/external-llm.json`，设置页和 `GET /api/settings/external-llm` 只返回“是否已配置”，不会返回密钥。未通过界面保存配置时，原有 `MEETOMINUTE_OPENAI_*` 环境变量仍可作为兼容配置来源。
+```text
+http://127.0.0.1:8000/diagnostics
+```
 
-### FunASR 本地转写
+诊断页会直接告诉你缺少哪一项依赖，以及应该如何处理。
 
-本机环境已经配置完成。若在另一台 RTX/NVIDIA 设备上从零重建，先安装匹配的 PyTorch CUDA wheel，再安装项目的本地转写扩展：
+## 配置真实转写和纪要
+
+MeetOminute 在创建会议时提供三种处理模式：
+
+| 页面模式 | 录音发送位置 | 转写后端 | 纪要后端 |
+| --- | --- | --- | --- |
+| 全本地 | 不离开本机 | 本地 FunASR | 本地 Ollama |
+| 混合模式 | 不离开本机 | 本地 FunASR | 外部 LLM |
+| 云端模式 | 发送给所选转写接口 | OpenAI 兼容转写 | 外部 LLM |
+
+### 本地 FunASR 转写
+
+先根据自己的显卡和 CUDA 环境安装匹配的 PyTorch，再安装本地转写扩展：
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 .\.venv\Scripts\python.exe -m pip install -e ".[dev,local-asr]"
 ```
 
-然后在 `.env` 中启用：
+在 `.env` 中启用：
 
 ```dotenv
 MEETOMINUTE_LOCAL_TRANSCRIBER=funasr
@@ -96,142 +182,247 @@ MEETOMINUTE_FUNASR_DEVICE=auto
 MEETOMINUTE_FUNASR_ISOLATE_PROCESS=true
 ```
 
-默认组合为 Paraformer-zh + FSMN-VAD + CT-Punc + CAM++，可同时生成中文转写、标点、时间戳和匿名说话人标签。“预计发言人数”会作为聚类人数传给 CAM++。模型首次使用时下载到 `data/models/`，当前缓存约 2.07 GB。FunASR 默认在独立子进程运行，结束时整个 CUDA 上下文一并退出，避免和随后加载的 Ollama 模型争抢 6 GB 显存。
+默认模型组合：
 
-使用项目附带的 15 分钟 AISHELL-4 样本执行基准：
+- Paraformer-zh：中文语音识别
+- FSMN-VAD：语音活动检测
+- CT-Punc：标点恢复
+- CAM++：说话人区分
 
-```powershell
-.\.venv\Scripts\python.exe scripts\benchmark_funasr.py `
-  samples\aishell4_zh_meeting_15min.wav `
-  --textgrid samples\aishell4_zh_meeting_source.TextGrid `
-  --clip-offset 120 `
-  --expected-speakers 7 `
-  --output benchmark-results\funasr-aishell4-15min-final.json
-```
-
-本机最终基准结果：
-
-| 指标 | 结果 |
-| --- | --- |
-| 音频 | AISHELL-4，普通话多人会议，15 分钟 |
-| 处理耗时 | 71.775 秒（包含缓存模型加载） |
-| 速度 | 12.54 倍实时，RTF 0.0797 |
-| 峰值 GPU 显存 | 2534.6 MB |
-| 说话人数 | 预测 7 / 标注 7 |
-| 转写片段 | 302 |
-| 近似字符错误率 | 37.83% |
-
-字符错误率是把带重叠说话的多人会议标注按时间拼接后计算的粗略值，不能与干净、单说话人的标准测试集直接比较。完整指标和逐段结果见 `benchmark-results/funasr-aishell4-15min-final.json`。
+模型首次使用时会下载到 `data/models/`。隔离进程会在转写结束后释放整个 CUDA 上下文，减少与本地大语言模型争用显存的情况。
 
 ### Ollama 本地纪要
 
-本机复用 `E:\OllamaModels` 中已有的 Qwen3.5 9.2B Q4_K_M 权重，并通过 `ollama/Modelfile.meetominute` 创建专用模型名；新模型共享原权重，不会重复占用 5.8 GB：
-
-```powershell
-ollama create meetominute-qwen35-9b -f ollama\Modelfile.meetominute
-```
-
-本机配置：
+确保 Ollama 已经安装，并且本机已有可用模型。然后在 `.env` 中填写：
 
 ```dotenv
 MEETOMINUTE_LOCAL_LLM=ollama
 MEETOMINUTE_OLLAMA_BASE_URL=http://127.0.0.1:11435/v1
-MEETOMINUTE_OLLAMA_MODEL=meetominute-qwen35-9b
+MEETOMINUTE_OLLAMA_MODEL=你的模型名称
 MEETOMINUTE_OLLAMA_REASONING_EFFORT=none
-MEETOMINUTE_LLM_CHUNK_CHARS=6000
-MEETOMINUTE_LLM_INPUT_CHAR_BUDGET=6000
-MEETOMINUTE_LLM_MAX_TOKENS=4096
 ```
 
-纪要输入预算会同时约束系统提示、模板和待处理内容。长会议会先分段抽取，
-再按预算进行多层归并，避免一次性把全部分段结果塞进模型上下文。
+当 `ollama` 命令可以在终端调用时，项目启动器会尝试在专用端口 `11435` 启动本地 Ollama 服务。也可以将地址改为自己已经运行的 Ollama OpenAI 兼容接口。
 
-15 分钟转写稿的最终纪要基准：
+仓库中的 [`ollama/Modelfile.meetominute`](ollama/Modelfile.meetominute) 提供了一份偏重事实约束的中文纪要提示配置，可按自己的基础模型修改其中的 `FROM`。
 
-| 指标 | 结果 |
-| --- | --- |
-| 模型运行大小 | 6.15 GB，其中约 4.15 GB 驻留 RTX 显存 |
-| 上下文 | 8192 tokens |
-| 处理耗时 | 200.625 秒 |
-| 模型调用 | 3 次 |
-| 输出 tokens | 2621 |
-| 有效输出速度 | 13.06 tokens/s |
-| 证据时间戳 | 20 / 20 有效 |
+### 外部 LLM API
 
-完整纪要和指标见 `benchmark-results/ollama-qwen35-9b-aishell4-15min-minutes-final.json`。专用端口 `11435` 上的完整应用级测试用 122.212 秒处理 60 秒录音，已覆盖上传、FunASR、Ollama、SQLite、模型释放和全部导出格式，见 `benchmark-results/funasr-ollama-app-smoke-dedicated.json`。
+启动后进入“外部 LLM”页面：
 
-## 界面工作流
+```text
+http://127.0.0.1:8000/settings/external-llm
+```
 
-当前网页已升级为完整的本地会议工作台：
+填写：
 
-- 首页集中展示本地处理栈、隐私状态、任务创建和可搜索的会议历史。
-- 任务页用四阶段轨道展示录音接收、语音转写、纪要生成和人工审核状态，并可取消任务、从最近断点继续或从头重跑。
-- 逐字稿支持说话人姓名映射、文本搜索、按说话人筛选、原音定位、未保存修改提示和 TXT 导出。
-- 纪要页按事实类型分区展示，证据时间可直接回听原录音，并提供 Word、Markdown、TXT 和 JSON 导出入口。
-- 跨会议搜索可同时查找标题、日期、录音文件名、术语表、发言人、逐字稿和纪要，支持多关键词、内容范围及正常/归档/回收站筛选。
-- 待办中心会汇总所有会议纪要中的行动项，识别逾期事项，并支持完成、忽略和重新打开；状态会同步到 JSON、Markdown、TXT 和 Word 导出。
-- 纪要模板中心支持新建、编辑、复制和删除自定义模板，可控制章节启用、章节名称、额外章节及模型提取重点。
-- 会议日历按实际会议日期展示正常、归档和回收站记录，支持按月切换、查看待处理/逾期事项并直接进入会议详情。
-- 资料库支持会议归档、只读查看、回收站恢复和经过二次确认的永久删除。
-- 备份中心可创建一致性 ZIP 快照、下载到其他磁盘，并以“不覆盖已有会议”的方式合并恢复。
-- 运行诊断页会检查完整本地处理栈，并对缺失命令、CUDA 不可用、模型未缓存和磁盘空间不足给出修复建议。
-- 桌面端和 390 px 手机端均已完成浏览器截图验证，无横向布局溢出或控制台错误。
+- API Base URL，例如 `https://your-provider.example/v1`
+- 模型名称
+- API Key
 
-界面验收截图保存在 `benchmark-results/`，其中包括工作台、会议详情、搜索结果、待办中心、日历及 390 px 手机布局。可用 `scripts/visual_check_ui.js` 重复执行浏览器级布局与交互检查。
+接口需要兼容 OpenAI Chat Completions 协议。可以先“测试连接”，成功后再保存；保存后无需重启应用。
 
-## 数据与恢复
+Windows 下，通过页面保存的 API Key 会使用当前用户的 DPAPI 加密，并保存在 `data/external-llm.json`。设置页面、诊断信息、会议文件和日志都不会回显密钥。
+
+也可以直接通过 `.env` 配置：
+
+```dotenv
+MEETOMINUTE_CLOUD_TRANSCRIBER=openai
+MEETOMINUTE_CLOUD_LLM=openai
+MEETOMINUTE_OPENAI_BASE_URL=https://your-provider.example/v1
+MEETOMINUTE_OPENAI_API_KEY=your-api-key
+MEETOMINUTE_TRANSCRIBE_MODEL=your-transcription-model
+MEETOMINUTE_LLM_MODEL=your-chat-model
+```
+
+## 使用方法
+
+### 1. 创建会议
+
+在工作台填写：
+
+- 会议标题
+- 实际会议日期
+- 预计发言人数
+- 专有名词或术语表
+- 处理模式
+- 会议纪要模板
+- 录音文件
+
+上传后任务会进入后台队列。关闭浏览器不会停止正在运行的任务。
+
+### 2. 查看处理进度
+
+会议详情页会展示四个主要阶段：
+
+1. 接收录音
+2. 音频标准化
+3. 语音转写
+4. 纪要生成
+
+任务可以取消、从最近检查点继续，或从原始录音开始重跑。应用意外退出后，再次启动也会自动恢复未完成任务。
+
+### 3. 校正逐字稿
+
+转写完成后可以：
+
+- 修改每一段文字
+- 将匿名说话人映射为真实姓名
+- 搜索逐字稿
+- 按说话人筛选
+- 点击时间定位并回听录音
+- 导出 TXT 逐字稿
+
+原始转写会单独保留，人工编辑不会覆盖原始识别结果。
+
+### 4. 生成和整理纪要
+
+纪要会按照所选模板分章节展示，并尽量为结论、行动项和自定义章节保留证据时间。修改逐字稿后，可以重新生成纪要。
+
+行动项可以在会议详情页或待办中心标记为：
+
+- 待处理
+- 已完成
+- 已忽略
+
+重新生成纪要时，内容相同的行动项会保留原状态。
+
+### 5. 管理历史会议
+
+| 页面 | 地址 | 用途 |
+| --- | --- | --- |
+| 全文搜索 | `/search` | 跨会议查找标题、逐字稿、纪要、说话人和术语 |
+| 待办中心 | `/actions` | 汇总待处理、逾期、完成和忽略事项 |
+| 会议日历 | `/calendar` | 按实际日期查看会议和待办数量 |
+| 纪要模板 | `/minutes-templates` | 新建、编辑、复制和删除纪要模板 |
+| 资料库 | `/archive` | 管理归档会议和回收站 |
+| 备份中心 | `/backups` | 创建、下载和恢复 ZIP 备份 |
+| 运行诊断 | `/diagnostics` | 检查本地运行环境 |
+
+以上地址都以 `http://127.0.0.1:8000` 为前缀。
+
+### 6. 导出和备份
+
+逐字稿支持：
+
+- TXT
+
+会议纪要支持：
+
+- Word（DOCX）
+- Markdown
+- TXT
+- JSON
+
+待办状态变更后，纪要的各个导出文件会同步更新。
+
+完整备份包含数据库、会议目录、任务记录、模板、正常会议、归档会议和回收站会议，不包含模型缓存或外部 LLM API Key。
+
+## 数据与隐私
 
 默认数据目录为 `data/`：
 
 ```text
 data/
-  meetominute.sqlite3
-  backups/
-    meetominute-backup-20260727-120000-a1b2c3d4.zip
-  meetings/
-    2026-07-26_课题组周会_ab12cd34/
-      original.m4a
-      normalized.wav
-      meeting.json
-      transcript_raw.json
-      transcript_edited.json
-      speakers.json
-      glossary.txt
-      transcript.md
-      transcript.txt
-      minutes.json
-      minutes.md
-      minutes.txt
-      minutes.docx
-      processing.log
+├─ meetominute.sqlite3
+├─ external-llm.json
+├─ models/
+├─ backups/
+└─ meetings/
+   └─ 2026-07-28_会议标题_ab12cd34/
+      ├─ original.m4a
+      ├─ normalized.wav
+      ├─ meeting.json
+      ├─ transcript_raw.json
+      ├─ transcript_edited.json
+      ├─ transcript.txt
+      ├─ minutes.json
+      ├─ minutes.md
+      ├─ minutes.txt
+      ├─ minutes.docx
+      └─ processing.log
 ```
 
-上传采用 1 MB 分块写入，不会将大文件整体载入内存。任务及 `uploaded → normalized → transcribed → completed` 检查点保存在 SQLite；浏览器关闭不影响后台队列，应用进程退出后再次启动会自动从最近有效断点继续。单个任务即使遇到数据库或磁盘级异常也不会拖停整个后台队列。用户也可在任务页取消处理，已完成的标准化音频或逐字稿不会被删除；“从断点继续”复用这些成果，“从头重跑”才会清理生成文件并重新处理原始录音。FFmpeg 和默认的隔离 FunASR 子进程可即时取消，外部 LLM 请求会在当前 HTTP 请求结束后停止。原始录音与 `transcript_raw.json` 不会被人工编辑覆盖。
+不同模式下的数据边界：
 
-跨会议搜索入口为 `http://127.0.0.1:8000/search`，待办中心为 `http://127.0.0.1:8000/actions`，纪要模板入口为 `http://127.0.0.1:8000/minutes-templates`，会议日历入口为 `http://127.0.0.1:8000/calendar`，资料库入口为 `http://127.0.0.1:8000/archive`，备份中心为 `http://127.0.0.1:8000/backups`：
+- **全本地**：录音和逐字稿都在本机处理
+- **混合模式**：录音在本机转写，校正后的逐字稿发送给外部 LLM
+- **云端模式**：原始录音发送给所选转写接口，逐字稿发送给外部 LLM
 
-- 创建会议和重新生成纪要时均可选择模板；生成结果会保存模板快照，因此后续修改模板不会改变已有纪要的章节和导出格式。
-- 自定义模板可以关闭不需要的内置章节、修改章节名称，并通过“章节名称 | 提取要求”增加最多 8 个带证据时间的列表章节。
-- 模板要求会同时进入分段事实抽取和最终合并提示词，但不能覆盖“不推测负责人、期限、决定或实验结论”等事实约束。
-- 日历按填写的会议日期归类，支持月份选择和前后月份切换；归档及回收站记录不会从原日期消失。
-- 搜索直接读取 SQLite 与会议目录中的最新文件，不维护容易失步的第二份索引；单个文件缺失或损坏不会影响其他会议的结果。
-- 待办编号由会议与行动内容稳定生成；重新生成纪要时，内容一致的待办会保留完成/忽略状态，新增事项默认待处理。
-- 归档会议会从工作台隐藏，逐字稿和纪要正文进入只读模式；待办仍可继续跟进，取消归档后可编辑正文。
-- 移入回收站不会立即删除文件；只有在回收站中再次确认“永久删除”才会删除数据库记录和对应的精确会议目录。
-- 完整备份包含纪要模板、活跃、归档及回收站会议、任务历史和会议目录，不包含模型缓存或外部 LLM API Key。
-- 创建或恢复备份时会进入独占维护状态，新的编辑和后台文件写入会等待或被友好拦截；备份文件清单从同一份 SQLite 快照读取。
-- 恢复采用合并导入，相同会议 ID 或目录名会跳过，不覆盖当前数据；备份中的未完成任务会恢复为已取消状态，可按现有断点手动继续。
-- SQLite 数据库使用显式版本迁移，当前 schema 为 v4；旧版数据库在启动时自动补齐任务表、会议生命周期和纪要模板字段。
+使用任何外部服务前，请自行确认服务商的数据保留、隐私和合规政策。
 
-保存在 `data/backups/` 的副本仍与项目位于同一磁盘。需要防范硬盘损坏时，请下载 ZIP 并复制到另一块磁盘或可信的加密存储位置。
+项目默认只监听 `127.0.0.1`。如果主动改成 `0.0.0.0` 提供局域网访问，应同时考虑防火墙、身份认证和可信网络边界；当前版本没有内置多用户登录系统。
 
-## 测试
+## 常见问题
+
+### 双击 `start.bat` 提示找不到虚拟环境
+
+在项目目录执行：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+```
+
+### 提示无法读取音频信息
+
+通常是 `ffmpeg` 或 `ffprobe` 未安装、未加入 `PATH`，也可能是录音文件损坏。执行：
+
+```powershell
+ffmpeg -version
+ffprobe -version
+```
+
+然后打开 `/diagnostics` 查看程序实际检测到的路径。
+
+### 上传后只有占位文字
+
+默认后端是 `mock`，只用于体验界面和验证流程。请在 `.env` 中启用 FunASR、Ollama 或 OpenAI 兼容后端。
+
+### CUDA 不可用或显存不足
+
+- 确认 NVIDIA 驱动、PyTorch 和 CUDA wheel 相互匹配
+- 将 `MEETOMINUTE_FUNASR_DEVICE` 保持为 `auto`
+- 保持 `MEETOMINUTE_FUNASR_ISOLATE_PROCESS=true`
+- 减小本地 LLM 模型或上下文大小
+- 在 `/diagnostics` 查看 PyTorch 实际识别到的显卡
+
+### 外部 LLM 测试连接失败
+
+检查 Base URL 是否包含正确的 `/v1` 前缀、模型名称是否存在、API Key 是否有效，以及服务是否兼容 OpenAI Chat Completions。
+
+### 如何把数据迁移到另一台电脑
+
+进入备份中心创建并下载 ZIP 文件，在另一台电脑的备份中心上传恢复。恢复采用合并方式，不会覆盖已有的同 ID 会议。
+
+## 开发与测试
+
+安装开发依赖：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+```
+
+运行自动化测试：
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-仓库中的 GitHub Actions 会在 Windows + Python 3.11 环境自动执行测试、
-Python 编译检查和浏览器 JavaScript 语法检查。
+其他检查：
 
-硬件评估和当前实施状态见 `docs/hardware-assessment.md`。
+```powershell
+.\.venv\Scripts\python.exe -m compileall -q app tests
+node --check app\static\app.js
+.\start.bat --check
+```
+
+GitHub Actions 会在 Windows + Python 3.11 环境运行测试、Python 编译检查和浏览器 JavaScript 语法检查。
+
+浏览器布局验收脚本位于 [`scripts/visual_check_ui.js`](scripts/visual_check_ui.js)，硬件与性能参考见 [`docs/hardware-assessment.md`](docs/hardware-assessment.md) 和 [`benchmark-results/`](benchmark-results/)。
+
+## 项目状态
+
+当前版本为 **v0.1 原型**，已经具备完整的本地个人会议工作流，但仍不建议直接作为无认证的公网服务使用。
+
+欢迎通过 [Issues](https://github.com/salty-yv/meetominute/issues) 反馈问题和建议。
